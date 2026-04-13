@@ -3,7 +3,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { motion, Variants , AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { Award, BookOpen, Globe, Stethoscope, Briefcase, GraduationCap, Play, Star, Building2, Users, MonitorPlay, MessageCircle } from "lucide-react";
+import { Award, BookOpen, Globe, Stethoscope, Briefcase, GraduationCap, Play, PlayCircle, Star,Volume2, VolumeX, Building2, Users, MonitorPlay, MessageCircle } from "lucide-react";
 
 /* ---------------- PREMIUM COMPONENTS ---------------- */
 const GoldText = ({ text, className = "" }: { text: string; className?: string }) => (
@@ -32,9 +32,12 @@ const DarkGoldText = ({ text, className = "" }: { text: string; className?: stri
   </h2>
 );
 
-/* ---------------- INTERACTIVE VIDEO COMPONENT ---------------- */
+// Make sure to add PlayCircle, Volume2, VolumeX to your lucide-react imports at the top:
+// import { Play, PlayCircle, Volume2, VolumeX } from "lucide-react";
+
 const VideoReelCard = ({ num }: { num: number }) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const togglePlay = () => {
@@ -42,51 +45,73 @@ const VideoReelCard = ({ num }: { num: number }) => {
       if (isPlaying) {
         videoRef.current.pause();
       } else {
-        // Only load the heavy video data when the user explicitly clicks to play
         videoRef.current.play();
       }
       setIsPlaying(!isPlaying);
     }
   };
 
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the video from pausing when clicking the mute button
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
   return (
     <motion.div
-      whileHover={{ y: -10, boxShadow: "0 25px 50px -12px rgba(191,149,63,0.3)" }}
-      className="w-[320px] h-[550px] bg-black rounded-3xl overflow-hidden shadow-xl border-2 border-[#BF953F]/20 flex flex-col relative group transition-all duration-300 cursor-pointer"
+      whileHover={{ y: -10 }}
+      className="relative w-[300px] h-[533px] shrink-0 rounded-3xl overflow-hidden shadow-2xl cursor-pointer group transition-all duration-500 bg-black border-2 border-transparent hover:border-[#BF953F]/60 hover:shadow-[0_20px_50px_rgba(191,149,63,0.3)]"
       onClick={togglePlay}
-      style={{ willChange: "transform, box-shadow" }} // OPTIMIZATION: GPU Acceleration
     >
-      <video 
+      {/* Golden Gradient Border effect on hover */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#AA771C_100%)] pointer-events-none transition-opacity duration-500 -z-10 scale-[1.02]" />
+
+      {/* The Video Element */}
+      <video
         ref={videoRef}
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
-        loop 
+        src={`/assets/r${num}.mp4`} // Make sure your videos are named r1.mp4, r2.mp4 in the public/assets folder
+        className="w-full h-full object-cover relative z-10"
+        loop
         playsInline
-        muted // OPTIMIZATION: Muted videos initialize faster
-        preload="metadata" // OPTIMIZATION: Don't download the whole video on page load, just the first frame
-      >
-        <source src={`/assets/r${num}.mp4`} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+        muted={isMuted}
+        onEnded={() => setIsPlaying(false)}
+      />
 
-      <div className={`absolute inset-0 transition-opacity duration-500 pointer-events-none ${isPlaying ? 'opacity-0' : 'opacity-100'}`}>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
-        
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/40 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-            <Play className="w-8 h-8 text-white ml-1" fill="white" />
-          </div>
+      {/* Play Button Overlay (Fades out when playing) */}
+      <div className={`absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40 transition-opacity duration-300 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}>
+        <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/40 text-white shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:bg-[#BF953F]/90 group-hover:border-[#FBF5B7] group-hover:text-[#040814] transition-all duration-500">
+          <PlayCircle size={32} className="ml-1" />
         </div>
+        <p className="mt-4 text-white font-serif tracking-widest text-sm uppercase drop-shadow-md">
+          {isPlaying ? '' : 'Tap to Play'}
+        </p>
+      </div>
 
-        <div className="absolute top-6 left-6 flex gap-2 z-10">
-          <span className="px-3 py-1 bg-black/50 backdrop-blur-md border border-[#BF953F]/50 rounded-full text-xs font-bold text-[#FBF5B7] uppercase tracking-wider">
-            NSFA
-          </span>
-        </div>
+      {/* Top Gradient for text readability */}
+      <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-black/80 to-transparent z-20 pointer-events-none" />
+
+      {/* Volume Toggle (Only visible when playing) */}
+      {isPlaying && (
+        <button
+          onClick={toggleMute}
+          className="absolute top-4 right-4 z-30 p-3 rounded-full bg-black/50 backdrop-blur-md text-white border border-white/20 hover:bg-[#BF953F] hover:text-[#040814] transition-all"
+        >
+          {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+        </button>
+      )}
+
+      {/* Bottom Information Overlay */}
+      <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-20">
+        <h4 className="text-xl font-bold text-white mb-1 group-hover:text-[#FBF5B7] transition-colors">Success Story {num}</h4>
+        <p className="text-white/80 text-sm font-light flex items-center gap-2">
+           <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" /> Verified Alumni
+        </p>
       </div>
     </motion.div>
   );
 };
-
 /* ---------------- DATA ARRAYS ---------------- */
 const advancedFeatures = [
   { id: 1, title: "Global Certifications", desc: "Globally Recognised Certifications from IAO, ISO, IAF, BSS & UK Boards.", x: 15, y: 15 },
@@ -541,7 +566,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------------- 6. VIDEO REELS ---------------- */}
+    {/* ---------------- 6. VIDEO REELS ---------------- */}
       <section className="py-32 relative bg-[#FAFAFA] text-black border-t-8 border-[#BF953F] overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] pointer-events-none" />
 
@@ -561,13 +586,13 @@ export default function Home() {
 
         <div className="w-full overflow-hidden cursor-grab active:cursor-grabbing pb-16 pt-4 relative z-10" ref={reviewsRef}>
           <motion.div drag="x" dragConstraints={reviewsRef} className="flex gap-8 px-10 w-max mx-auto" style={{ willChange: "transform" }}>
+            {/* Make sure you have videos named v1.mp4 to v6.mp4 in your public/assets folder! */}
             {[1, 2, 3, 4, 5, 6].map((num) => (
               <VideoReelCard key={num} num={num} />
             ))}
           </motion.div>
         </div>
       </section>
-
     </main>
   );
 }
