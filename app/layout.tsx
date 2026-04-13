@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css"; // Uses our Tailwind v4 setup
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import Chatbot from "@/components/layout/Chatbot";
 
 export const metadata: Metadata = {
   title: "NSFA Academy | Zeal to Excellence in Aesthetics Science",
@@ -22,6 +23,7 @@ export default function RootLayout({
           {children}
         </div>
         <Footer />
+        <Chatbot />
       </body>
     </html>
   );
