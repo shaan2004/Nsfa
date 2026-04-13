@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import { motion, Variants , AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { Award, BookOpen, Globe, Stethoscope, Briefcase, GraduationCap, Play, Star, Building2, Users, MonitorPlay, MessageCircle } from "lucide-react";
 
 /* ---------------- PREMIUM COMPONENTS ---------------- */
@@ -145,6 +146,7 @@ const grandCardUp: Variants = {
 
 /* ---------------- PAGE ---------------- */
 export default function Home() {
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [activeFeature, setActiveFeature] = useState<number | null>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
@@ -159,15 +161,7 @@ export default function Home() {
   return (
     <main suppressHydrationWarning className="bg-[#080E21] text-white overflow-hidden min-h-screen relative perspective-[1000px]">
       
-      {/* FLOATING WHATSAPP BUTTON */}
-      <motion.button 
-        initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 1, type: "spring" }}
-        whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-        className="fixed bottom-8 right-8 z-50 w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(37,211,102,0.4)] cursor-pointer"
-        style={{ willChange: "transform" }}
-      >
-        <MessageCircle className="w-8 h-8 text-white" />
-      </motion.button>
+     
 
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes infinite-scroll {
@@ -248,6 +242,7 @@ export default function Home() {
           </motion.p>
 
           <motion.button
+            onClick={() => router.push('/courses')} // <-- Added onClick routing
             initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 1.5, type: "spring" }}
             whileHover={{ scale: 1.05, boxShadow: "0 10px 50px rgba(191,149,63,0.5)", y: -5 }} whileTap={{ scale: 0.95 }}
             className="mt-14 px-14 py-5 rounded-full font-bold text-[#080E21] tracking-[0.2em] text-lg uppercase cursor-pointer shadow-xl border border-white/20 backdrop-blur-md"
