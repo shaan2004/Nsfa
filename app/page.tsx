@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
-import { motion, Variants , AnimatePresence } from "framer-motion";
+import { motion, Variants, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { Award, BookOpen, Globe, Stethoscope, Briefcase, GraduationCap, Play, PlayCircle, Star,Volume2, VolumeX, Building2, Users, MonitorPlay, MessageCircle } from "lucide-react";
+import { Award, BookOpen, Globe, Stethoscope, Briefcase, GraduationCap, Play, PlayCircle, Star, Volume2, VolumeX, Building2, Users, MonitorPlay, MessageCircle, ChevronDown } from "lucide-react";
 
 /* ---------------- PREMIUM COMPONENTS ---------------- */
 const GoldText = ({ text, className = "" }: { text: string; className?: string }) => (
@@ -31,28 +31,30 @@ const DarkGoldText = ({ text, className = "" }: { text: string; className?: stri
     {text}
   </h2>
 );
-
-// Make sure to add PlayCircle, Volume2, VolumeX to your lucide-react imports at the top:
-// import { Play, PlayCircle, Volume2, VolumeX } from "lucide-react";
-
 const VideoReelCard = ({ num }: { num: number }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [hasError, setHasError] = useState(false); // Added error state
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const togglePlay = () => {
+    if (hasError) return; // Don't try to play if the file is missing
     if (videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
       } else {
-        videoRef.current.play();
+        // Catch promise rejection if playback fails
+        videoRef.current.play().catch((e) => {
+          console.error("Video playback failed:", e);
+          setHasError(true);
+        });
       }
       setIsPlaying(!isPlaying);
     }
   };
 
   const toggleMute = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent the video from pausing when clicking the mute button
+    e.stopPropagation();
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
       setIsMuted(!isMuted);
@@ -62,56 +64,72 @@ const VideoReelCard = ({ num }: { num: number }) => {
   return (
     <motion.div
       whileHover={{ y: -10 }}
-      className="relative w-[300px] h-[533px] shrink-0 rounded-3xl overflow-hidden shadow-2xl cursor-pointer group transition-all duration-500 bg-black border-2 border-transparent hover:border-[#BF953F]/60 hover:shadow-[0_20px_50px_rgba(191,149,63,0.3)]"
+      whileTap={{ scale: 0.98 }}
+      className="relative w-[260px] md:w-[300px] h-[460px] md:h-[533px] shrink-0 rounded-3xl overflow-hidden shadow-2xl cursor-pointer group transition-all duration-500 bg-black border-2 border-transparent hover:border-[#BF953F]/60 active:border-[#BF953F]/60 hover:shadow-[0_20px_50px_rgba(191,149,63,0.3)] active:shadow-[0_20px_50px_rgba(191,149,63,0.3)]"
       onClick={togglePlay}
     >
-      {/* Golden Gradient Border effect on hover */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#AA771C_100%)] pointer-events-none transition-opacity duration-500 -z-10 scale-[1.02]" />
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#AA771C_100%)] pointer-events-none transition-opacity duration-500 -z-10 scale-[1.02]" />
 
-      {/* The Video Element */}
+      {/* ERROR FALLBACK: Shows if the video file is missing or corrupted */}
+      {hasError && (
+        <div className="absolute inset-0 z-30 flex items-center justify-center bg-[#050914]">
+          <p className="text-white/40 text-xs font-bold uppercase tracking-[0.2em] border border-white/10 px-4 py-2 rounded-full">
+            Video Missing
+          </p>
+        </div>
+      )}
+
+      {/* UPGRADED VIDEO ELEMENT */}
       <video
         ref={videoRef}
-        src={`/assets/r${num}.mp4`} // Make sure your videos are named r1.mp4, r2.mp4 in the public/assets folder
-        className="w-full h-full object-cover relative z-10"
+        className={`w-full h-full object-cover relative z-10 ${hasError ? 'hidden' : 'block'}`}
         loop
         playsInline
         muted={isMuted}
+        preload="metadata" // Optimizes loading
         onEnded={() => setIsPlaying(false)}
-      />
+        onError={() => setHasError(true)} // Triggers the fallback if source fails
+      >
+        {/* Explicitly declare the type. Added both 'v' and 'r' prefixes just in case of naming mix-ups */}
+        <source src={`/assets/r${num}.mp4`} type="video/mp4" />
+        <source src={`/assets/r${num}.mp4`} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
 
-      {/* Play Button Overlay (Fades out when playing) */}
-      <div className={`absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40 transition-opacity duration-300 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}>
-        <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/40 text-white shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:bg-[#BF953F]/90 group-hover:border-[#FBF5B7] group-hover:text-[#040814] transition-all duration-500">
-          <PlayCircle size={32} className="ml-1" />
+      {/* Play Button Overlay (Only shows if there is no error) */}
+      {!hasError && (
+        <div className={`absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40 transition-opacity duration-300 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}>
+          <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/40 text-white shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:bg-[#BF953F]/90 group-active:bg-[#BF953F]/90 group-hover:border-[#FBF5B7] group-active:border-[#FBF5B7] group-hover:text-[#040814] group-active:text-[#040814] transition-all duration-500">
+            <PlayCircle size={32} className="ml-1" />
+          </div>
+          <p className="mt-4 text-white font-serif tracking-widest text-xs md:text-sm uppercase drop-shadow-md">
+            {isPlaying ? '' : 'Tap to Play'}
+          </p>
         </div>
-        <p className="mt-4 text-white font-serif tracking-widest text-sm uppercase drop-shadow-md">
-          {isPlaying ? '' : 'Tap to Play'}
-        </p>
-      </div>
+      )}
 
-      {/* Top Gradient for text readability */}
       <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-black/80 to-transparent z-20 pointer-events-none" />
 
-      {/* Volume Toggle (Only visible when playing) */}
-      {isPlaying && (
+      {/* Volume Toggle */}
+      {isPlaying && !hasError && (
         <button
           onClick={toggleMute}
-          className="absolute top-4 right-4 z-30 p-3 rounded-full bg-black/50 backdrop-blur-md text-white border border-white/20 hover:bg-[#BF953F] hover:text-[#040814] transition-all"
+          className="absolute top-4 right-4 z-30 p-2 md:p-3 rounded-full bg-black/50 backdrop-blur-md text-white border border-white/20 hover:bg-[#BF953F] active:bg-[#BF953F] hover:text-[#040814] active:text-[#040814] transition-all"
         >
           {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
         </button>
       )}
 
-      {/* Bottom Information Overlay */}
-      <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-20">
-        <h4 className="text-xl font-bold text-white mb-1 group-hover:text-[#FBF5B7] transition-colors">Success Story {num}</h4>
-        <p className="text-white/80 text-sm font-light flex items-center gap-2">
+      <div className="absolute bottom-0 left-0 w-full p-4 md:p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-20">
+        <h4 className="text-lg md:text-xl font-bold text-white mb-1 group-hover:text-[#FBF5B7] group-active:text-[#FBF5B7] transition-colors">Success Story {num}</h4>
+        <p className="text-white/80 text-xs md:text-sm font-light flex items-center gap-2">
            <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" /> Verified Alumni
         </p>
       </div>
     </motion.div>
   );
 };
+
 /* ---------------- DATA ARRAYS ---------------- */
 const advancedFeatures = [
   { id: 1, title: "Global Certifications", desc: "Globally Recognised Certifications from IAO, ISO, IAF, BSS & UK Boards.", x: 15, y: 15 },
@@ -136,29 +154,24 @@ const courses = [
   { title: "Dental Science", icon: Stethoscope },
 ];
 
-const marquee = [...courses, ...courses, ...courses];
-
 const journeyFeatures = [
   { title: "Hands on Experience", desc: "Get Hands on experience with Live practical sessions", icon: Building2, color: "from-[#1A2D4A] to-[#080E21]" },
   { title: "Expert Training", desc: "Get trained from the experts in the field of Aesthetics", icon: Users, color: "from-[#BF953F] to-[#B38728]" },
   { title: "Webinars / Online Courses", desc: "Get informed with the latest trends in the field of Aesthetics", icon: MonitorPlay, color: "from-[#0F766E] to-[#042F2E]" }
 ];
 
-/* ---------------- ADVANCED ANIMATION VARIANTS ---------------- */
-const wordReveal: Variants = {
-  hidden: { opacity: 0, y: 50, filter: "blur(10px)" },
-  visible: (i: number) => ({
-    opacity: 1, y: 0, filter: "blur(0px)",
-    transition: { delay: i * 0.15, duration: 0.8, type: "spring", stiffness: 50 },
-  }),
-};
+const faqs = [
+  { question: "Who is eligible to enroll in these aesthetic courses?", answer: "Our courses are specifically designed for registered medical and dental professionals, including Doctors, Dentists, Dermatologists, and Maxillofacial Surgeons looking to upgrade their skills." },
+  { question: "Are NSFA Academy certifications globally recognized?", answer: "Yes! We are the first academy in India to hold IAO Accreditation for Facial Aesthetics. Our certifications are also ISO 9001:2015, IAF, and UK Board affiliated, making them recognized worldwide." },
+  { question: "Do you provide hands-on clinical training?", answer: "Absolutely. Hands-on clinical training on live models is a core component of our curriculum to ensure you graduate with complete practical confidence." },
+  { question: "Is there job placement assistance after course completion?", answer: "Yes, we provide 100% job placement assistance, career counseling, and support for setting up your own clinical practice." },
+  { question: "Do you offer online or hybrid learning options?", answer: "Yes, we offer comprehensive online modules and webinars combined with offline hands-on workshops to accommodate busy professional schedules." }
+];
 
+/* ---------------- ADVANCED ANIMATION VARIANTS ---------------- */
 const wipeReveal: Variants = {
   hidden: { clipPath: "inset(0 100% 0 0)", opacity: 0 },
-  visible: { 
-    clipPath: "inset(0 0% 0 0)", opacity: 1, 
-    transition: { duration: 1.2, ease: [0.77, 0, 0.175, 1] } 
-  }
+  visible: { clipPath: "inset(0 0% 0 0)", opacity: 1, transition: { duration: 1.2, ease: [0.77, 0, 0.175, 1] } }
 };
 
 const grandCardUp: Variants = {
@@ -174,6 +187,7 @@ export default function Home() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [activeFeature, setActiveFeature] = useState<number | null>(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const reviewsRef = useRef<HTMLDivElement>(null);
   const programsRef = useRef<HTMLDivElement>(null);
 
@@ -186,28 +200,35 @@ export default function Home() {
   return (
     <main suppressHydrationWarning className="bg-[#080E21] text-white overflow-hidden min-h-screen relative perspective-[1000px]">
       
-     
-
+      {/* GLOBAL CSS OPTIMIZATIONS */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes infinite-scroll {
           0% { transform: translateX(0); }
           100% { transform: translateX(calc(-250px * 5 - 1.5rem * 5)); }
         }
-        .marquee-track {
+        .animate-programs {
           display: flex;
           width: max-content;
           animation: infinite-scroll 25s linear infinite;
-          will-change: transform; /* OPTIMIZATION: Force hardware acceleration */
+          will-change: transform; 
         }
-        .marquee-track:hover {
+        /* Added :active and :focus to pause on mobile touch/drag */
+        .pause-on-hover:hover .animate-programs,
+        .pause-on-hover:active .animate-programs,
+        .pause-on-hover:focus-within .animate-programs {
           animation-play-state: paused;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}} />
 
     {/* ---------------- 1. HERO SECTION ---------------- */}
       <section className="min-h-[100vh] flex items-center justify-center text-center px-4 relative overflow-hidden">
-        
-        {/* SLIDER BACKGROUND IMAGES */}
         <div className="absolute inset-0 -z-30 bg-[#050914]">
           {[1, 2].map((num, i) => (
             <motion.div
@@ -221,38 +242,34 @@ export default function Home() {
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,9,20,0.7)_0%,rgba(8,14,33,0.9)_100%)] mix-blend-multiply" />
         </div>
 
-        {/* Ambient Lights */}
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#0074A5]/30 blur-[150px] -z-10" />
         <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#BF953F]/20 blur-[150px] -z-10" />
 
         <motion.div 
-          initial={{ opacity: 1, y: 0 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} // OPTIMIZATION: Stop tracking after it appears
-          exit={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 1, y: 0 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} exit={{ opacity: 0, scale: 0.95 }}
           className="max-w-6xl z-10 flex flex-col items-center pt-20"
         >
           <motion.h3 
             initial={{ opacity: 0, letterSpacing: "0.1em" }} animate={{ opacity: 1, letterSpacing: "0.4em" }} transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
-            className="text-[#FBF5B7] uppercase mb-4 font-bold text-sm md:text-base drop-shadow-md tracking-widest"
+            className="text-[#FBF5B7] uppercase mb-4 font-bold text-xs md:text-base drop-shadow-md tracking-widest"
           >
             Welcome to
           </motion.h3>
 
-          <div className="overflow-hidden py-4 px-2">
+          <div className="overflow-hidden py-2 md:py-4 px-2">
             <motion.h1
               initial={{ y: "100%", clipPath: "inset(100% 0 0 0)" }} animate={{ y: "0%", clipPath: "inset(0% 0 0 0)" }} transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1], delay: 0.2 }}
-              className="text-7xl md:text-9xl lg:text-[10rem] font-serif font-extrabold text-transparent bg-clip-text drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] leading-none"
+              className="text-6xl md:text-9xl lg:text-[10rem] font-serif font-extrabold text-transparent bg-clip-text drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] leading-none"
               style={{ backgroundImage: "linear-gradient(to bottom right, #FCF6BA, #BF953F, #B38728)", willChange: "transform, clip-path" }}
             >
               NSFA
             </motion.h1>
           </div>
           
-          <div className="overflow-hidden pb-4">
+          <div className="overflow-hidden pb-2 md:pb-4">
             <motion.h1
               initial={{ y: "-100%", clipPath: "inset(0 0 100% 0)" }} animate={{ y: "0%", clipPath: "inset(0 0 0% 0)" }} transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1], delay: 0.4 }}
-              className="text-6xl md:text-8xl lg:text-[7rem] font-serif font-bold text-transparent bg-clip-text drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] leading-none"
+              className="text-5xl md:text-8xl lg:text-[7rem] font-serif font-bold text-transparent bg-clip-text drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] leading-none"
               style={{ backgroundImage: "linear-gradient(to top right, #FCF6BA, #BF953F, #B38728)", willChange: "transform, clip-path" }}
             >
               ACADEMY
@@ -261,16 +278,16 @@ export default function Home() {
 
           <motion.p 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.2 }}
-            className="mt-8 text-white/90 text-2xl md:text-4xl font-light italic font-serif tracking-wide"
+            className="mt-6 md:mt-8 text-white/90 text-lg md:text-4xl font-light italic font-serif tracking-wide px-4"
           >
             Zeal To Excellence In Aesthetics Science
           </motion.p>
 
           <motion.button
-            onClick={() => router.push('/courses')} // <-- Added onClick routing
+            onClick={() => router.push('/courses')}
             initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 1.5, type: "spring" }}
             whileHover={{ scale: 1.05, boxShadow: "0 10px 50px rgba(191,149,63,0.5)", y: -5 }} whileTap={{ scale: 0.95 }}
-            className="mt-14 px-14 py-5 rounded-full font-bold text-[#080E21] tracking-[0.2em] text-lg uppercase cursor-pointer shadow-xl border border-white/20 backdrop-blur-md"
+            className="mt-10 md:mt-14 px-8 py-4 md:px-14 md:py-5 rounded-full font-bold text-[#080E21] tracking-[0.2em] text-sm md:text-lg uppercase cursor-pointer shadow-xl border border-white/20 backdrop-blur-md"
             style={{ background: "linear-gradient(135deg, #BF953F 0%, #FCF6BA 50%, #B38728 100%)" }}
           >
             Explore Courses
@@ -278,26 +295,23 @@ export default function Home() {
         </motion.div>
       </section>
 
-   {/* ---------------- 2. WHY CHOOSE US (Neurolink Floating Network) ---------------- */}
-      <section className="min-h-[100vh] py-24 relative overflow-hidden bg-[linear-gradient(180deg,#0B132A_0%,#050914_100%)] flex items-center justify-center hidden md:flex">
-        
+   {/* ---------------- 2. WHY CHOOSE US ---------------- */}
+      <section className="min-h-screen py-24 relative overflow-hidden bg-[linear-gradient(180deg,#0B132A_0%,#050914_100%)] flex flex-col items-center justify-center">
         <div className="absolute top-[20%] left-[20%] w-[40%] h-[40%] rounded-full bg-[#BF953F]/10 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[20%] right-[20%] w-[40%] h-[40%] rounded-full bg-[#0074A5]/10 blur-[120px] pointer-events-none" />
-
-        <div className="relative z-20 flex flex-col items-center justify-center text-center max-w-3xl px-4 pointer-events-none">
-          <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="h-[2px] bg-[#FFD700] mb-8" />
-          
+        
+        <div className="relative z-20 flex flex-col items-center justify-center text-center max-w-3xl px-4 pointer-events-none mb-12">
+          <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="h-[2px] bg-[#FFD700] mb-6 md:mb-8" />
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <GoldText text="Why NSFA Academy" className="text-5xl md:text-7xl lg:text-8xl mb-6 pointer-events-auto drop-shadow-2xl" />
-            <p className="text-white/70 text-lg md:text-xl leading-relaxed font-light pointer-events-auto">
-              NSFA Academy is a globally recognized advanced aesthetic science & dental academy. The academy provides immersive programs designed to educate medical professionals on the latest innovations in the industry.
+            <GoldText text="Why NSFA Academy" className="text-4xl md:text-7xl lg:text-8xl mb-4 md:mb-6 pointer-events-auto drop-shadow-2xl" />
+            <p className="text-white/70 text-base md:text-xl leading-relaxed font-light pointer-events-auto px-4">
+              NSFA Academy is a globally recognized advanced aesthetic science & dental academy. Immersive programs designed to educate professionals on the latest innovations.
             </p>
           </motion.div>
-
-          <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }} className="h-[2px] bg-[#FFD700] mt-8" />
+          <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }} className="h-[2px] bg-[#FFD700] mt-6 md:mt-8" />
         </div>
 
-        <div className={`absolute inset-0 ${activeFeature ? 'pointer-events-none z-0' : 'pointer-events-auto z-20'}`}>
+        {/* DESKTOP NEUROLINK VIEW */}
+        <div className={`hidden md:block absolute inset-0 mt-40 ${activeFeature ? 'pointer-events-none z-0' : 'pointer-events-auto z-20'}`}>
           <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
             <defs>
               <linearGradient id="neuro-grad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -306,50 +320,42 @@ export default function Home() {
                 <stop offset="100%" stopColor="#FFD700" stopOpacity="0.5" />
               </linearGradient>
             </defs>
-            
             {advancedFeatures.map((f) => (
-               <motion.line
-                  key={`spoke-${f.id}`} x1="50%" y1="50%" x2={`${f.x}%`} y2={`${f.y}%`} stroke="url(#neuro-grad)" strokeWidth="1.5"
-                  animate={{ opacity: [0.1, 0.8, 0.1] }} transition={{ repeat: Infinity, duration: 3 + (f.id % 3), ease: "easeInOut" }}
-                  style={{ willChange: "opacity" }} // OPTIMIZATION
-               />
+               <motion.line key={`spoke-${f.id}`} x1="50%" y1="50%" x2={`${f.x}%`} y2={`${f.y}%`} stroke="url(#neuro-grad)" strokeWidth="1.5" animate={{ opacity: [0.1, 0.8, 0.1] }} transition={{ repeat: Infinity, duration: 3 + (f.id % 3), ease: "easeInOut" }} style={{ willChange: "opacity" }} />
             ))}
-            
             {meshConnections.map(([id1, id2], i) => {
                const f1 = advancedFeatures.find(f => f.id === id1)!;
                const f2 = advancedFeatures.find(f => f.id === id2)!;
                return (
-                 <motion.line
-                    key={`ring-${i}`} x1={`${f1.x}%`} y1={`${f1.y}%`} x2={`${f2.x}%`} y2={`${f2.y}%`} stroke="url(#neuro-grad)" strokeWidth="1" strokeDasharray="5 5"
-                    animate={{ opacity: [0.05, 0.5, 0.05] }} transition={{ repeat: Infinity, duration: 4 + (i % 2), ease: "easeInOut", delay: i * 0.4 }}
-                    style={{ willChange: "opacity" }} // OPTIMIZATION
-                 />
+                 <motion.line key={`ring-${i}`} x1={`${f1.x}%`} y1={`${f1.y}%`} x2={`${f2.x}%`} y2={`${f2.y}%`} stroke="url(#neuro-grad)" strokeWidth="1" strokeDasharray="5 5" animate={{ opacity: [0.05, 0.5, 0.05] }} transition={{ repeat: Infinity, duration: 4 + (i % 2), ease: "easeInOut", delay: i * 0.4 }} style={{ willChange: "opacity" }} />
                );
             })}
           </svg>
-
           {advancedFeatures.map((f, i) => (
-            <motion.div
-              key={f.id} layoutId={`feature-container-${f.id}`} onClick={() => setActiveFeature(f.id)}
-              style={{ left: `${f.x}%`, top: `${f.y}%`, willChange: "transform" }}
-              className="absolute -translate-x-1/2 -translate-y-1/2 w-max cursor-pointer z-20"
-              animate={{ y: [0, -12, 0], x: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 4 + (i % 3), ease: "easeInOut", delay: i * 0.2 }}
-              whileHover={{ scale: 1.1, zIndex: 30 }}
-            >
+            <motion.div key={f.id} layoutId={`feature-container-${f.id}`} onClick={() => setActiveFeature(f.id)} style={{ left: `${f.x}%`, top: `${f.y}%`, willChange: "transform" }} className="absolute -translate-x-1/2 -translate-y-1/2 w-max cursor-pointer z-20" animate={{ y: [0, -12, 0], x: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 4 + (i % 3), ease: "easeInOut", delay: i * 0.2 }} whileHover={{ scale: 1.1, zIndex: 30 }}>
               <motion.div layoutId={`feature-bg-${f.id}`} className="relative overflow-hidden px-6 py-3 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.3)] border border-[#BF953F]/30 transition-colors duration-300 group">
                 <div className="absolute inset-0 bg-[#080E21]/60 backdrop-blur-xl transition-opacity duration-300 group-hover:opacity-0" />
                 <div className="absolute inset-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <motion.span layoutId={`feature-text-${f.id}`} className="relative z-10 text-[#FBF5B7] group-hover:text-[#080E21] font-serif font-bold tracking-wide whitespace-nowrap drop-shadow-md group-hover:drop-shadow-none transition-colors duration-300">
-                  {f.title}
-                </motion.span>
+                <motion.span layoutId={`feature-text-${f.id}`} className="relative z-10 text-[#FBF5B7] group-hover:text-[#080E21] font-serif font-bold tracking-wide whitespace-nowrap drop-shadow-md group-hover:drop-shadow-none transition-colors duration-300">{f.title}</motion.span>
               </motion.div>
             </motion.div>
           ))}
         </div>
 
+        {/* MOBILE FALLBACK VIEW (Scrollable Cards) */}
+        <div className="flex md:hidden w-full overflow-x-auto snap-x snap-mandatory px-4 pb-8 pt-4 gap-4 no-scrollbar relative z-30">
+          {advancedFeatures.map((f) => (
+             <div key={f.id} className="min-w-[85vw] snap-center p-6 rounded-3xl bg-white/5 border border-white/10 flex flex-col justify-center text-center shadow-xl">
+               <h3 className="text-xl font-serif font-bold text-[#FBF5B7] mb-3">{f.title}</h3>
+               <p className="text-white/70 text-sm leading-relaxed">{f.desc}</p>
+             </div>
+          ))}
+        </div>
+
+        {/* DESKTOP MODAL */}
         <AnimatePresence>
           {activeFeature && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setActiveFeature(null)} className="absolute inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4 cursor-pointer">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setActiveFeature(null)} className="absolute inset-0 z-50 hidden md:flex items-center justify-center bg-black/70 backdrop-blur-md p-4 cursor-pointer">
               {advancedFeatures.filter(f => f.id === activeFeature).map(f => (
                 <motion.div key={f.id} layoutId={`feature-bg-${f.id}`} className="bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] p-10 rounded-3xl max-w-lg w-full shadow-[0_20px_60px_rgba(191,149,63,0.6)] cursor-default text-center relative overflow-hidden" onClick={(e) => e.stopPropagation()}>
                   <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-overlay pointer-events-none" />
@@ -367,162 +373,93 @@ export default function Home() {
       </section>
 
       {/* ---------------- 3. TO THE JOURNEY AHEAD ---------------- */}
-      <section className="py-32 relative bg-white text-black overflow-hidden border-y-4 border-[#BF953F]">
-        <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-20 items-center">
+      <section className="py-24 md:py-32 relative bg-white text-black overflow-hidden border-y-4 border-[#BF953F]">
+        <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
           
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} className="space-y-6">
-            <h3 className="text-[#8B6914] tracking-[0.2em] uppercase text-sm font-bold">To The Journey Ahead</h3>
-            <motion.div variants={wipeReveal}>
-              <DarkGoldText text="Gain Valuable Knowledge & Experience" className="text-4xl md:text-6xl leading-tight" />
+            <h3 className="text-[#8B6914] tracking-[0.2em] uppercase text-xs md:text-sm font-bold text-center lg:text-left">To The Journey Ahead</h3>
+            <motion.div variants={wipeReveal} className="text-center lg:text-left">
+              <DarkGoldText text="Gain Valuable Knowledge & Experience" className="text-3xl md:text-5xl lg:text-6xl leading-tight" />
             </motion.div>
 
-            <div className="space-y-12 pt-8">
+            <div className="space-y-8 md:space-y-12 pt-4 md:pt-8">
               {journeyFeatures.map((item, idx) => (
-                <motion.div key={idx} custom={idx} variants={grandCardUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="flex items-start gap-8 group cursor-default">
-                  <div className={`w-20 h-20 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-br ${item.color} shadow-xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
-                    <item.icon className="w-10 h-10 text-white" />
+                <motion.div key={idx} custom={idx} variants={grandCardUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 md:gap-8 group cursor-default">
+                  <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-br ${item.color} shadow-xl group-hover:scale-110 group-active:scale-110 group-hover:rotate-6 group-active:rotate-6 transition-all duration-500`}>
+                    <item.icon className="w-8 h-8 md:w-10 md:h-10 text-white" />
                   </div>
                   <div>
-                    <h4 className="text-3xl font-serif font-bold text-[#080E21] mb-3 group-hover:text-[#8B6914] transition-colors duration-300">{item.title}</h4>
-                    <p className="text-gray-600 text-lg leading-relaxed">{item.desc}</p>
+                    <h4 className="text-xl md:text-3xl font-serif font-bold text-[#080E21] mb-2 md:mb-3 group-hover:text-[#8B6914] group-active:text-[#8B6914] transition-colors duration-300">{item.title}</h4>
+                    <p className="text-gray-600 text-sm md:text-lg leading-relaxed">{item.desc}</p>
                   </div>
                 </motion.div>
               ))}
             </div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, scale: 0.8, rotateY: 20 }} whileInView={{ opacity: 1, scale: 1, rotateY: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 1, type: "spring" }} className="grid grid-cols-2 grid-rows-2 gap-6 h-[700px] perspective-[1000px]">
-            <div className="bg-[linear-gradient(135deg,#1A2D4A,#080E21)] p-10 rounded-3xl flex flex-col justify-center text-white shadow-2xl hover:-translate-y-4 hover:rotate-2 transition-all duration-500 cursor-pointer border border-[#1A2D4A]/50">
-              <h4 className="text-3xl font-serif font-bold mb-4">Having any queries?</h4>
-              <p className="text-white/80 text-base leading-relaxed">Ready to move into a fast-growing industry with multiple career path opportunities available?</p>
+          {/* MOBILE FIX: Converted 2x2 grid to horizontal swipe on mobile */}
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 1, type: "spring" }} 
+            className="flex overflow-x-auto gap-4 snap-x snap-mandatory w-full h-[350px] no-scrollbar pb-4 md:grid md:grid-cols-2 md:grid-rows-2 md:h-[700px] md:gap-6 perspective-[1000px]"
+          >
+            <div className="min-w-[85vw] snap-center md:min-w-0 bg-[linear-gradient(135deg,#1A2D4A,#080E21)] p-6 md:p-10 rounded-3xl flex flex-col justify-center text-white shadow-2xl hover:-translate-y-4 active:-translate-y-4 md:hover:rotate-2 transition-all duration-500 cursor-pointer border border-[#1A2D4A]/50">
+              <h4 className="text-2xl md:text-3xl font-serif font-bold mb-3 md:mb-4">Having any queries?</h4>
+              <p className="text-white/80 text-sm md:text-base leading-relaxed">Ready to move into a fast-growing industry with multiple career path opportunities available?</p>
             </div>
-            <div className="rounded-3xl overflow-hidden shadow-2xl"><img src="/assets/j1.png" alt="Graduation" className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" loading="lazy" /></div>
-            <div className="rounded-3xl overflow-hidden shadow-2xl"><img src="/assets/j2.png" alt="Students Learning" className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" loading="lazy" /></div>
-            <div className="bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] p-10 rounded-3xl flex flex-col justify-center text-[#080E21] shadow-[0_20px_40px_rgba(191,149,63,0.4)] hover:-translate-y-4 hover:-rotate-2 transition-all duration-500 cursor-pointer">
-              <h4 className="text-3xl font-serif font-bold mb-4">Connect with us!</h4>
-              <p className="text-[#080E21]/80 text-base leading-relaxed font-bold">We are here to help you. It's time to earn your Aesthetician certification with NSFA Academy!</p>
+            <div className="min-w-[85vw] snap-center md:min-w-0 rounded-3xl overflow-hidden shadow-2xl">
+              <img src="/assets/j1.png" alt="Graduation" className="w-full h-full object-cover hover:scale-110 active:scale-110 transition-transform duration-700" loading="lazy" />
+            </div>
+            <div className="min-w-[85vw] snap-center md:min-w-0 rounded-3xl overflow-hidden shadow-2xl">
+              <img src="/assets/j2.png" alt="Students Learning" className="w-full h-full object-cover hover:scale-110 active:scale-110 transition-transform duration-700" loading="lazy" />
+            </div>
+            <div className="min-w-[85vw] snap-center md:min-w-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] p-6 md:p-10 rounded-3xl flex flex-col justify-center text-[#080E21] shadow-[0_20px_40px_rgba(191,149,63,0.4)] hover:-translate-y-4 active:-translate-y-4 md:hover:-rotate-2 transition-all duration-500 cursor-pointer">
+              <h4 className="text-2xl md:text-3xl font-serif font-bold mb-3 md:mb-4">Connect with us!</h4>
+              <p className="text-[#080E21]/80 text-sm md:text-base leading-relaxed font-bold">We are here to help you. It's time to earn your Aesthetician certification with NSFA Academy!</p>
             </div>
           </motion.div>
         </div>
       </section>
 
-    {/* ---------------- 4. PROGRAMS SECTION (Marquee with Meteors) ---------------- */}
-      <section className="py-32 relative bg-[linear-gradient(180deg,#080E21_0%,#0B132A_100%)] overflow-hidden">
-        
-        {/* INJECTED CSS FOR INFINITE SCROLL & METEORS */}
-        <style dangerouslySetInnerHTML={{__html: `
-          @keyframes scroll-left {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } /* Scrolls exactly half the width before snapping back perfectly */
-          }
-          
-          .animate-programs {
-            display: flex;
-            width: max-content;
-            animation: scroll-left 40s linear infinite; /* Slower, smoother duration */
-            will-change: transform; /* Hardware Acceleration */
-            backface-visibility: hidden;
-            -webkit-font-smoothing: antialiased;
-          }
-          
-          .pause-on-hover:hover .animate-programs {
-            animation-play-state: paused;
-          }
-
-          /* --- GOLDEN METEORS --- */
-          @keyframes meteor-fall {
-            0% { transform: translate(0, 0) rotate(45deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translate(-100vw, 100vh) rotate(45deg); opacity: 0; }
-          }
-
-          .meteor {
-            position: absolute;
-            width: 150px;
-            height: 2px;
-            background: linear-gradient(90deg, rgba(255,215,0,0) 0%, rgba(255,215,0,0.8) 100%);
-            animation: meteor-fall linear infinite;
-            will-change: transform, opacity;
-            pointer-events: none;
-            opacity: 0;
-            z-index: 0;
-          }
-          /* Create varying speeds and starting positions for meteors */
-          .meteor:nth-child(1) { top: -10%; left: 30%; animation-duration: 4s; animation-delay: 0.5s; }
-          .meteor:nth-child(2) { top: -20%; left: 80%; animation-duration: 5s; animation-delay: 2s; }
-          .meteor:nth-child(3) { top: -10%; left: 110%; animation-duration: 6s; animation-delay: 1.5s; }
-          .meteor:nth-child(4) { top: 30%; left: 120%; animation-duration: 4.5s; animation-delay: 3s; }
-          .meteor:nth-child(5) { top: 60%; left: 110%; animation-duration: 5.5s; animation-delay: 0.8s; }
-        `}} />
-
-        {/* METEOR ELEMENTS */}
+      {/* ---------------- 4. PROGRAMS SECTION (Marquee with Meteors) ---------------- */}
+      <section className="py-24 md:py-32 relative bg-[linear-gradient(180deg,#080E21_0%,#0B132A_100%)] overflow-hidden">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="meteor" />
-          <div className="meteor" />
-          <div className="meteor" />
-          <div className="meteor" />
-          <div className="meteor" />
+          <div className="meteor" /><div className="meteor" /><div className="meteor" /><div className="meteor" /><div className="meteor" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 text-center mb-16 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 text-center mb-10 md:mb-16 relative z-10">
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.8, type: "spring", bounce: 0.4 }} className="space-y-4">
-            <GoldText text="Explore Our Programs" className="text-5xl md:text-7xl py-2" />
-            <p className="text-white/60 text-xl font-light mt-4">Hover to pause. Drag to explore our world-class curriculum.</p>
+            <GoldText text="Explore Our Programs" className="text-4xl md:text-7xl py-2" />
+            <p className="text-white/60 text-sm md:text-xl font-light mt-4 px-4">Touch to pause. Drag to explore our world-class curriculum.</p>
           </motion.div>
         </div>
 
-        {/* OPTIMIZED SCROLLING CONTAINER */}
-        <div className="w-full overflow-hidden cursor-grab active:cursor-grabbing pb-16 pt-8 pause-on-hover relative z-10" ref={programsRef}>
-          <motion.div 
-            drag="x" 
-            dragConstraints={programsRef} 
-            className="animate-programs gap-8 px-4" 
-          >
-            {/* Render the courses array TWICE to create a seamless infinite loop */}
+        <div className="w-full overflow-hidden cursor-grab active:cursor-grabbing pb-16 pt-4 md:pt-8 pause-on-hover relative z-10" ref={programsRef}>
+          <motion.div drag="x" dragConstraints={programsRef} className="animate-programs gap-4 md:gap-8 px-4">
             {[...courses, ...courses].map((c, i) => (
               <motion.div 
                 key={i} 
-                whileHover={{ y: -15, scale: 1.05, boxShadow: "0 30px 60px -15px rgba(255,215,0,0.3)" }} 
-                className="w-[300px] h-[360px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-12 border border-white/10 shadow-2xl transition-all duration-500"
+                whileHover={{ y: -10, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }} 
+                className="w-[260px] md:w-[300px] h-[320px] md:h-[360px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-10 border border-white/10 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)] active:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)]"
               >
-                <div className="absolute inset-0 bg-white/5 backdrop-blur-md transition-opacity duration-500 group-hover:opacity-0" />
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)]" />
+                <div className="absolute inset-0 bg-white/5 backdrop-blur-md transition-opacity duration-500 group-hover:opacity-0 group-active:opacity-0" />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)]" />
                 
-                <div className="relative z-10 flex flex-col items-center text-center px-8 w-full h-full">
-                  
-                  {/* Icon & Title Group */}
-                  <div className="mb-6 p-5 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-hover:bg-black/10 transition-colors duration-500 shadow-inner">
-                    <c.icon className="w-12 h-12 text-[#FBF5B7] group-hover:text-black transition-colors duration-500" />
+                <div className="relative z-10 flex flex-col items-center text-center px-6 w-full h-full">
+                  <div className="mb-4 md:mb-6 p-4 md:p-5 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-active:border-black/20 group-hover:bg-black/10 group-active:bg-black/10 transition-colors duration-500 shadow-inner">
+                    <c.icon className="w-10 h-10 md:w-12 md:h-12 text-[#FBF5B7] group-hover:text-black group-active:text-black transition-colors duration-500" />
                   </div>
-                  <h3 className="text-2xl font-serif text-white group-hover:text-black font-bold transition-colors duration-500 mb-auto">
+                  <h3 className="text-xl md:text-2xl font-serif text-white group-hover:text-black group-active:text-black font-bold transition-colors duration-500 mb-auto">
                     {c.title}
                   </h3>
 
-                  {/* Action Buttons (Fades in on hover) */}
-                  <div className="w-full flex flex-col gap-3 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 pb-8">
-                    
-                    {/* View Details Button */}
-                    <button 
-                      onClick={() => window.location.href = '/courses'}
-                      className="w-full py-2.5 rounded-xl bg-black text-[#FBF5B7] font-bold text-xs tracking-widest uppercase hover:bg-white hover:text-black transition-colors shadow-lg"
-                    >
+                  <div className="w-full flex flex-col gap-2 md:gap-3 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6">
+                    <button onClick={() => window.location.href = '/courses'} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-black text-[#FBF5B7] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-white hover:text-black active:bg-white active:text-black transition-colors border border-white/10 md:border-none">
                       View Details
                     </button>
-                    
-                    {/* Enquire Button */}
-                    <button 
-                      onClick={() => {
-                        const message = `Hello NSFA Academy, I am interested in learning more about the ${c.title}.`;
-                        window.open(`https://wa.me/919884718883?text=${encodeURIComponent(message)}`, '_blank');
-                      }}
-                      className="w-full py-2.5 rounded-xl border border-black/30 text-black font-bold text-xs tracking-widest uppercase hover:bg-black hover:text-[#FBF5B7] transition-colors"
-                    >
+                    <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title}.`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 md:border-black/30 text-white md:text-black font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:text-[#FBF5B7] active:text-[#FBF5B7] transition-colors">
                       Enquire Now
                     </button>
-
                   </div>
-
                 </div>
               </motion.div>
             ))}
@@ -530,33 +467,30 @@ export default function Home() {
         </div>
       </section>
 
-     {/* ---------------- 5. GLOBALLY RECOGNISED ---------------- */}
+      {/* ---------------- 5. GLOBALLY RECOGNISED ---------------- */}
       <section className="py-24 relative overflow-hidden bg-[#050914] flex flex-col items-center justify-center">
         <div className="absolute inset-0 z-0 flex items-center justify-center opacity-30 mix-blend-screen pointer-events-none">
           <img src="/assets/map.png" alt="World Map" className="w-[100%] max-w-[1600px] object-contain drop-shadow-[0_0_30px_rgba(191,149,63,0.3)]" loading="lazy" />
         </div>
-        <div className="absolute top-[20%] left-[50%] -translate-x-1/2 w-[60%] h-[60%] rounded-full bg-[#BF953F]/10 blur-[200px] -z-10 pointer-events-none" />
 
-        <div className="max-w-6xl mx-auto px-4 relative z-10 w-full text-center flex flex-col items-center">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} className="mb-20 space-y-6">
+        <div className="max-w-7xl mx-auto px-4 relative z-10 w-full text-center flex flex-col items-center">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} className="mb-12 md:mb-20 space-y-4 md:space-y-6">
             <motion.div variants={wipeReveal}>
-              <GoldText text="Globally Recognised Certifications" className="text-6xl md:text-7xl lg:text-8xl leading-tight" />
+              <GoldText text="Globally Recognised" className="text-4xl md:text-7xl lg:text-8xl leading-tight" />
             </motion.div>
-            <motion.p variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.5 }}}} className="text-white/70 text-2xl leading-relaxed max-w-4xl mx-auto font-light">
-              We ensure comprehensive training and upgradation of knowledge and skills on a global scale.
+            <motion.p variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.5 }}}} className="text-white/70 text-sm md:text-2xl leading-relaxed max-w-4xl mx-auto font-light px-4">
+              Comprehensive training and upgradation of skills on a global scale.
             </motion.p>
           </motion.div>
 
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={{ visible: { transition: { staggerChildren: 0.3 } } }} className="flex flex-wrap justify-center gap-10 lg:gap-16 items-center w-full">
-            {[{ src: "/assets/mets.png", w: "w-[280px]" }, { src: "/assets/mount.png", w: "w-[380px]", center: true }, { src: "/assets/meds.png", w: "w-[280px]" }].map((logo, i) => (
-              <motion.div 
-                key={i} 
-                variants={grandCardUp} 
-                whileHover={{ y: -15, scale: 1.05, boxShadow: logo.center ? "0 30px 60px -10px rgba(191,149,63,0.4)" : "0 20px 50px -10px rgba(191,149,63,0.2)" }} 
-                className={`rounded-3xl flex items-center justify-center cursor-pointer transition-all duration-500 shadow-2xl backdrop-blur-xl ${logo.w} ${
-                  logo.center 
-                    ? 'p-10 border border-[#BF953F]/40 h-[200px] bg-[linear-gradient(145deg,rgba(191,149,63,0.15)_0%,rgba(0,0,0,0)_100%)]' 
-                    : 'p-8 h-[160px] bg-white/5 border border-white/10 hover:border-[#BF953F]/30 hover:bg-white/10'
+          {/* MOBILE FIX: Horizontal Scroll for Logos */}
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={{ visible: { transition: { staggerChildren: 0.3 } } }} 
+            className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory md:flex-wrap justify-start md:justify-center gap-6 md:gap-16 items-center w-full no-scrollbar pb-8 md:pb-0"
+          >
+            {[{ src: "/assets/mets.png", w: "w-[240px] md:w-[280px]" }, { src: "/assets/mount.png", w: "w-[280px] md:w-[380px]", center: true }, { src: "/assets/meds.png", w: "w-[240px] md:w-[280px]" }].map((logo, i) => (
+              <motion.div key={i} variants={grandCardUp} whileHover={{ y: -10, scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                className={`snap-center shrink-0 rounded-3xl flex items-center justify-center cursor-pointer transition-all duration-500 shadow-2xl backdrop-blur-xl ${logo.w} ${
+                  logo.center ? 'p-8 md:p-10 border border-[#BF953F]/40 h-[160px] md:h-[200px] bg-[linear-gradient(145deg,rgba(191,149,63,0.15)_0%,rgba(0,0,0,0)_100%)] shadow-[0_20px_40px_-10px_rgba(191,149,63,0.3)]' : 'p-6 md:p-8 h-[120px] md:h-[160px] bg-white/5 border border-white/10 hover:border-[#BF953F]/30 active:border-[#BF953F]/30'
                 }`}
               >
                 <img src={logo.src} alt="Partner" className="max-w-[85%] max-h-[85%] object-contain" loading="lazy" />
@@ -566,33 +500,72 @@ export default function Home() {
         </div>
       </section>
 
-    {/* ---------------- 6. VIDEO REELS ---------------- */}
-      <section className="py-32 relative bg-[#FAFAFA] text-black border-t-8 border-[#BF953F] overflow-hidden">
+      {/* ---------------- 6. VIDEO REELS ---------------- */}
+      <section className="py-24 md:py-32 relative bg-[#FAFAFA] text-black border-t-8 border-[#BF953F] overflow-hidden">
         <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-4 text-center mb-20 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 text-center mb-12 md:mb-20 relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} className="space-y-4">
-            <h3 className="text-[#8B6914] tracking-[0.2em] uppercase text-sm font-bold flex items-center justify-center gap-2">
-              <Play className="w-5 h-5 fill-current" /> Watch Our Success Stories
+            <h3 className="text-[#8B6914] tracking-[0.2em] uppercase text-xs md:text-sm font-bold flex items-center justify-center gap-2">
+              <Play className="w-4 h-4 md:w-5 md:h-5 fill-current" /> Watch Our Success Stories
             </h3>
             <motion.div variants={wipeReveal}>
-              <DarkGoldText text="Student Experience" className="text-5xl md:text-7xl" />
+              <DarkGoldText text="Student Experience" className="text-4xl md:text-7xl" />
             </motion.div>
-            <motion.p variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.5 }}}} className="text-gray-600 text-xl max-w-3xl mx-auto font-light pt-4">
-              Swipe and click to watch real testimonials and clinical training experiences from our alumni across the globe.
+            <motion.p variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.5 }}}} className="text-gray-600 text-sm md:text-xl max-w-3xl mx-auto font-light pt-2 md:pt-4 px-4">
+              Swipe and click to watch real testimonials and clinical training experiences.
             </motion.p>
           </motion.div>
         </div>
 
-        <div className="w-full overflow-hidden cursor-grab active:cursor-grabbing pb-16 pt-4 relative z-10" ref={reviewsRef}>
-          <motion.div drag="x" dragConstraints={reviewsRef} className="flex gap-8 px-10 w-max mx-auto" style={{ willChange: "transform" }}>
-            {/* Make sure you have videos named v1.mp4 to v6.mp4 in your public/assets folder! */}
+        <div className="w-full overflow-hidden cursor-grab active:cursor-grabbing pb-16 pt-4 relative z-10 no-scrollbar" ref={reviewsRef}>
+          <motion.div drag="x" dragConstraints={reviewsRef} className="flex gap-4 md:gap-8 px-4 md:px-10 w-max mx-auto">
             {[1, 2, 3, 4, 5, 6].map((num) => (
               <VideoReelCard key={num} num={num} />
             ))}
           </motion.div>
         </div>
       </section>
+
+      {/* ---------------- 7. FAQ SECTION (NEW) ---------------- */}
+      <section className="py-24 md:py-32 relative bg-[#050914] overflow-hidden border-t border-white/5">
+        <div className="max-w-4xl mx-auto px-4 relative z-10">
+          <div className="text-center mb-12 md:mb-20">
+            <h3 className="text-[#BF953F] tracking-[0.2em] uppercase text-xs md:text-sm font-bold mb-4">Support</h3>
+            <GoldText text="Frequently Asked Questions" className="text-3xl md:text-6xl" />
+          </div>
+
+          <div className="space-y-4">
+            {faqs.map((faq, idx) => (
+              <FAQItem key={idx} question={faq.question} answer={faq.answer} isOpen={openFaq === idx} onClick={() => setOpenFaq(openFaq === idx ? null : idx)} />
+            ))}
+          </div>
+        </div>
+      </section>
+
     </main>
+  );
+}
+
+/* ---------------- FAQ ITEM COMPONENT ---------------- */
+function FAQItem({ question, answer, isOpen, onClick }: { question: string, answer: string, isOpen: boolean, onClick: () => void }) {
+  return (
+    <div className={`border rounded-2xl transition-all duration-300 overflow-hidden ${isOpen ? 'border-[#BF953F]/50 bg-white/5 shadow-[0_10px_30px_rgba(191,149,63,0.1)]' : 'border-white/10 bg-transparent hover:bg-white/5'}`}>
+      <button onClick={onClick} className="w-full px-6 py-5 flex items-center justify-between text-left outline-none">
+        <span className={`font-serif font-bold text-base md:text-lg transition-colors ${isOpen ? 'text-[#FBF5B7]' : 'text-white'}`}>{question}</span>
+        <motion.div animate={{ rotate: isOpen ? 180 : 0 }} className={`shrink-0 ml-4 p-1 rounded-full ${isOpen ? 'bg-[#BF953F] text-[#050914]' : 'bg-white/10 text-white'}`}>
+          <ChevronDown size={18} />
+        </motion.div>
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+            <div className="px-6 pb-6 text-white/70 text-sm md:text-base leading-relaxed font-light border-t border-white/5 pt-4">
+              {answer}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
