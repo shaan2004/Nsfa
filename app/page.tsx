@@ -31,19 +31,19 @@ const DarkGoldText = ({ text, className = "" }: { text: string; className?: stri
     {text}
   </h2>
 );
+
 const VideoReelCard = ({ num }: { num: number }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [hasError, setHasError] = useState(false); // Added error state
+  const [hasError, setHasError] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const togglePlay = () => {
-    if (hasError) return; // Don't try to play if the file is missing
+    if (hasError) return;
     if (videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
       } else {
-        // Catch promise rejection if playback fails
         videoRef.current.play().catch((e) => {
           console.error("Video playback failed:", e);
           setHasError(true);
@@ -70,7 +70,6 @@ const VideoReelCard = ({ num }: { num: number }) => {
     >
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#AA771C_100%)] pointer-events-none transition-opacity duration-500 -z-10 scale-[1.02]" />
 
-      {/* ERROR FALLBACK: Shows if the video file is missing or corrupted */}
       {hasError && (
         <div className="absolute inset-0 z-30 flex items-center justify-center bg-[#050914]">
           <p className="text-white/40 text-xs font-bold uppercase tracking-[0.2em] border border-white/10 px-4 py-2 rounded-full">
@@ -79,24 +78,21 @@ const VideoReelCard = ({ num }: { num: number }) => {
         </div>
       )}
 
-      {/* UPGRADED VIDEO ELEMENT */}
       <video
         ref={videoRef}
         className={`w-full h-full object-cover relative z-10 ${hasError ? 'hidden' : 'block'}`}
         loop
         playsInline
         muted={isMuted}
-        preload="metadata" // Optimizes loading
+        preload="metadata"
         onEnded={() => setIsPlaying(false)}
-        onError={() => setHasError(true)} // Triggers the fallback if source fails
+        onError={() => setHasError(true)}
       >
-        {/* Explicitly declare the type. Added both 'v' and 'r' prefixes just in case of naming mix-ups */}
         <source src={`/assets/r${num}.mp4`} type="video/mp4" />
         <source src={`/assets/r${num}.mp4`} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
-      {/* Play Button Overlay (Only shows if there is no error) */}
       {!hasError && (
         <div className={`absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40 transition-opacity duration-300 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}>
           <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/40 text-white shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:bg-[#BF953F]/90 group-active:bg-[#BF953F]/90 group-hover:border-[#FBF5B7] group-active:border-[#FBF5B7] group-hover:text-[#040814] group-active:text-[#040814] transition-all duration-500">
@@ -110,7 +106,6 @@ const VideoReelCard = ({ num }: { num: number }) => {
 
       <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-black/80 to-transparent z-20 pointer-events-none" />
 
-      {/* Volume Toggle */}
       {isPlaying && !hasError && (
         <button
           onClick={toggleMute}
@@ -200,7 +195,7 @@ export default function Home() {
   return (
     <main suppressHydrationWarning className="bg-[#080E21] text-white overflow-hidden min-h-screen relative perspective-[1000px]">
       
-      {/* GLOBAL CSS OPTIMIZATIONS */}
+      {/* GLOBAL CSS OPTIMIZATIONS (METEORS RESTORED) */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes infinite-scroll {
           0% { transform: translateX(0); }
@@ -212,7 +207,6 @@ export default function Home() {
           animation: infinite-scroll 25s linear infinite;
           will-change: transform; 
         }
-        /* Added :active and :focus to pause on mobile touch/drag */
         .pause-on-hover:hover .animate-programs,
         .pause-on-hover:active .animate-programs,
         .pause-on-hover:focus-within .animate-programs {
@@ -225,9 +219,33 @@ export default function Home() {
           -ms-overflow-style: none;
           scrollbar-width: none;
         }
+
+        /* --- RESTORED GOLDEN METEORS --- */
+        @keyframes meteor-fall {
+          0% { transform: translate(0, 0) rotate(45deg); opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { transform: translate(-100vw, 100vh) rotate(45deg); opacity: 0; }
+        }
+        .meteor {
+          position: absolute;
+          width: 150px;
+          height: 2px;
+          background: linear-gradient(90deg, rgba(255,215,0,0) 0%, rgba(255,215,0,0.8) 100%);
+          animation: meteor-fall linear infinite;
+          will-change: transform, opacity;
+          pointer-events: none;
+          opacity: 0;
+          z-index: 0;
+        }
+        .meteor:nth-child(1) { top: -10%; left: 30%; animation-duration: 4s; animation-delay: 0.5s; }
+        .meteor:nth-child(2) { top: -20%; left: 80%; animation-duration: 5s; animation-delay: 2s; }
+        .meteor:nth-child(3) { top: -10%; left: 110%; animation-duration: 6s; animation-delay: 1.5s; }
+        .meteor:nth-child(4) { top: 30%; left: 120%; animation-duration: 4.5s; animation-delay: 3s; }
+        .meteor:nth-child(5) { top: 60%; left: 110%; animation-duration: 5.5s; animation-delay: 0.8s; }
       `}} />
 
-    {/* ---------------- 1. HERO SECTION ---------------- */}
+      {/* ---------------- 1. HERO SECTION ---------------- */}
       <section className="min-h-[100vh] flex items-center justify-center text-center px-4 relative overflow-hidden">
         <div className="absolute inset-0 -z-30 bg-[#050914]">
           {[1, 2].map((num, i) => (
@@ -295,9 +313,10 @@ export default function Home() {
         </motion.div>
       </section>
 
-   {/* ---------------- 2. WHY CHOOSE US ---------------- */}
-      <section className="min-h-screen py-24 relative overflow-hidden bg-[linear-gradient(180deg,#0B132A_0%,#050914_100%)] flex flex-col items-center justify-center">
+      {/* ---------------- 2. WHY CHOOSE US (Neurolink Active on Mobile & Desktop) ---------------- */}
+      <section className="min-h-[100vh] py-24 relative overflow-hidden bg-[linear-gradient(180deg,#0B132A_0%,#050914_100%)] flex flex-col items-center justify-center">
         <div className="absolute top-[20%] left-[20%] w-[40%] h-[40%] rounded-full bg-[#BF953F]/10 blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-[20%] right-[20%] w-[40%] h-[40%] rounded-full bg-[#0074A5]/10 blur-[120px] pointer-events-none" />
         
         <div className="relative z-20 flex flex-col items-center justify-center text-center max-w-3xl px-4 pointer-events-none mb-12">
           <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="h-[2px] bg-[#FFD700] mb-6 md:mb-8" />
@@ -310,8 +329,8 @@ export default function Home() {
           <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }} className="h-[2px] bg-[#FFD700] mt-6 md:mt-8" />
         </div>
 
-        {/* DESKTOP NEUROLINK VIEW */}
-        <div className={`hidden md:block absolute inset-0 mt-40 ${activeFeature ? 'pointer-events-none z-0' : 'pointer-events-auto z-20'}`}>
+        {/* NEUROLINK VIEW - Restored and Active on both Mobile & Desktop */}
+        <div className={`absolute inset-0 mt-32 md:mt-40 ${activeFeature ? 'pointer-events-none z-0' : 'pointer-events-auto z-20'}`}>
           <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
             <defs>
               <linearGradient id="neuro-grad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -331,39 +350,30 @@ export default function Home() {
                );
             })}
           </svg>
+          
           {advancedFeatures.map((f, i) => (
-            <motion.div key={f.id} layoutId={`feature-container-${f.id}`} onClick={() => setActiveFeature(f.id)} style={{ left: `${f.x}%`, top: `${f.y}%`, willChange: "transform" }} className="absolute -translate-x-1/2 -translate-y-1/2 w-max cursor-pointer z-20" animate={{ y: [0, -12, 0], x: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 4 + (i % 3), ease: "easeInOut", delay: i * 0.2 }} whileHover={{ scale: 1.1, zIndex: 30 }}>
-              <motion.div layoutId={`feature-bg-${f.id}`} className="relative overflow-hidden px-6 py-3 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.3)] border border-[#BF953F]/30 transition-colors duration-300 group">
-                <div className="absolute inset-0 bg-[#080E21]/60 backdrop-blur-xl transition-opacity duration-300 group-hover:opacity-0" />
-                <div className="absolute inset-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <motion.span layoutId={`feature-text-${f.id}`} className="relative z-10 text-[#FBF5B7] group-hover:text-[#080E21] font-serif font-bold tracking-wide whitespace-nowrap drop-shadow-md group-hover:drop-shadow-none transition-colors duration-300">{f.title}</motion.span>
+            <motion.div key={f.id} layoutId={`feature-container-${f.id}`} onClick={() => setActiveFeature(f.id)} style={{ left: `${f.x}%`, top: `${f.y}%`, willChange: "transform" }} className="absolute -translate-x-1/2 -translate-y-1/2 w-max cursor-pointer z-20" animate={{ y: [0, -12, 0], x: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 4 + (i % 3), ease: "easeInOut", delay: i * 0.2 }} whileHover={{ scale: 1.1, zIndex: 30 }} whileTap={{ scale: 0.95 }}>
+              <motion.div layoutId={`feature-bg-${f.id}`} className="relative overflow-hidden px-3 py-2 md:px-6 md:py-3 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.3)] border border-[#BF953F]/30 transition-colors duration-300 group">
+                <div className="absolute inset-0 bg-[#080E21]/80 backdrop-blur-xl transition-opacity duration-300 group-hover:opacity-0 group-active:opacity-0" />
+                <div className="absolute inset-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300" />
+                <motion.span layoutId={`feature-text-${f.id}`} className="relative z-10 text-[#FBF5B7] group-hover:text-[#080E21] group-active:text-[#080E21] font-serif font-bold text-[10px] md:text-base tracking-wide whitespace-nowrap drop-shadow-md group-hover:drop-shadow-none group-active:drop-shadow-none transition-colors duration-300">{f.title}</motion.span>
               </motion.div>
             </motion.div>
           ))}
         </div>
 
-        {/* MOBILE FALLBACK VIEW (Scrollable Cards) */}
-        <div className="flex md:hidden w-full overflow-x-auto snap-x snap-mandatory px-4 pb-8 pt-4 gap-4 no-scrollbar relative z-30">
-          {advancedFeatures.map((f) => (
-             <div key={f.id} className="min-w-[85vw] snap-center p-6 rounded-3xl bg-white/5 border border-white/10 flex flex-col justify-center text-center shadow-xl">
-               <h3 className="text-xl font-serif font-bold text-[#FBF5B7] mb-3">{f.title}</h3>
-               <p className="text-white/70 text-sm leading-relaxed">{f.desc}</p>
-             </div>
-          ))}
-        </div>
-
-        {/* DESKTOP MODAL */}
+        {/* MODAL - Now optimized for Mobile & Desktop */}
         <AnimatePresence>
           {activeFeature && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setActiveFeature(null)} className="absolute inset-0 z-50 hidden md:flex items-center justify-center bg-black/70 backdrop-blur-md p-4 cursor-pointer">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setActiveFeature(null)} className="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 cursor-pointer">
               {advancedFeatures.filter(f => f.id === activeFeature).map(f => (
-                <motion.div key={f.id} layoutId={`feature-bg-${f.id}`} className="bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] p-10 rounded-3xl max-w-lg w-full shadow-[0_20px_60px_rgba(191,149,63,0.6)] cursor-default text-center relative overflow-hidden" onClick={(e) => e.stopPropagation()}>
+                <motion.div key={f.id} layoutId={`feature-bg-${f.id}`} className="bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] p-6 md:p-10 rounded-3xl max-w-[90vw] md:max-w-lg w-full shadow-[0_20px_60px_rgba(191,149,63,0.6)] cursor-default text-center relative overflow-hidden" onClick={(e) => e.stopPropagation()}>
                   <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-overlay pointer-events-none" />
                   <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0, transition: { delay: 0.2 } }} exit={{ opacity: 0, transition: { duration: 0.1 } }} className="relative z-10 flex flex-col items-center">
-                    <div className="w-16 h-2 bg-[#080E21]/20 rounded-full mb-8" />
-                    <motion.h3 layoutId={`feature-text-${f.id}`} className="text-3xl font-serif font-bold text-[#080E21] mb-6">{f.title}</motion.h3>
-                    <p className="text-[#080E21]/90 text-lg font-medium leading-relaxed">{f.desc}</p>
-                    <button onClick={() => setActiveFeature(null)} className="mt-10 px-8 py-3 rounded-full border-2 border-[#080E21]/40 text-[#080E21] font-bold tracking-widest uppercase hover:bg-[#080E21] hover:text-[#FBF5B7] transition-all">Close Details</button>
+                    <div className="w-12 md:w-16 h-1.5 md:h-2 bg-[#080E21]/20 rounded-full mb-6 md:mb-8" />
+                    <motion.h3 layoutId={`feature-text-${f.id}`} className="text-2xl md:text-3xl font-serif font-bold text-[#080E21] mb-4 md:mb-6">{f.title}</motion.h3>
+                    <p className="text-[#080E21]/90 text-base md:text-lg font-medium leading-relaxed">{f.desc}</p>
+                    <button onClick={() => setActiveFeature(null)} className="mt-8 md:mt-10 px-6 py-2.5 md:px-8 md:py-3 rounded-full border-2 border-[#080E21]/40 text-[#080E21] font-bold tracking-widest text-xs md:text-sm uppercase hover:bg-[#080E21] active:bg-[#080E21] hover:text-[#FBF5B7] active:text-[#FBF5B7] transition-all">Close</button>
                   </motion.div>
                 </motion.div>
               ))}
@@ -397,7 +407,6 @@ export default function Home() {
             </div>
           </motion.div>
 
-          {/* MOBILE FIX: Converted 2x2 grid to horizontal swipe on mobile */}
           <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 1, type: "spring" }} 
             className="flex overflow-x-auto gap-4 snap-x snap-mandatory w-full h-[350px] no-scrollbar pb-4 md:grid md:grid-cols-2 md:grid-rows-2 md:h-[700px] md:gap-6 perspective-[1000px]"
           >
@@ -419,8 +428,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------------- 4. PROGRAMS SECTION (Marquee with Meteors) ---------------- */}
+      {/* ---------------- 4. PROGRAMS SECTION (With RESTORED Meteors) ---------------- */}
       <section className="py-24 md:py-32 relative bg-[linear-gradient(180deg,#080E21_0%,#0B132A_100%)] overflow-hidden">
+        
+        {/* METEORS RESTORED HERE */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="meteor" /><div className="meteor" /><div className="meteor" /><div className="meteor" /><div className="meteor" />
         </div>
@@ -483,7 +494,6 @@ export default function Home() {
             </motion.p>
           </motion.div>
 
-          {/* MOBILE FIX: Horizontal Scroll for Logos */}
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={{ visible: { transition: { staggerChildren: 0.3 } } }} 
             className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory md:flex-wrap justify-start md:justify-center gap-6 md:gap-16 items-center w-full no-scrollbar pb-8 md:pb-0"
           >
@@ -527,7 +537,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------------- 7. FAQ SECTION (NEW) ---------------- */}
+      {/* ---------------- 7. FAQ SECTION ---------------- */}
       <section className="py-24 md:py-32 relative bg-[#050914] overflow-hidden border-t border-white/5">
         <div className="max-w-4xl mx-auto px-4 relative z-10">
           <div className="text-center mb-12 md:mb-20">
