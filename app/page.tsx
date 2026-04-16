@@ -135,9 +135,9 @@ const targetAudience = [
 
 const advancedFeatures = [
   { id: 1, title: "8-in-1 Course", desc: "Only institute providing 8 CPD trainings in 1 comprehensive course.", x: 15, y: 15 },
-  { id: 2, title: "Level 6 Monopoly", desc: "Exclusive ISPMU Permanent Makeup Masterclass in Bangkok.", x: 85, y: 18 },
+  { id: 2, title: "Monopoly", desc: "Exclusive ISPMU Permanent Makeup Masterclass in Bangkok.", x: 85, y: 18 },
   { id: 3, title: "Free Internships", desc: "Guaranteed free internship benefits and hands-on practice.", x: 12, y: 48 },
-  { id: 4, title: "Level 7 Korea", desc: "Exclusive Korea University Programme. Only 30 seats per year.", x: 88, y: 45 },
+  { id: 4, title: "Korea", desc: "Exclusive Korea University Programme. Only 30 seats per year.", x: 88, y: 45 },
   { id: 5, title: "Business Setup", desc: "Business & Entrepreneurship classes to open your own clinic.", x: 18, y: 78 },
   { id: 6, title: "Easy EMI", desc: "Highly accessible courses with flexible Easy EMI options.", x: 82, y: 75 },
   { id: 7, title: "Global Placement", desc: "100% Job Placement offers and career assistance globally.", x: 35, y: 92 },
@@ -149,10 +149,10 @@ const meshConnections = [
 ];
 
 const courses = [
-  { title: "Level 4: Fellowship", loc: "Chennai", desc: "Facial Aesthetics & Clinical Cosmetology. 4 Batches/Yr.", badge: "8 CPDs in 1", icon: Award },
+  { title: "Fellowship", loc: "Chennai", desc: "Facial Aesthetics & Clinical Cosmetology. 4 Batches/Yr.", badge: "8 CPDs in 1", icon: Award },
   { title: "Master Fellowship", loc: "Dubai / S. Korea", desc: "Multi-level global certification with international faculty.", badge: "Global Placement", icon: Globe },
-  { title: "Level 6: PMU Masterclass", loc: "Bangkok", desc: "ISPMU Permanent Makeup Masterclass. 2 Batches/Yr.", badge: "Monopoly", icon: Star },
-  { title: "Level 7: Univ. Programme", loc: "South Korea", desc: "Premium University Training. Only 30 seats per year.", badge: "Monopoly", icon: GraduationCap },
+  { title: "PMU Masterclass", loc: "Bangkok", desc: "ISPMU Permanent Makeup Masterclass. 2 Batches/Yr.", badge: "Monopoly", icon: Star },
+  { title: "Korea University Programme", loc: "South Korea", desc: "Premium University Training. Only 30 seats per year.", badge: "Monopoly", icon: GraduationCap },
   { title: "PMU & Lashes", loc: "Chennai", desc: "Monthly PMU batches & 6 Eyelash batches per year.", badge: "Hands-on", icon: BookOpen },
 ];
 
@@ -165,8 +165,8 @@ const journeyFeatures = [
 const faqs = [
   { question: "Who is eligible to enroll in these aesthetic courses?", answer: "Our courses are specifically designed for MBBS, BDS, BHMS, BAMS, MAXFAX, Nurses, BPT, Beauticians, and Makeup Artists." },
   { question: "What is the fee structure and do you offer EMI?", answer: "Our average fees range from ₹35,000 to ₹90,000 depending on the course level. Yes, we offer Easy EMI options to make our world-class training accessible." },
-  { question: "What does the Level 4 Fellowship include?", answer: "The Level 4 course (held in Chennai) includes Facial Aesthetics, Clinical/Medical Cosmetology, and Skin Aesthetics. We take only 20 students per batch, 4 times a year." },
-  { question: "Do you offer international training?", answer: "Yes! We offer a Master Fellowship in Dubai/South Korea, a Level 6 PMU Masterclass in Bangkok, and a Level 7 Korea University Programme." },
+  { question: "What does the Fellowship include?", answer: "The Fellowship (held in Chennai) includes Facial Aesthetics, Clinical/Medical Cosmetology, and Skin Aesthetics. We take only 20 students per batch, 4 times a year." },
+  { question: "Do you offer international training?", answer: "Yes! We offer a Master Fellowship in Dubai/South Korea,PMU Masterclass in Bangkok, and a Korea University Programme." },
   { question: "Will I get help setting up my own clinic?", answer: "Absolutely. In addition to 100% job placement assistance, we provide specialized Business & Entrepreneurship classes to help you launch your own aesthetic clinic or salon." }
 ];
 
@@ -357,7 +357,7 @@ export default function Home() {
             <span className="relative inline-flex rounded-full h-3 w-3 bg-black"></span>
           </span>
           <p className="text-[10px] md:text-sm font-bold uppercase tracking-wider">
-            Admissions Open: Level 4 Chennai Batch (Only 20 Seats) | Easy EMI Available
+            Admissions Open: Chennai Batch (Only 20 Seats) | Easy EMI Available
           </p>
         </div>
 
