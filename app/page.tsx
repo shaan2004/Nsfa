@@ -3,7 +3,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { motion, Variants, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { Award, BookOpen, Globe, Stethoscope, Briefcase, GraduationCap, Play, PlayCircle, Star, Volume2, VolumeX, Building2, Users, MonitorPlay, MessageCircle, ChevronDown } from "lucide-react";
+import { Award, BookOpen, Globe, Stethoscope, Briefcase, GraduationCap, Play, PlayCircle, Star, Volume2, VolumeX, Building2, Users, MonitorPlay, MessageCircle, ChevronDown, Sparkles } from "lucide-react";
 
 /* ---------------- PREMIUM COMPONENTS ---------------- */
 const GoldText = ({ text, className = "" }: { text: string; className?: string }) => (
@@ -88,7 +88,7 @@ const VideoReelCard = ({ num }: { num: number }) => {
         onEnded={() => setIsPlaying(false)}
         onError={() => setHasError(true)}
       >
-        <source src={`/assets/r${num}.mp4`} type="video/mp4" />
+        <source src={`/assets/v${num}.mp4`} type="video/mp4" />
         <source src={`/assets/r${num}.mp4`} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
@@ -125,42 +125,50 @@ const VideoReelCard = ({ num }: { num: number }) => {
   );
 };
 
-/* ---------------- DATA ARRAYS ---------------- */
+/* ---------------- ACTUAL BUSINESS DATA ---------------- */
+const targetAudience = [
+  { title: "Medical Professionals", desc: "MBBS, BDS, BHMS, BAMS, MAXFAX", icon: Stethoscope },
+  { title: "Allied Health", desc: "Nurses, BPT (Physiotherapists)", icon: Users },
+  { title: "Beauty Experts", desc: "Beauticians, Makeup Artists (MUA)", icon: Star },
+  { title: "Clinic Owners", desc: "Salon & Clinic Entrepreneurs (KBAC)", icon: Building2 }
+];
+
 const advancedFeatures = [
-  { id: 1, title: "Global Certifications", desc: "Globally Recognised Certifications from IAO, ISO, IAF, BSS & UK Boards.", x: 15, y: 15 },
-  { id: 2, title: "Affordable 8-in-1", desc: "Highly affordable 8 in 1 Course with Individual Certification.", x: 85, y: 18 },
-  { id: 3, title: "Student Exchange", desc: "Exchange Programs with International Universities (Sweden, Turkey, Dubai, UK).", x: 12, y: 48 },
-  { id: 4, title: "Dual Degree", desc: "First in India to Launch Dual Degree Certification.", x: 88, y: 45 },
-  { id: 5, title: "Job Placement", desc: "100% Job Placement offers and career assistance.", x: 18, y: 78 },
-  { id: 6, title: "Cosmetic Medicine", desc: "First in India to Launch Cosmetic Medicine Courses.", x: 82, y: 75 },
-  { id: 7, title: "Research Ops", desc: "India's Only course for Facial Aesthetics with Research opportunities.", x: 35, y: 92 },
-  { id: 8, title: "Pioneer Training", desc: "Training by true Pioneers in the field of Aesthetics and Dentistry.", x: 65, y: 90 },
+  { id: 1, title: "8-in-1 Course", desc: "Only institute providing 8 CPD trainings in 1 comprehensive course.", x: 15, y: 15 },
+  { id: 2, title: "Level 6 Monopoly", desc: "Exclusive ISPMU Permanent Makeup Masterclass in Bangkok.", x: 85, y: 18 },
+  { id: 3, title: "Free Internships", desc: "Guaranteed free internship benefits and hands-on practice.", x: 12, y: 48 },
+  { id: 4, title: "Level 7 Korea", desc: "Exclusive Korea University Programme. Only 30 seats per year.", x: 88, y: 45 },
+  { id: 5, title: "Business Setup", desc: "Business & Entrepreneurship classes to open your own clinic.", x: 18, y: 78 },
+  { id: 6, title: "Easy EMI", desc: "Highly accessible courses with flexible Easy EMI options.", x: 82, y: 75 },
+  { id: 7, title: "Global Placement", desc: "100% Job Placement offers and career assistance globally.", x: 35, y: 92 },
+  { id: 8, title: "Master Fellowship", desc: "Multi-level certifications across Dubai & South Korea.", x: 65, y: 90 },
 ];
 
 const meshConnections = [
   [1, 3], [3, 5], [5, 7], [7, 8], [8, 6], [6, 4], [4, 2], [2, 1]
 ];
 
+// UPDATED TO ACTUAL COURSES FROM NOTES
 const courses = [
-  { title: "Diploma Courses", icon: BookOpen },
-  { title: "Fellowship Courses", icon: Award },
-  { title: "Mastership Courses", icon: GraduationCap },
-  { title: "PG Certification", icon: Globe },
-  { title: "Dental Science", icon: Stethoscope },
+  { title: "Level 4: Fellowship", loc: "Chennai", desc: "Facial Aesthetics & Clinical Cosmetology. 4 Batches/Yr.", badge: "8 CPDs in 1", icon: Award },
+  { title: "Master Fellowship", loc: "Dubai / S. Korea", desc: "Multi-level global certification with international faculty.", badge: "Global Placement", icon: Globe },
+  { title: "Level 6: PMU Masterclass", loc: "Bangkok", desc: "ISPMU Permanent Makeup Masterclass. 2 Batches/Yr.", badge: "Monopoly", icon: Star },
+  { title: "Level 7: Univ. Programme", loc: "South Korea", desc: "Premium University Training. Only 30 seats per year.", badge: "Monopoly", icon: GraduationCap },
+  { title: "PMU & Lashes", loc: "Chennai", desc: "Monthly PMU batches & 6 Eyelash batches per year.", badge: "Hands-on", icon: BookOpen },
 ];
 
 const journeyFeatures = [
-  { title: "Hands on Experience", desc: "Get Hands on experience with Live practical sessions", icon: Building2, color: "from-[#1A2D4A] to-[#080E21]" },
-  { title: "Expert Training", desc: "Get trained from the experts in the field of Aesthetics", icon: Users, color: "from-[#BF953F] to-[#B38728]" },
-  { title: "Webinars / Online Courses", desc: "Get informed with the latest trends in the field of Aesthetics", icon: MonitorPlay, color: "from-[#0F766E] to-[#042F2E]" }
+  { title: "8 CPDs in 1 Course", desc: "We are the only institute to provide 8 CPD training modules integrated into a single course.", icon: Award, color: "from-[#1A2D4A] to-[#080E21]" },
+  { title: "Business & Internships", desc: "Free internship benefits plus exclusive Business & Entrepreneurship classes to launch your clinic.", icon: Briefcase, color: "from-[#BF953F] to-[#B38728]" },
+  { title: "Accessible Learning", desc: "World-class education made accessible with flexible Easy EMI options and 100% placement assistance.", icon: Sparkles, color: "from-[#0F766E] to-[#042F2E]" }
 ];
 
 const faqs = [
-  { question: "Who is eligible to enroll in these aesthetic courses?", answer: "Our courses are specifically designed for registered medical and dental professionals, including Doctors, Dentists, Dermatologists, and Maxillofacial Surgeons looking to upgrade their skills." },
-  { question: "Are NSFA Academy certifications globally recognized?", answer: "Yes! We are the first academy in India to hold IAO Accreditation for Facial Aesthetics. Our certifications are also ISO 9001:2015, IAF, and UK Board affiliated, making them recognized worldwide." },
-  { question: "Do you provide hands-on clinical training?", answer: "Absolutely. Hands-on clinical training on live models is a core component of our curriculum to ensure you graduate with complete practical confidence." },
-  { question: "Is there job placement assistance after course completion?", answer: "Yes, we provide 100% job placement assistance, career counseling, and support for setting up your own clinical practice." },
-  { question: "Do you offer online or hybrid learning options?", answer: "Yes, we offer comprehensive online modules and webinars combined with offline hands-on workshops to accommodate busy professional schedules." }
+  { question: "Who is eligible to enroll in these aesthetic courses?", answer: "Our courses are specifically designed for MBBS, BDS, BHMS, BAMS, MAXFAX, Nurses, BPT, Beauticians, and Makeup Artists." },
+  { question: "What is the fee structure and do you offer EMI?", answer: "Our average fees range from ₹35,000 to ₹90,000 depending on the course level. Yes, we offer Easy EMI options to make our world-class training accessible." },
+  { question: "What does the Level 4 Fellowship include?", answer: "The Level 4 course (held in Chennai) includes Facial Aesthetics, Clinical/Medical Cosmetology, and Skin Aesthetics. We take only 20 students per batch, 4 times a year." },
+  { question: "Do you offer international training?", answer: "Yes! We offer a Master Fellowship in Dubai/South Korea, a Level 6 PMU Masterclass in Bangkok, and a Level 7 Korea University Programme." },
+  { question: "Will I get help setting up my own clinic?", answer: "Absolutely. In addition to 100% job placement assistance, we provide specialized Business & Entrepreneurship classes to help you launch your own aesthetic clinic or salon." }
 ];
 
 /* ---------------- ADVANCED ANIMATION VARIANTS ---------------- */
@@ -195,11 +203,17 @@ export default function Home() {
   return (
     <main suppressHydrationWarning className="bg-[#080E21] text-white overflow-hidden min-h-screen relative perspective-[1000px]">
       
-      {/* GLOBAL CSS OPTIMIZATIONS (METEORS RESTORED) */}
+      {/* GLOBAL CSS OPTIMIZATIONS */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes infinite-scroll {
           0% { transform: translateX(0); }
-          100% { transform: translateX(calc(-250px * 5 - 1.5rem * 5)); }
+          100% { transform: translateX(calc(-300px * 5 - 2rem * 5)); }
+        }
+        @media (max-width: 768px) {
+          @keyframes infinite-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-260px * 5 - 1rem * 5)); }
+          }
         }
         .animate-programs {
           display: flex;
@@ -245,8 +259,19 @@ export default function Home() {
         .meteor:nth-child(5) { top: 60%; left: 110%; animation-duration: 5.5s; animation-delay: 0.8s; }
       `}} />
 
+      {/* ---------------- SCARCITY TOP BANNER ---------------- */}
+      <div className="bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] text-[#080E21] py-2 md:py-3 px-4 text-center z-50 relative flex items-center justify-center gap-2 md:gap-4 shadow-lg">
+        <span className="relative flex h-3 w-3">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-black opacity-40"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-black"></span>
+        </span>
+        <p className="text-[10px] md:text-sm font-bold uppercase tracking-wider">
+          Admissions Open: Level 4 Chennai Batch (Only 20 Seats) | Easy EMI Available
+        </p>
+      </div>
+
       {/* ---------------- 1. HERO SECTION ---------------- */}
-      <section className="min-h-[100vh] flex items-center justify-center text-center px-4 relative overflow-hidden">
+      <section className="min-h-[95vh] flex items-center justify-center text-center px-4 relative overflow-hidden">
         <div className="absolute inset-0 -z-30 bg-[#050914]">
           {[1, 2].map((num, i) => (
             <motion.div
@@ -265,7 +290,7 @@ export default function Home() {
 
         <motion.div 
           initial={{ opacity: 1, y: 0 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} exit={{ opacity: 0, scale: 0.95 }}
-          className="max-w-6xl z-10 flex flex-col items-center pt-20"
+          className="max-w-6xl z-10 flex flex-col items-center pt-10"
         >
           <motion.h3 
             initial={{ opacity: 0, letterSpacing: "0.1em" }} animate={{ opacity: 1, letterSpacing: "0.4em" }} transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
@@ -296,7 +321,7 @@ export default function Home() {
 
           <motion.p 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.2 }}
-            className="mt-6 md:mt-8 text-white/90 text-lg md:text-4xl font-light italic font-serif tracking-wide px-4"
+            className="mt-4 md:mt-8 text-white/90 text-lg md:text-4xl font-light italic font-serif tracking-wide px-4"
           >
             Zeal To Excellence In Aesthetics Science
           </motion.p>
@@ -305,12 +330,38 @@ export default function Home() {
             onClick={() => router.push('/courses')}
             initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 1.5, type: "spring" }}
             whileHover={{ scale: 1.05, boxShadow: "0 10px 50px rgba(191,149,63,0.5)", y: -5 }} whileTap={{ scale: 0.95 }}
-            className="mt-10 md:mt-14 px-8 py-4 md:px-14 md:py-5 rounded-full font-bold text-[#080E21] tracking-[0.2em] text-sm md:text-lg uppercase cursor-pointer shadow-xl border border-white/20 backdrop-blur-md"
+            className="mt-8 md:mt-14 px-8 py-4 md:px-14 md:py-5 rounded-full font-bold text-[#080E21] tracking-[0.2em] text-sm md:text-lg uppercase cursor-pointer shadow-xl border border-white/20 backdrop-blur-md"
             style={{ background: "linear-gradient(135deg, #BF953F 0%, #FCF6BA 50%, #B38728 100%)" }}
           >
             Explore Courses
           </motion.button>
         </motion.div>
+      </section>
+
+      {/* ---------------- 1.5 DESIGNED FOR (Target Audience) ---------------- */}
+      <section className="py-20 relative bg-[#050914] border-y border-white/5">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <motion.h3 
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}
+            className="text-white/50 tracking-[0.3em] uppercase text-xs md:text-sm font-bold mb-10"
+          >
+            Programs Exclusively Designed For
+          </motion.h3>
+
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={{ visible: { transition: { staggerChildren: 0.2 } } }} 
+            className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-4 gap-4 md:gap-8 pb-4 no-scrollbar"
+          >
+            {targetAudience.map((audience, i) => (
+              <motion.div key={i} variants={grandCardUp} whileHover={{ y: -5 }} className="min-w-[75vw] md:min-w-0 snap-center p-6 md:p-8 rounded-3xl bg-white/5 border border-white/10 flex flex-col items-center text-center shadow-lg group hover:border-[#BF953F]/40 transition-colors">
+                <div className="w-14 h-14 rounded-full bg-[#080E21] border border-[#BF953F]/30 flex items-center justify-center mb-4 group-hover:bg-[#BF953F] transition-colors duration-300">
+                  <audience.icon className="w-6 h-6 text-[#BF953F] group-hover:text-[#080E21] transition-colors duration-300" />
+                </div>
+                <h4 className="text-xl font-serif font-bold text-white mb-2">{audience.title}</h4>
+                <p className="text-[#FBF5B7]/70 text-xs font-light uppercase tracking-widest">{audience.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </section>
 
       {/* ---------------- 2. WHY CHOOSE US (Neurolink Active on Mobile & Desktop) ---------------- */}
@@ -323,13 +374,13 @@ export default function Home() {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
             <GoldText text="Why NSFA Academy" className="text-4xl md:text-7xl lg:text-8xl mb-4 md:mb-6 pointer-events-auto drop-shadow-2xl" />
             <p className="text-white/70 text-base md:text-xl leading-relaxed font-light pointer-events-auto px-4">
-              NSFA Academy is a globally recognized advanced aesthetic science & dental academy. Immersive programs designed to educate professionals on the latest innovations.
+              NSFA Academy is a globally recognized advanced aesthetic science academy. We are the ONLY institute offering true monopoly masterclasses and 8 CPDs in one course.
             </p>
           </motion.div>
           <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }} className="h-[2px] bg-[#FFD700] mt-6 md:mt-8" />
         </div>
 
-        {/* NEUROLINK VIEW - Restored and Active on both Mobile & Desktop */}
+        {/* NEUROLINK VIEW */}
         <div className={`absolute inset-0 mt-32 md:mt-40 ${activeFeature ? 'pointer-events-none z-0' : 'pointer-events-auto z-20'}`}>
           <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
             <defs>
@@ -362,7 +413,6 @@ export default function Home() {
           ))}
         </div>
 
-        {/* MODAL - Now optimized for Mobile & Desktop */}
         <AnimatePresence>
           {activeFeature && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setActiveFeature(null)} className="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 cursor-pointer">
@@ -450,24 +500,35 @@ export default function Home() {
                 key={i} 
                 whileHover={{ y: -10, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }} 
-                className="w-[260px] md:w-[300px] h-[320px] md:h-[360px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-10 border border-white/10 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)] active:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)]"
+                className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-white/10 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)] active:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)]"
               >
                 <div className="absolute inset-0 bg-white/5 backdrop-blur-md transition-opacity duration-500 group-hover:opacity-0 group-active:opacity-0" />
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)]" />
                 
-                <div className="relative z-10 flex flex-col items-center text-center px-6 w-full h-full">
-                  <div className="mb-4 md:mb-6 p-4 md:p-5 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-active:border-black/20 group-hover:bg-black/10 group-active:bg-black/10 transition-colors duration-500 shadow-inner">
-                    <c.icon className="w-10 h-10 md:w-12 md:h-12 text-[#FBF5B7] group-hover:text-black group-active:text-black transition-colors duration-500" />
+                {/* Floating Badge (e.g. 8 CPDs in 1, Monopoly) */}
+                <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#BF953F]/50 text-[#FBF5B7] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-black group-active:bg-white group-active:text-black transition-colors">
+                  {c.badge}
+                </div>
+                
+                <div className="relative z-10 flex flex-col items-center text-center px-4 md:px-6 w-full h-full">
+                  <div className="mb-4 md:mb-6 p-4 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-active:border-black/20 group-hover:bg-black/10 group-active:bg-black/10 transition-colors duration-500 shadow-inner">
+                    <c.icon className="w-8 h-8 md:w-10 md:h-10 text-[#FBF5B7] group-hover:text-black group-active:text-black transition-colors duration-500" />
                   </div>
-                  <h3 className="text-xl md:text-2xl font-serif text-white group-hover:text-black group-active:text-black font-bold transition-colors duration-500 mb-auto">
+                  <h3 className="text-xl md:text-2xl font-serif text-white group-hover:text-black group-active:text-black font-bold transition-colors duration-500 mb-2">
                     {c.title}
                   </h3>
+                  <p className="text-xs md:text-sm text-[#BF953F] group-hover:text-black/70 group-active:text-black/70 font-bold uppercase tracking-widest mb-2 transition-colors duration-500">
+                    📍 {c.loc}
+                  </p>
+                  <p className="text-xs md:text-sm text-white/60 group-hover:text-black/80 group-active:text-black/80 font-light mb-auto transition-colors duration-500">
+                    {c.desc}
+                  </p>
 
-                  <div className="w-full flex flex-col gap-2 md:gap-3 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6">
+                  <div className="w-full flex flex-col gap-2 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6 mt-4">
                     <button onClick={() => window.location.href = '/courses'} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-black text-[#FBF5B7] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-white hover:text-black active:bg-white active:text-black transition-colors border border-white/10 md:border-none">
                       View Details
                     </button>
-                    <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title}.`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 md:border-black/30 text-white md:text-black font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:text-[#FBF5B7] active:text-[#FBF5B7] transition-colors">
+                    <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title} (${c.loc}).`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 md:border-black/30 text-white md:text-black font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:text-[#FBF5B7] active:text-[#FBF5B7] transition-colors">
                       Enquire Now
                     </button>
                   </div>
