@@ -20,12 +20,94 @@ const GoldText = ({ text, className = "" }: { text: string; className?: string }
 
 /* ---------------- 6 COURSES DATA ---------------- */
 const courseData = [
-  { id: 1, category: "Diploma", icon: BookOpenText, duration: "1 Year", programs: ["Clinical Cosmetology", "Medical Trichology", "Non Surgical Facial Aesthetics", "Bariatric Science"] },
-  { id: 2, category: "Fellowship", icon: Award, duration: "6 Months", programs: ["Aesthetic Medicine", "Cosmetic Medicine", "Medical Cosmetology", "Non Surgical Facial Aesthetics"] },
-  { id: 3, category: "Mastership", icon: GraduationCap, duration: "1 Year", programs: ["Implantology", "Aesthetic Dentistry (3 In 1)", "Endodontics"] },
-  { id: 4, category: "PG Cert", icon: Globe, duration: "3-6 Months", programs: ["Advanced Lasers", "Chemical Peels", "Botulinum Toxin", "Dermal Fillers"] },
-  { id: 5, category: "Dental Sci", icon: Stethoscope, duration: "Varies", programs: ["Laser Dentistry", "Cosmetic Dentistry", "Orthodontics"] },
-  { id: 6, category: "M.SC", icon: BookOpenText, duration: "2 Years", programs: ["Facial Aesthetics", "Aesthetic Dentistry", "Trichology", "Cosmeceutical Science"] },
+  { 
+    id: 1, 
+    category: "Diploma", 
+    icon: BookOpenText, 
+    duration: "1 Year", 
+    programs: [
+      "PG Diploma Clinical Cosmetology and Trichology", 
+      "PG Diploma in Medical Trichology, Trichopigmentation and Nutraceuticals", 
+      "PG Diploma in Non Surgical Facial Aesthetics", 
+      "PG Diploma in Bariatric Science and Nutrition"
+    ] 
+  },
+  { 
+    id: 2, 
+    category: "Fellowship", 
+    icon: Award, 
+    duration: "6 Months", 
+    programs: [
+      "Fellowship in Non Surgical Facial Aesthetics", 
+      "Fellowship in Medical Cosmetology", 
+      "Fellowship in Aesthetic Medicine", 
+      "Fellowship in Cosmetic Medicine"
+    ] 
+  },
+  { 
+    id: 3, 
+    category: "Mastership", 
+    icon: GraduationCap, 
+    duration: "1 Year", 
+    programs: [
+      "Non Surgical Facial Aesthetics with advanced Transformation", 
+      "Non Surgical Hair restoration", 
+      "Non Surgical Nutrigenomics"
+    ] 
+  },
+  { 
+    id: 4, 
+    category: "PG Cert", 
+    icon: Globe, 
+    duration: "3-6 Months", 
+    programs: [
+      "Certification Training in Advanced Lasers", 
+      "Certification Training in Chemical Peels and Medifacial", 
+      "Certification Training in Trichology", 
+      "Certification Training in Medical Cupping", 
+      "Certification Training in BBGlow", 
+      "Certification Training in Micropigmentation", 
+      "Certification Training in Clinical Nutrition", 
+      "Certification Training in Derma Planning", 
+      "Certification Training in Cosmeceutical Formation Science", 
+      "Certification Training in Botulinun toxin", 
+      "Certification Training in Dermal Fillers", 
+      "Certification Training in Fibroblast Pen", 
+      "Certification Training in Biostimulation in Aesthetics", 
+      "Certification Training in Acne & Hyperpigmentation"
+    ] 
+  },
+  { 
+    id: 5, 
+    category: "Dental Sci", 
+    icon: Stethoscope, 
+    duration: "Varies", 
+    programs: [
+      "Fellowship In Laser Dentistry", 
+      "Fellowship In Cosmetic Dentistry", 
+      "Fellowship In Orthodontics", 
+      "Mastership In Implantology", 
+      "Mastership In Aesthetic Dentistry (3 In 1) Course", 
+      "Mastership In Endodontics", 
+      "Mastership In Comprehensive Clinical Dentistry", 
+      "PG Certificate In Botulinum Toxin In Denstistry", 
+      "PG Certificate In Sports Dentistry", 
+      "PG Certificate In Gum Rejuvenation"
+    ] 
+  },
+  { 
+    id: 6, 
+    category: "M.SC", 
+    icon: BookOpenText, 
+    duration: "2 Years", 
+    programs: [
+      "M.SC IN FACIAL AESTHETICS & COSMETOLOGY", 
+      "M.SC in Aesthetic Dentistry", 
+      "M.SC in Cosmeceutical Science", 
+      "M.SC in Aesthetic Medicine", 
+      "M.SC in Trichology"
+    ] 
+  },
 ];
 
 export default function Courses() {

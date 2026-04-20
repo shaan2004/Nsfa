@@ -19,7 +19,7 @@ export default function Navbar() {
     { name: "About Us", path: "/about-us" },
     { name: "Gallery", path: "/gallery" },
     { name: "Courses", path: "/courses" },
-    { name: "Blog & Download", path: "/blog-downloads" }, // Updated path slightly for standard URL convention
+    { name: "Blog & Download", path: "/blog&downloads" }, // Updated path slightly for standard URL convention
     { name: "Contact", path: "/contact" },
   ];
 
