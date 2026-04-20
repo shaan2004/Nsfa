@@ -125,13 +125,7 @@ const VideoReelCard = ({ num }: { num: number }) => {
   );
 };
 
-/* ---------------- ACTUAL BUSINESS DATA ---------------- */
-const targetAudience = [
-  { title: "Medical Professionals", desc: "MBBS, BDS, BHMS, BAMS, MAXFAX", icon: Stethoscope },
-  { title: "Allied Health", desc: "Nurses, BPT (Physiotherapists)", icon: Users },
-  { title: "Beauty Experts", desc: "Beauticians, Makeup Artists (MUA)", icon: Star },
-  { title: "Clinic Owners", desc: "Salon & Clinic Entrepreneurs (KBAC)", icon: Building2 }
-];
+
 
 const advancedFeatures = [
   { id: 1, title: "8-in-1 Course", desc: "Only institute providing 8 CPD trainings in 1 comprehensive course.", x: 15, y: 15 },
@@ -148,12 +142,26 @@ const meshConnections = [
   [1, 3], [3, 5], [5, 7], [7, 8], [8, 6], [6, 4], [4, 2], [2, 1]
 ];
 
-const courses = [
-  { title: "Fellowship", loc: "Chennai", desc: "Facial Aesthetics & Clinical Cosmetology. 4 Batches/Yr.", badge: "8 CPDs in 1", icon: Award },
-  { title: "Master Fellowship", loc: "Dubai / S. Korea", desc: "Multi-level global certification with international faculty.", badge: "Global Placement", icon: Globe },
-  { title: "PMU Masterclass", loc: "Bangkok", desc: "ISPMU Permanent Makeup Masterclass. 2 Batches/Yr.", badge: "Monopoly", icon: Star },
-  { title: "Korea University Programme", loc: "South Korea", desc: "Premium University Training. Only 30 seats per year.", badge: "Monopoly", icon: GraduationCap },
-  { title: "PMU & Lashes", loc: "Chennai", desc: "Monthly PMU batches & 6 Eyelash batches per year.", badge: "Hands-on", icon: BookOpen },
+const aestheticCourses = [
+  { title: "PG Diploma", loc: "Clinical Cosmetology", desc: "Clinical Cosmetology, Trichology & Nutraceuticals.", badge: "Diploma", icon: BookOpen },
+  { title: "PG Diploma", loc: "Facial Aesthetics", desc: "Non Surgical Facial Aesthetics, Bariatric Science & Nutrition.", badge: "Diploma", icon: Award },
+  { title: "Fellowship", loc: "Medical Cosmetology", desc: "Non Surgical Facial Aesthetics & Aesthetic/Cosmetic Medicine.", badge: "Fellowship", icon: Globe },
+  { title: "Mastership", loc: "Advanced Transformation", desc: "Non Surgical Hair restoration & Nutrigenomics.", badge: "Mastership", icon: GraduationCap },
+  { title: "M.SC", loc: "Facial Aesthetics", desc: "M.SC in Facial Aesthetics, Cosmetology & Aesthetic Medicine.", badge: "Degree", icon: Briefcase },
+  { title: "PG Certification", loc: "Advanced Lasers", desc: "Chemical Peels, Medifacial & Trichology.", badge: "Certificate", icon: Sparkles },
+  { title: "PG Certification", loc: "Botulinum Toxin", desc: "Dermal Fillers, Fibroblast Pen & Biostimulation.", badge: "Certificate", icon: Stethoscope },
+  { title: "PG Certification", loc: "Clinical Nutrition", desc: "Derma Planning & Cosmeceutical Formation Science.", badge: "Certificate", icon: Users },
+];
+
+const dentalCourses = [
+  { title: "Fellowship", loc: "Laser Dentistry", desc: "Fellowship In Laser Dentistry.", badge: "Dental", icon: Stethoscope },
+  { title: "Fellowship", loc: "Cosmetic Dentistry", desc: "Fellowship In Cosmetic Dentistry & Orthodontics.", badge: "Dental", icon: Award },
+  { title: "Mastership", loc: "Implantology", desc: "Mastership In Implantology.", badge: "Dental", icon: Globe },
+  { title: "Mastership", loc: "Aesthetic Dentistry", desc: "Mastership In Aesthetic Dentistry (3 In 1) Course.", badge: "Dental", icon: GraduationCap },
+  { title: "Mastership", loc: "Endodontics", desc: "Mastership In Endodontics & Comprehensive Clinical Dentistry.", badge: "Dental", icon: BookOpen },
+  { title: "PG Certificate", loc: "Botulinum Toxin", desc: "Botulinum Toxin In Denstistry.", badge: "Certificate", icon: Sparkles },
+  { title: "PG Certificate", loc: "Sports Dentistry", desc: "Sports Dentistry & Gum Rejuvenation.", badge: "Certificate", icon: Briefcase },
+  { title: "M.SC", loc: "Aesthetic Dentistry", desc: "M.SC in Aesthetic Dentistry.", badge: "Degree", icon: Award },
 ];
 
 const journeyFeatures = [
@@ -162,13 +170,6 @@ const journeyFeatures = [
   { title: "Accessible Learning", desc: "World-class education made accessible with flexible Easy EMI options and 100% placement assistance.", icon: Sparkles, color: "from-[#0F766E] to-[#042F2E]" }
 ];
 
-const faqs = [
-  { question: "Who is eligible to enroll in these aesthetic courses?", answer: "Our courses are specifically designed for MBBS, BDS, BHMS, BAMS, MAXFAX, Nurses, BPT, Beauticians, and Makeup Artists." },
-  { question: "What is the fee structure and do you offer EMI?", answer: "Our average fees range from ₹35,000 to ₹90,000 depending on the course level. Yes, we offer Easy EMI options to make our world-class training accessible." },
-  { question: "What does the Fellowship include?", answer: "The Fellowship (held in Chennai) includes Facial Aesthetics, Clinical/Medical Cosmetology, and Skin Aesthetics. We take only 20 students per batch, 4 times a year." },
-  { question: "Do you offer international training?", answer: "Yes! We offer a Master Fellowship in Dubai/South Korea,PMU Masterclass in Bangkok, and a Korea University Programme." },
-  { question: "Will I get help setting up my own clinic?", answer: "Absolutely. In addition to 100% job placement assistance, we provide specialized Business & Entrepreneurship classes to help you launch your own aesthetic clinic or salon." }
-];
 
 /* ---------------- ADVANCED ANIMATION VARIANTS ---------------- */
 const wipeReveal: Variants = {
@@ -189,7 +190,6 @@ export default function Home() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [activeFeature, setActiveFeature] = useState<number | null>(null);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
   
   // LEAD GEN POPUP STATE
   const [showLeadPopup, setShowLeadPopup] = useState(false);
@@ -357,7 +357,7 @@ export default function Home() {
             <span className="relative inline-flex rounded-full h-3 w-3 bg-black"></span>
           </span>
           <p className="text-[10px] md:text-sm font-bold uppercase tracking-wider">
-            Admissions Open: Chennai Batch (Only 20 Seats) | Easy EMI Available
+            Admissions Open: Chennai Batch (Only 20 Seats) | Global Masterclasses in Bangkok, Dubai & South Korea
           </p>
         </div>
 
@@ -414,7 +414,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.2 }}
               className="mt-4 md:mt-8 text-white/90 text-lg md:text-4xl font-light italic font-serif tracking-wide px-4"
             >
-              Zeal To Excellence In Aesthetics Science
+              Zeal To Excellence In Upskilling Education
             </motion.p>
 
             <motion.button
@@ -429,124 +429,126 @@ export default function Home() {
           </motion.div>
         </section>
 
-      {/* ---------------- 1.5 DESIGNED FOR (Target Audience) ---------------- */}
-      <section className="py-12 md:py-20 relative bg-[#050914] border-y border-white/5">
-        <div className="max-w-7xl mx-auto px-2 md:px-4 text-center">
-          <motion.h3 
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}
-            className="text-[#BF953F] tracking-[0.15em] md:tracking-[0.3em] uppercase text-[10px] md:text-sm font-bold mb-8 md:mb-12 drop-shadow-md"
-          >
-            Programs Exclusively Designed For
-          </motion.h3>
+      
+  {/* ---------------- 2. WHY CHOOSE US (Tree Branch & Glowing Dots Layout) ---------------- */}
+      <section className="min-h-[100vh] py-24 relative overflow-hidden bg-[linear-gradient(180deg,#0B132A_0%,#050914_100%)] flex flex-col items-center justify-center">
+        {/* Background Ambient Glows */}
+        <div className="absolute top-[20%] left-[10%] w-[40%] h-[40%] rounded-full bg-[#BF953F]/10 blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-[20%] right-[10%] w-[40%] h-[40%] rounded-full bg-[#0074A5]/10 blur-[120px] pointer-events-none" />
 
-          {/* Changed to strict 4-column grid for all screen sizes */}
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={{ visible: { transition: { staggerChildren: 0.2 } } }} 
-            className="grid grid-cols-4 gap-2 sm:gap-4 md:gap-8 pb-4 items-start"
-          >
-            {targetAudience.map((audience, i) => (
-              <motion.div 
-                key={i} 
-                variants={grandCardUp} 
-                whileHover={{ y: -8 }} 
-                // Severely reduced mobile padding so the shields fit side-by-side
-                className="relative w-full pt-6 pb-8 px-1 md:pt-12 md:pb-16 md:px-6 flex flex-col items-center text-center group cursor-pointer drop-shadow-[0_10px_20px_rgba(191,149,63,0.2)] md:drop-shadow-[0_15px_30px_rgba(191,149,63,0.2)]"
-              >
-                {/* 1. Outer Golden Shield Shape */}
-                <div 
-                  className="absolute inset-0 bg-[linear-gradient(145deg,#BF953F,#FCF6BA,#B38728)] transition-all duration-500 group-hover:brightness-110 group-active:brightness-110"
-                  style={{ clipPath: 'polygon(50% 0%, 100% 12%, 100% 75%, 50% 100%, 0 75%, 0 12%)' }}
-                />
-                
-                {/* 2. Inner Golden Shield (Creates a premium inset border effect) */}
-                <div 
-                  className="absolute inset-[2px] md:inset-[3px] bg-[linear-gradient(135deg,#D4AF37,#FFF2CD,#AA771C)] transition-all duration-500"
-                  style={{ clipPath: 'polygon(50% 0%, 100% 12%, 100% 75%, 50% 100%, 0 75%, 0 12%)' }}
-                />
+        {/* Animated Connecting Gradient Lines (Desktop Only) */}
+        <svg className="hidden lg:block absolute inset-0 w-full h-full pointer-events-none z-10">
+          <defs>
+            <linearGradient id="tree-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#0074A5" stopOpacity="0" />
+              <stop offset="40%" stopColor="#BF953F" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#FFD700" stopOpacity="1" />
+            </linearGradient>
+          </defs>
+          {/* Drawing curved branches mapped to the 2x4 grid on the right */}
+          {[
+            { x: 58, y: 22 }, { x: 78, y: 22 },
+            { x: 58, y: 40 }, { x: 78, y: 40 },
+            { x: 58, y: 58 }, { x: 78, y: 58 },
+            { x: 58, y: 76 }, { x: 78, y: 76 }
+          ].map((pos, i) => (
+            <motion.path 
+              key={`line-${i}`}
+              // Starts from the left text (x: 35%, y: 50%) and curves into the grid items
+              d={`M 35% 50% C 42% 50%, 45% ${pos.y}%, ${pos.x}% ${pos.y}%`}
+              fill="none"
+              stroke="url(#tree-grad)"
+              strokeWidth="1.5"
+              strokeDasharray="5 5"
+              // The classic neurolink opacity fade animation
+              animate={{ opacity: [0.05, 0.7, 0.05] }} 
+              transition={{ repeat: Infinity, duration: 3 + (i % 2), delay: i * 0.2, ease: "easeInOut" }}
+            />
+          ))}
+        </svg>
 
-                {/* 3. Shield Content */}
-                <div className="relative z-10 flex flex-col items-center h-full justify-start">
-                  {/* Scaled down icon circle for mobile */}
-                  <div className="w-8 h-8 md:w-16 md:h-16 rounded-full bg-[#080E21] flex items-center justify-center mb-2 md:mb-6 shadow-inner group-hover:scale-110 group-active:scale-110 transition-transform duration-300 shrink-0">
-                    <audience.icon className="w-4 h-4 md:w-8 md:h-8 text-[#FBF5B7]" />
-                  </div>
-                  
-                  {/* Scaled down typography for mobile */}
-                  <h4 className="text-[9px] min-[400px]:text-[10px] sm:text-sm md:text-2xl font-serif font-bold text-[#080E21] mb-1 md:mb-3 leading-tight">
-                    {audience.title}
-                  </h4>
-                  
-                  {/* Kept description but made it tiny on mobile so it fits the narrow columns */}
-                  <p className="text-[#080E21]/80 text-[6px] min-[400px]:text-[7px] sm:text-[10px] md:text-xs font-bold uppercase tracking-wider md:tracking-widest leading-tight md:leading-relaxed">
-                    {audience.desc}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-        {/* ---------------- 2. WHY CHOOSE US (Neurolink Active on Mobile & Desktop) ---------------- */}
-        <section className="min-h-[100vh] py-24 relative overflow-hidden bg-[linear-gradient(180deg,#0B132A_0%,#050914_100%)] flex flex-col items-center justify-center">
-          <div className="absolute top-[20%] left-[20%] w-[40%] h-[40%] rounded-full bg-[#BF953F]/10 blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-[20%] right-[20%] w-[40%] h-[40%] rounded-full bg-[#0074A5]/10 blur-[120px] pointer-events-none" />
+        <div className="max-w-7xl w-full mx-auto px-4 flex flex-col lg:flex-row items-center justify-between relative z-20 gap-16 lg:gap-8">
           
-          <div className="relative z-20 flex flex-col items-center justify-center text-center max-w-3xl px-4 pointer-events-none mb-12">
-            <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="h-[2px] bg-[#FFD700] mb-6 md:mb-8" />
+          {/* LEFT SIDE: Content & Text */}
+          <div className="w-full lg:w-5/12 flex flex-col items-center lg:items-start text-center lg:text-left shrink-0">
+            <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="h-[2px] bg-[#FFD700] mb-8" />
+            
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-              <GoldText text="Why NSFA Academy" className="text-4xl md:text-7xl lg:text-8xl mb-4 md:mb-6 pointer-events-auto drop-shadow-2xl" />
-              <p className="text-white/70 text-base md:text-xl leading-relaxed font-light pointer-events-auto px-4">
+              <GoldText text="Why NSFA Academy" className="text-5xl md:text-7xl mb-6 drop-shadow-2xl" />
+              <p className="text-white/70 text-lg md:text-xl leading-relaxed font-light">
                 NSFA Academy is a globally recognized advanced aesthetic science academy. We are the ONLY institute offering true monopoly masterclasses and 8 CPDs in one course.
               </p>
             </motion.div>
-            <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }} className="h-[2px] bg-[#FFD700] mt-6 md:mt-8" />
+
+            <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }} className="h-[2px] bg-[#FFD700] mt-8" />
           </div>
 
-          <div className={`absolute inset-0 mt-32 md:mt-40 ${activeFeature ? 'pointer-events-none z-0' : 'pointer-events-auto z-20'}`}>
-            <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
-              <defs>
-                <linearGradient id="neuro-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#BF953F" stopOpacity="0.5" />
-                  <stop offset="50%" stopColor="#0074A5" stopOpacity="0.3" />
-                  <stop offset="100%" stopColor="#FFD700" stopOpacity="0.5" />
-                </linearGradient>
-              </defs>
-              {advancedFeatures.map((f) => (
-                 <motion.line key={`spoke-${f.id}`} x1="50%" y1="50%" x2={`${f.x}%`} y2={`${f.y}%`} stroke="url(#neuro-grad)" strokeWidth="1.5" animate={{ opacity: [0.1, 0.8, 0.1] }} transition={{ repeat: Infinity, duration: 3 + (f.id % 3), ease: "easeInOut" }} style={{ willChange: "opacity" }} />
-              ))}
-              {meshConnections.map(([id1, id2], i) => {
-                 const f1 = advancedFeatures.find(f => f.id === id1)!;
-                 const f2 = advancedFeatures.find(f => f.id === id2)!;
-                 return (
-                   <motion.line key={`ring-${i}`} x1={`${f1.x}%`} y1={`${f1.y}%`} x2={`${f2.x}%`} y2={`${f2.y}%`} stroke="url(#neuro-grad)" strokeWidth="1" strokeDasharray="5 5" animate={{ opacity: [0.05, 0.5, 0.05] }} transition={{ repeat: Infinity, duration: 4 + (i % 2), ease: "easeInOut", delay: i * 0.4 }} style={{ willChange: "opacity" }} />
-                 );
-              })}
-            </svg>
-            
+          {/* RIGHT SIDE: Key Points Grid */}
+          <div className="w-full lg:w-7/12 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 relative z-20">
             {advancedFeatures.map((f, i) => (
-              <motion.div key={f.id} layoutId={`feature-container-${f.id}`} onClick={() => setActiveFeature(f.id)} style={{ left: `${f.x}%`, top: `${f.y}%`, willChange: "transform" }} className="absolute -translate-x-1/2 -translate-y-1/2 w-max cursor-pointer z-20" animate={{ y: [0, -12, 0], x: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 4 + (i % 3), ease: "easeInOut", delay: i * 0.2 }} whileHover={{ scale: 1.1, zIndex: 30 }} whileTap={{ scale: 0.95 }}>
-                <motion.div layoutId={`feature-bg-${f.id}`} className="relative overflow-hidden px-3 py-2 md:px-6 md:py-3 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.3)] border border-[#BF953F]/30 transition-colors duration-300 group">
-                  <div className="absolute inset-0 bg-[#080E21]/80 backdrop-blur-xl transition-opacity duration-300 group-hover:opacity-0 group-active:opacity-0" />
-                  <div className="absolute inset-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300" />
-                  <motion.span layoutId={`feature-text-${f.id}`} className="relative z-10 text-[#FBF5B7] group-hover:text-[#080E21] group-active:text-[#080E21] font-serif font-bold text-[10px] md:text-base tracking-wide whitespace-nowrap drop-shadow-md group-hover:drop-shadow-none group-active:drop-shadow-none transition-colors duration-300">{f.title}</motion.span>
-                </motion.div>
+              <motion.div 
+                key={f.id} 
+                onClick={() => setActiveFeature(f.id)}
+                initial={{ opacity: 0, x: 50 }} 
+                whileInView={{ opacity: 1, x: 0 }} 
+                viewport={{ once: true }} 
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                whileHover={{ scale: 1.03, x: -5 }} 
+                whileTap={{ scale: 0.97 }}
+                className="w-full px-5 py-4 md:px-6 md:py-5 rounded-2xl bg-[#0A1128]/60 border border-white/10 shadow-[0_10px_20px_rgba(0,0,0,0.4)] cursor-pointer group hover:border-[#BF953F]/60 active:border-[#BF953F]/60 transition-all relative flex items-center justify-start text-left overflow-hidden"
+              >
+                {/* Subtle golden hover background */}
+                <div className="absolute inset-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] opacity-0 group-hover:opacity-[0.05] group-active:opacity-[0.05] transition-opacity duration-300" />
+                
+                {/* "Overgrown" Animated Dot */}
+                <div className="relative flex items-center justify-center w-4 h-4 mr-4 shrink-0">
+                  {/* The core solid dot */}
+                  <div className="w-1.5 h-1.5 bg-[#FBF5B7] rounded-full z-10" />
+                  {/* The pulsing 'overgrown' ripple */}
+                  <motion.div 
+                    animate={{ scale: [1, 3.5, 1], opacity: [0.8, 0, 0.8] }}
+                    transition={{ repeat: Infinity, duration: 2.5, delay: i * 0.15 }}
+                    className="absolute inset-0 bg-[#BF953F] rounded-full"
+                  />
+                </div>
+
+                <h4 className="text-[#FBF5B7] font-serif font-bold text-base md:text-lg group-hover:text-white transition-colors relative z-10 truncate">
+                  {f.title}
+                </h4>
               </motion.div>
             ))}
           </div>
 
-         {/* MODAL - Now optimized for Mobile & Desktop with Enquire Button */}
+        </div>
+
+        {/* MODAL - Confined inside the section using 'absolute' */}
         <AnimatePresence>
           {activeFeature && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setActiveFeature(null)} className="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 cursor-pointer">
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }} 
+              onClick={() => setActiveFeature(null)} 
+              // 'absolute inset-0' traps the modal inside the 'relative' section parent
+              className="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 cursor-pointer"
+            >
               {advancedFeatures.filter(f => f.id === activeFeature).map(f => (
-                <motion.div key={f.id} layoutId={`feature-bg-${f.id}`} className="bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] p-6 md:p-10 rounded-3xl max-w-[90vw] md:max-w-lg w-full shadow-[0_20px_60px_rgba(191,149,63,0.6)] cursor-default text-center relative overflow-hidden" onClick={(e) => e.stopPropagation()}>
+                <motion.div 
+                  key={f.id} 
+                  initial={{ scale: 0.9, y: 20 }}
+                  animate={{ scale: 1, y: 0 }}
+                  exit={{ scale: 0.9, y: 20 }}
+                  transition={{ type: "spring", bounce: 0.4 }}
+                  className="bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] p-6 md:p-10 rounded-3xl max-w-[90vw] md:max-w-lg w-full shadow-[0_20px_60px_rgba(191,149,63,0.6)] cursor-default text-center relative overflow-hidden" 
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-overlay pointer-events-none" />
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0, transition: { delay: 0.2 } }} exit={{ opacity: 0, transition: { duration: 0.1 } }} className="relative z-10 flex flex-col items-center">
+                  
+                  <div className="relative z-10 flex flex-col items-center">
                     <div className="w-12 md:w-16 h-1.5 md:h-2 bg-[#080E21]/20 rounded-full mb-6 md:mb-8" />
-                    <motion.h3 layoutId={`feature-text-${f.id}`} className="text-2xl md:text-3xl font-serif font-bold text-[#080E21] mb-4 md:mb-6">{f.title}</motion.h3>
+                    <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#080E21] mb-4 md:mb-6">{f.title}</h3>
                     <p className="text-[#080E21]/90 text-base md:text-lg font-medium leading-relaxed">{f.desc}</p>
                     
-                    {/* BUTTON CONTAINER - Added Enquire Now alongside Close */}
                     <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mt-8 md:mt-10 w-full justify-center">
                       <button 
                         onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I would like to know more about: ${f.title}.`)}`, '_blank')} 
@@ -561,15 +563,14 @@ export default function Home() {
                         Close
                       </button>
                     </div>
+                  </div>
 
-                  </motion.div>
                 </motion.div>
               ))}
             </motion.div>
           )}
         </AnimatePresence>
-        </section>
-
+      </section>
         {/* ---------------- 3. TO THE JOURNEY AHEAD ---------------- */}
         <section className="py-24 md:py-32 relative bg-white text-black overflow-hidden border-y-4 border-[#BF953F]">
           <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
@@ -616,7 +617,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------------- 4. PROGRAMS SECTION ---------------- */}
+     {/* ---------------- 4. PROGRAMS SECTION (Two Rows) ---------------- */}
         <section className="py-24 md:py-32 relative bg-[linear-gradient(180deg,#080E21_0%,#0B132A_100%)] overflow-hidden">
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="meteor" /><div className="meteor" /><div className="meteor" /><div className="meteor" /><div className="meteor" />
@@ -629,11 +630,13 @@ export default function Home() {
             </motion.div>
           </div>
 
-          <div className="w-full overflow-hidden cursor-grab active:cursor-grabbing pb-16 pt-4 md:pt-8 pause-on-hover relative z-10" ref={programsRef}>
+          <div className="w-full flex flex-col gap-8 md:gap-12 overflow-hidden cursor-grab active:cursor-grabbing pb-16 pt-4 md:pt-8 pause-on-hover relative z-10" ref={programsRef}>
+            
+            {/* ROW 1: Aesthetic Courses */}
             <motion.div drag="x" dragConstraints={programsRef} className="animate-programs gap-4 md:gap-8 px-4">
-              {[...courses, ...courses].map((c, i) => (
+              {[...aestheticCourses, ...aestheticCourses].map((c, i) => (
                 <motion.div 
-                  key={i} 
+                  key={`aesthetic-${i}`} 
                   whileHover={{ y: -10, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }} 
                   className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-white/10 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)] active:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)]"
@@ -652,10 +655,10 @@ export default function Home() {
                     <h3 className="text-xl md:text-2xl font-serif text-white group-hover:text-black group-active:text-black font-bold transition-colors duration-500 mb-2">
                       {c.title}
                     </h3>
-                    <p className="text-xs md:text-sm text-[#BF953F] group-hover:text-black/70 group-active:text-black/70 font-bold uppercase tracking-widest mb-2 transition-colors duration-500">
+                    <p className="text-xs md:text-sm text-[#BF953F] group-hover:text-black/70 group-active:text-black/70 font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">
                       📍 {c.loc}
                     </p>
-                    <p className="text-xs md:text-sm text-white/60 group-hover:text-black/80 group-active:text-black/80 font-light mb-auto transition-colors duration-500">
+                    <p className="text-xs md:text-sm text-white/60 group-hover:text-black/80 group-active:text-black/80 font-light mb-auto transition-colors duration-500 line-clamp-3">
                       {c.desc}
                     </p>
 
@@ -671,6 +674,50 @@ export default function Home() {
                 </motion.div>
               ))}
             </motion.div>
+
+            {/* ROW 2: Dental Courses */}
+            <motion.div drag="x" dragConstraints={programsRef} className="animate-programs gap-4 md:gap-8 px-4" style={{ animationDirection: "reverse" }}>
+              {[...dentalCourses, ...dentalCourses].map((c, i) => (
+                <motion.div 
+                  key={`dental-${i}`} 
+                  whileHover={{ y: -10, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }} 
+                  className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-[#0074A5]/30 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,116,165,0.4)] active:shadow-[0_30px_60px_-15px_rgba(0,116,165,0.4)]"
+                >
+                  <div className="absolute inset-0 bg-white/5 backdrop-blur-md transition-opacity duration-500 group-hover:opacity-0 group-active:opacity-0" />
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,#0074A5,#0A1128,#0074A5)]" />
+                  
+                  <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#0074A5]/50 text-[#88D4FF] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-[#0074A5] group-active:bg-white group-active:text-[#0074A5] transition-colors">
+                    {c.badge}
+                  </div>
+                  
+                  <div className="relative z-10 flex flex-col items-center text-center px-4 md:px-6 w-full h-full">
+                    <div className="mb-4 md:mb-6 p-4 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-active:border-black/20 group-hover:bg-black/20 group-active:bg-black/20 transition-colors duration-500 shadow-inner">
+                      <c.icon className="w-8 h-8 md:w-10 md:h-10 text-[#88D4FF] group-hover:text-white group-active:text-white transition-colors duration-500" />
+                    </div>
+                    <h3 className="text-xl md:text-2xl font-serif text-white font-bold transition-colors duration-500 mb-2">
+                      {c.title}
+                    </h3>
+                    <p className="text-xs md:text-sm text-[#88D4FF] font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">
+                      📍 {c.loc}
+                    </p>
+                    <p className="text-xs md:text-sm text-white/60 group-hover:text-white/90 group-active:text-white/90 font-light mb-auto transition-colors duration-500 line-clamp-3">
+                      {c.desc}
+                    </p>
+
+                    <div className="w-full flex flex-col gap-2 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6 mt-4">
+                      <button onClick={() => window.location.href = '/courses'} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-white text-white md:text-[#0074A5] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black hover:text-white active:bg-black active:text-white transition-colors border border-white/10 md:border-none shadow-lg">
+                        View Details
+                      </button>
+                      <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title} (${c.loc}).`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 text-white font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:border-black active:border-black transition-colors">
+                        Enquire Now
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+            
           </div>
         </section>
 
@@ -733,46 +780,10 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------------- 7. FAQ SECTION ---------------- */}
-        <section className="py-24 md:py-32 relative bg-[#050914] overflow-hidden border-t border-white/5">
-          <div className="max-w-4xl mx-auto px-4 relative z-10">
-            <div className="text-center mb-12 md:mb-20">
-              <h3 className="text-[#BF953F] tracking-[0.2em] uppercase text-xs md:text-sm font-bold mb-4">Support</h3>
-              <GoldText text="Frequently Asked Questions" className="text-3xl md:text-6xl" />
-            </div>
-
-            <div className="space-y-4">
-              {faqs.map((faq, idx) => (
-                <FAQItem key={idx} question={faq.question} answer={faq.answer} isOpen={openFaq === idx} onClick={() => setOpenFaq(openFaq === idx ? null : idx)} />
-              ))}
-            </div>
-          </div>
-        </section>
+      
 
       </main>
     </>
   );
 }
 
-/* ---------------- FAQ ITEM COMPONENT ---------------- */
-function FAQItem({ question, answer, isOpen, onClick }: { question: string, answer: string, isOpen: boolean, onClick: () => void }) {
-  return (
-    <div className={`border rounded-2xl transition-all duration-300 overflow-hidden ${isOpen ? 'border-[#BF953F]/50 bg-white/5 shadow-[0_10px_30px_rgba(191,149,63,0.1)]' : 'border-white/10 bg-transparent hover:bg-white/5'}`}>
-      <button onClick={onClick} className="w-full px-6 py-5 flex items-center justify-between text-left outline-none">
-        <span className={`font-serif font-bold text-base md:text-lg transition-colors ${isOpen ? 'text-[#FBF5B7]' : 'text-white'}`}>{question}</span>
-        <motion.div animate={{ rotate: isOpen ? 180 : 0 }} className={`shrink-0 ml-4 p-1 rounded-full ${isOpen ? 'bg-[#BF953F] text-[#050914]' : 'bg-white/10 text-white'}`}>
-          <ChevronDown size={18} />
-        </motion.div>
-      </button>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-            <div className="px-6 pb-6 text-white/70 text-sm md:text-base leading-relaxed font-light border-t border-white/5 pt-4">
-              {answer}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}

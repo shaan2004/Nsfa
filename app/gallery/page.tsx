@@ -28,20 +28,22 @@ const generateImagePaths = (basePath: string, totalImages: number, ext: string =
 const premiumGoldGradient = "bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#AA771C_100%)]";
 
 /* ---------------- GALLERY DATA STRUCTURE ---------------- */
+// Re-assigned categories to match the international locations
 const galleryEvents = [
-  { id: "1", category: "Awards", title: "Certificate Award Ceremony", cover: "/assets/certificate awards/1.jpg", images: generateImagePaths("/assets/certificate awards", 25) },
-  { id: "2", category: "Training", title: "Lecture Sessions", cover: "/assets/lecture session/1.jpg", images: generateImagePaths("/assets/lecture session", 8) },
-  { id: "3", category: "Training", title: "Practise Sessions", cover: "/assets/practice session/1.jpg", images: generateImagePaths("/assets/practice session", 22) },
-  { id: "4", category: "Awards", title: "July 2021 Batch Awards", cover: "/assets/july-2021-award/1.jpg", images: generateImagePaths("/assets/july-2021-award", 65) },
-  { id: "5", category: "Training", title: "July 2021 Batch Training", cover: "/assets/july-2021/1.jpg", images: generateImagePaths("/assets/july-2021", 7) },
-  { id: "6", category: "Training", title: "November 2021 Batch Training", cover: "/assets/nov-2021/1.jpeg", images: generateImagePaths("/assets/nov-2021", 20, "jpeg") },
-  { id: "7", category: "Awards", title: "January 2022 Batch Awards", cover: "/assets/jan-2022/1.jpeg", images: generateImagePaths("/assets/jan-2022", 9, "jpeg") },
-  { id: "8", category: "Awards", title: "February 2022 Batch Awards", cover: "/assets/feb-2022/1.jpeg", images: generateImagePaths("/assets/feb-2022", 4, "jpeg") },
-  { id: "9", category: "Awards", title: "PMU1 Batch Awards", cover: "/assets/pmu1/1.jpeg", images: generateImagePaths("/assets/pmu1", 11, "jpeg") },
-  { id: "10", category: "Awards", title: "PMU2 Batch Awards", cover: "/assets/pmu2/1.jpeg", images: generateImagePaths("/assets/pmu2", 8, "jpeg") }
+  { id: "1", category: "India", title: "Certificate Award Ceremony", cover: "/assets/certificate awards/1.jpg", images: generateImagePaths("/assets/certificate awards", 25) },
+  { id: "2", category: "India", title: "Lecture Sessions", cover: "/assets/lecture session/1.jpg", images: generateImagePaths("/assets/lecture session", 8) },
+  { id: "3", category: "India", title: "Practise Sessions", cover: "/assets/practice session/1.jpg", images: generateImagePaths("/assets/practice session", 22) },
+  { id: "4", category: "Dubai", title: "July 2021 Batch Awards", cover: "/assets/july-2021-award/1.jpg", images: generateImagePaths("/assets/july-2021-award", 65) },
+  { id: "5", category: "Dubai", title: "July 2021 Batch Training", cover: "/assets/july-2021/1.jpg", images: generateImagePaths("/assets/july-2021", 7) },
+  { id: "6", category: "Bangkok", title: "November 2021 Batch Training", cover: "/assets/nov-2021/1.jpeg", images: generateImagePaths("/assets/nov-2021", 20, "jpeg") },
+  { id: "7", category: "Korea", title: "January 2022 Batch Awards", cover: "/assets/jan-2022/1.jpeg", images: generateImagePaths("/assets/jan-2022", 9, "jpeg") },
+  { id: "8", category: "Korea", title: "February 2022 Batch Awards", cover: "/assets/feb-2022/1.jpeg", images: generateImagePaths("/assets/feb-2022", 4, "jpeg") },
+  { id: "9", category: "Bangkok", title: "PMU1 Batch Awards", cover: "/assets/pmu1/1.jpeg", images: generateImagePaths("/assets/pmu1", 11, "jpeg") },
+  { id: "10", category: "India", title: "PMU2 Batch Awards", cover: "/assets/pmu2/1.jpeg", images: generateImagePaths("/assets/pmu2", 8, "jpeg") }
 ];
 
-const categories = ["All", "Awards", "Training"];
+// Updated filter categories
+const categories = ["All", "India", "Dubai", "Korea", "Bangkok"];
 
 /* ---------------- ANIMATION VARIANTS (OPTIMIZED) ---------------- */
 const cardVariants: Variants = {
@@ -125,7 +127,7 @@ export default function Gallery() {
           </motion.p>
         </div>
 
-        {/* 2. CATEGORY FILTERS */}
+        {/* 2. CATEGORY FILTERS (Country Based) */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }}
           className="flex flex-wrap justify-center gap-4 mb-16 md:mb-20"
@@ -146,7 +148,6 @@ export default function Gallery() {
         </motion.div>
 
         {/* 3. ROYAL ART GALLERY GRID (2-Col Mobile, 3-Col Desktop) */}
-        {/* Changed grid-cols-1 to grid-cols-2 and adjusted gap for mobile */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-12">
           <AnimatePresence mode="wait">
             {filteredEvents.map((event, index) => (
@@ -161,14 +162,14 @@ export default function Gallery() {
                 onClick={() => openLightbox(event)}
                 tabIndex={0}
               >
-                {/* THE ROYAL FRAME CONTAINER (Added touch active states) */}
+                {/* THE ROYAL FRAME CONTAINER */}
                 <div className="p-1 md:p-2 rounded-2xl md:rounded-[2rem] shadow-[0_10px_30px_rgba(0,0,0,0.8)] md:shadow-[0_20px_50px_rgba(0,0,0,0.8)] transition-all duration-500 group-hover:shadow-[0_20px_50px_rgba(212,175,55,0.25)] group-active:shadow-[0_20px_50px_rgba(212,175,55,0.25)] group-hover:-translate-y-2 group-active:-translate-y-2 flex flex-col h-full relative overflow-hidden">
                   
                   {/* DUAL LAYER BACKGROUND FOR SMOOTH CROSSFADE */}
                   <div className="absolute inset-0 bg-[#0A1128] border-2 border-[#BF953F]/30 rounded-2xl md:rounded-[2rem] transition-opacity duration-500 z-0 group-hover:opacity-0 group-active:opacity-0" />
                   <div className={`absolute inset-0 ${premiumGoldGradient} rounded-2xl md:rounded-[2rem] opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 z-0`} />
 
-                  {/* Inner Matte & Image (Resized for mobile) */}
+                  {/* Inner Matte & Image */}
                   <div className="relative overflow-hidden aspect-square md:aspect-[4/3] bg-black rounded-xl m-1 md:m-2 z-10 border border-white/10 group-hover:border-[#040814]/20 group-active:border-[#040814]/20 transition-colors duration-500">
                     <Image
                       src={event.cover}
@@ -186,7 +187,7 @@ export default function Gallery() {
                     </div>
                   </div>
 
-                  {/* Card Info Area (Resized text for mobile) */}
+                  {/* Card Info Area */}
                   <div className="p-3 md:p-6 pb-3 md:pb-4 flex flex-col items-center justify-center text-center flex-grow relative z-10">
                     <span className="text-[#BF953F] group-hover:text-[#040814]/70 group-active:text-[#040814]/70 transition-colors duration-500 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-1 md:mb-3">
                       {event.category}
