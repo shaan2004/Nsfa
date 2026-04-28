@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion, Variants } from "framer-motion";
-import { Globe2, Award, ShieldCheck, MapPin } from "lucide-react";
+import { Globe2, Award, ShieldCheck, MapPin, Briefcase, Sparkles } from "lucide-react";
 
 /* ---------------- PREMIUM COMPONENTS ---------------- */
 const GoldText = ({ text, className = "" }: { text: string; className?: string }) => (
@@ -18,8 +18,20 @@ const GoldText = ({ text, className = "" }: { text: string; className?: string }
   </h2>
 );
 
+const DarkGoldText = ({ text, className = "" }: { text: string; className?: string }) => (
+  <h2
+    className={`font-serif font-bold text-transparent bg-clip-text ${className}`}
+    style={{
+      backgroundImage: "linear-gradient(to right, #8B6914, #B38728, #8B6914)",
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+    }}
+  >
+    {text}
+  </h2>
+);
+
 /* ---------------- ANIMATION VARIANTS ---------------- */
-// Style 1: Cinematic Blur & Spring Reveal for Hero Text
 const blurReveal: Variants = {
   hidden: { opacity: 0, y: 40, filter: "blur(15px)" },
   visible: (i: number) => ({
@@ -28,7 +40,6 @@ const blurReveal: Variants = {
   })
 };
 
-// Style 2: Smooth Slide & Frost (Glassmorphism Reveal)
 const glassSlideIn: Variants = {
   hidden: { opacity: 0, x: 50 },
   visible: { 
@@ -37,7 +48,6 @@ const glassSlideIn: Variants = {
   }
 };
 
-// Style 3: Luxury Text Wipe Reveal
 const wipeReveal: Variants = {
   hidden: { clipPath: "inset(0 100% 0 0)", opacity: 0 },
   visible: { 
@@ -46,7 +56,6 @@ const wipeReveal: Variants = {
   }
 };
 
-// Style 4: 3D Flip Up
 const flipUp3D: Variants = {
   hidden: { opacity: 0, rotateX: -40, y: 60, scale: 0.95 },
   visible: { 
@@ -55,17 +64,31 @@ const flipUp3D: Variants = {
   }
 };
 
+const grandCardUp: Variants = {
+  hidden: { opacity: 0, y: 80, scale: 0.9, rotateX: 15 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0, scale: 1, rotateX: 0,
+    transition: { delay: i * 0.15, duration: 0.8, type: "spring", bounce: 0.4 },
+  }),
+};
+
+/* ---------------- DATA ---------------- */
+const journeyFeatures = [
+  { title: "8 CPDs in 1 Course", desc: "We are the only institute to provide 8 CPD training modules integrated into a single course.", icon: Award, color: "from-[#1A2D4A] to-[#080E21]" },
+  { title: "Business & Internships", desc: "Free internship benefits plus exclusive Business & Entrepreneurship classes to launch your clinic.", icon: Briefcase, color: "from-[#BF953F] to-[#B38728]" },
+  { title: "Accessible Learning", desc: "World-class education made accessible with flexible Easy EMI options and 100% placement assistance.", icon: Sparkles, color: "from-[#0F766E] to-[#042F2E]" }
+];
 
 /* ---------------- PAGE ---------------- */
 export default function AboutUs() {
   return (
-    <main suppressHydrationWarning className="bg-[#040814] text-white min-h-screen pt-32 pb-32 relative overflow-hidden perspective-[1500px]">
+    <main suppressHydrationWarning className="bg-[#040814] text-white min-h-screen pt-32 relative overflow-hidden perspective-[1500px]">
       
       {/* Background Ambience */}
       <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-[#BF953F]/10 rounded-full blur-[150px] -z-10 pointer-events-none" />
       <div className="absolute bottom-[10%] left-[-10%] w-[700px] h-[700px] bg-[#0074A5]/10 rounded-full blur-[180px] -z-10 pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4 pb-32">
         
         {/* ---------------- 1. HERO SECTION ---------------- */}
         <div className="text-center mb-20 md:mb-32 max-w-4xl mx-auto">
@@ -92,17 +115,61 @@ export default function AboutUs() {
           </motion.p>
         </div>
 
+        {/* ---------------- 5. TO THE JOURNEY AHEAD (Moved up as requested) ---------------- */}
+        <section className="py-24 md:py-32 relative bg-[#FAFAFA] text-black overflow-hidden border-4 border-[#BF953F] rounded-[2rem] md:rounded-[3rem] mb-24 md:mb-40 shadow-[0_20px_60px_rgba(191,149,63,0.15)]">
+          <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
+            
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} className="space-y-6">
+              <h3 className="text-[#8B6914] tracking-[0.2em] uppercase text-xs md:text-sm font-bold text-center lg:text-left">To The Journey Ahead</h3>
+              <motion.div variants={wipeReveal} className="text-center lg:text-left">
+                <DarkGoldText text="Gain Valuable Knowledge & Experience" className="text-3xl md:text-5xl lg:text-6xl leading-tight" />
+              </motion.div>
+
+              <div className="space-y-8 md:space-y-12 pt-4 md:pt-8">
+                {journeyFeatures.map((item, idx) => (
+                  <motion.div key={idx} custom={idx} variants={grandCardUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 md:gap-8 group cursor-default">
+                    <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-br ${item.color} shadow-xl group-hover:scale-110 group-active:scale-110 group-hover:rotate-6 group-active:rotate-6 transition-all duration-500`}>
+                      <item.icon className="w-8 h-8 md:w-10 md:h-10 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="text-xl md:text-3xl font-serif font-bold text-[#080E21] mb-2 md:mb-3 group-hover:text-[#8B6914] group-active:text-[#8B6914] transition-colors duration-300">{item.title}</h4>
+                      <p className="text-gray-600 text-sm md:text-lg leading-relaxed">{item.desc}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 1, type: "spring" }} 
+              className="flex overflow-x-auto gap-4 snap-x snap-mandatory w-full h-[350px] scrollbar-hide pb-4 md:grid md:grid-cols-2 md:grid-rows-2 md:h-[700px] md:gap-6 perspective-[1000px]"
+            >
+              <div className="min-w-[85vw] snap-center md:min-w-0 bg-[linear-gradient(135deg,#1A2D4A,#080E21)] p-6 md:p-10 rounded-3xl flex flex-col justify-center text-white shadow-2xl hover:-translate-y-4 active:-translate-y-4 md:hover:rotate-2 transition-all duration-500 cursor-pointer border border-[#1A2D4A]/50">
+                <h4 className="text-2xl md:text-3xl font-serif font-bold mb-3 md:mb-4">Having any queries?</h4>
+                <p className="text-white/80 text-sm md:text-base leading-relaxed">Ready to move into a fast-growing industry with multiple career path opportunities available?</p>
+              </div>
+              <div className="min-w-[85vw] snap-center md:min-w-0 rounded-3xl overflow-hidden shadow-2xl">
+                <img src="/assets/j1.png" alt="Graduation" className="w-full h-full object-cover hover:scale-110 active:scale-110 transition-transform duration-700" loading="lazy" />
+              </div>
+              <div className="min-w-[85vw] snap-center md:min-w-0 rounded-3xl overflow-hidden shadow-2xl">
+                <img src="/assets/j2.png" alt="Students Learning" className="w-full h-full object-cover hover:scale-110 active:scale-110 transition-transform duration-700" loading="lazy" />
+              </div>
+              <div className="min-w-[85vw] snap-center md:min-w-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] p-6 md:p-10 rounded-3xl flex flex-col justify-center text-[#080E21] shadow-[0_20px_40px_rgba(191,149,63,0.4)] hover:-translate-y-4 active:-translate-y-4 md:hover:-rotate-2 transition-all duration-500 cursor-pointer">
+                <h4 className="text-2xl md:text-3xl font-serif font-bold mb-3 md:mb-4">Connect with us!</h4>
+                <p className="text-[#080E21]/80 text-sm md:text-base leading-relaxed font-bold">We are here to help you. It's time to earn your Aesthetician certification with NSFA Academy!</p>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
         {/* ---------------- 2. CONTENT GRID (Image & Info) ---------------- */}
         <div className="grid lg:grid-cols-2 gap-10 md:gap-16 items-center mb-24 md:mb-40">
           
-          {/* THE IMAGE FIX (Resized height for mobile) */}
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 1, type: "spring" }}
             className="relative rounded-3xl md:rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group h-[400px] md:h-[550px]"
           >
             <div className="absolute inset-0 bg-gradient-to-t from-[#040814] via-transparent to-transparent z-10 opacity-90 transition-opacity duration-700" />
             
-            {/* The Image - Now clear and optimized */}
             <img 
               src="/assets/aboutus.jpg" 
               alt="NSFA Academy Gathering" 
@@ -116,7 +183,6 @@ export default function AboutUs() {
             </div>
           </motion.div>
 
-          {/* THE GLASSMORPHIC INFO CARDS */}
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={glassSlideIn} className="space-y-6 md:space-y-8">
             
             <motion.div variants={glassSlideIn} className="p-6 md:p-8 rounded-[2rem] md:rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-[#BF953F]/40 active:border-[#BF953F]/40 transition-colors shadow-xl group">
@@ -153,12 +219,11 @@ export default function AboutUs() {
           </motion.div>
         </div>
 
-        {/* ---------------- 3. ACCREDITATION SECTION (Cinematic Wipe Reveal) ---------------- */}
+        {/* ---------------- 3. ACCREDITATION SECTION ---------------- */}
         <motion.section 
           initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.4 }}
           className="mb-24 md:mb-40 relative py-16 md:py-24 rounded-[2.5rem] md:rounded-[3rem] border border-white/10 bg-[linear-gradient(135deg,#080E21,#040814)] overflow-hidden flex flex-col lg:flex-row items-center gap-10 md:gap-16 px-6 md:px-16 shadow-2xl"
         >
-          {/* Animated Background Map */}
           <div className="absolute inset-0 z-0 flex items-center justify-center lg:justify-start opacity-10 pointer-events-none mix-blend-screen overflow-hidden">
             <motion.img 
               animate={{ x: [0, -20, 0] }} transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
@@ -189,7 +254,7 @@ export default function AboutUs() {
           </div>
         </motion.section>
 
-        {/* ---------------- 4. STATS & VISION (3D Flip Animation) ---------------- */}
+        {/* ---------------- 4. STATS & VISION ---------------- */}
         <div className="grid md:grid-cols-2 gap-8 md:gap-10">
           <motion.div 
             initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={flipUp3D}
@@ -222,6 +287,7 @@ export default function AboutUs() {
         </div>
 
       </div>
+
     </main>
   );
 }

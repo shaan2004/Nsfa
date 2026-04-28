@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
-import { motion, Variants, AnimatePresence } from "framer-motion";
+import { motion, Variants, AnimatePresence, useInView, useMotionValue, useTransform, animate } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Award, BookOpen, Globe, Stethoscope, Briefcase, GraduationCap, Play, PlayCircle, Star, Volume2, VolumeX, Building2, Users, MonitorPlay, MessageCircle, ChevronDown, Sparkles, X, CheckCircle2 } from "lucide-react";
 
@@ -31,6 +31,22 @@ const DarkGoldText = ({ text, className = "" }: { text: string; className?: stri
     {text}
   </h2>
 );
+
+/* ---------------- COUNTING NUMBER COMPONENT ---------------- */
+function Counter({ from, to, duration = 2, suffix = "" }: { from: number; to: number; duration?: number; suffix?: string }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const count = useMotionValue(from);
+  const rounded = useTransform(count, (latest) => Math.round(latest) + suffix);
+
+  useEffect(() => {
+    if (inView) {
+      animate(count, to, { duration, ease: "easeOut" });
+    }
+  }, [inView, count, to, duration]);
+
+  return <motion.span ref={ref}>{rounded}</motion.span>;
+}
 
 const VideoReelCard = ({ num }: { num: number }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -138,10 +154,6 @@ const advancedFeatures = [
   { id: 8, title: "Master Fellowship", desc: "Multi-level certifications across Dubai & South Korea.", x: 65, y: 90 },
 ];
 
-const meshConnections = [
-  [1, 3], [3, 5], [5, 7], [7, 8], [8, 6], [6, 4], [4, 2], [2, 1]
-];
-
 const aestheticCourses = [
   { title: "PG Diploma", loc: "Clinical Cosmetology", desc: "Clinical Cosmetology, Trichology & Nutraceuticals.", badge: "Diploma", icon: BookOpen },
   { title: "PG Diploma", loc: "Facial Aesthetics", desc: "Non Surgical Facial Aesthetics, Bariatric Science & Nutrition.", badge: "Diploma", icon: Award },
@@ -163,13 +175,6 @@ const dentalCourses = [
   { title: "PG Certificate", loc: "Sports Dentistry", desc: "Sports Dentistry & Gum Rejuvenation.", badge: "Certificate", icon: Briefcase },
   { title: "M.SC", loc: "Aesthetic Dentistry", desc: "M.SC in Aesthetic Dentistry.", badge: "Degree", icon: Award },
 ];
-
-const journeyFeatures = [
-  { title: "8 CPDs in 1 Course", desc: "We are the only institute to provide 8 CPD training modules integrated into a single course.", icon: Award, color: "from-[#1A2D4A] to-[#080E21]" },
-  { title: "Business & Internships", desc: "Free internship benefits plus exclusive Business & Entrepreneurship classes to launch your clinic.", icon: Briefcase, color: "from-[#BF953F] to-[#B38728]" },
-  { title: "Accessible Learning", desc: "World-class education made accessible with flexible Easy EMI options and 100% placement assistance.", icon: Sparkles, color: "from-[#0F766E] to-[#042F2E]" }
-];
-
 
 /* ---------------- ADVANCED ANIMATION VARIANTS ---------------- */
 const wipeReveal: Variants = {
@@ -206,7 +211,6 @@ export default function Home() {
   // SCROLL LISTENER FOR LEAD POPUP
   useEffect(() => {
     const handleScroll = () => {
-      // Triggers smoothly after the user scrolls down 800px 
       if (window.scrollY > 800 && !hasDismissedPopup && !showLeadPopup && !popupSubmitted) {
         setShowLeadPopup(true);
       }
@@ -226,11 +230,9 @@ export default function Home() {
 
   if (!mounted) return <main className="min-h-screen bg-[#080E21]"></main>;
 
-  // NOTICE: Using a React Fragment to hold the Modal OUTSIDE the main tag.
-  // This solves the CSS perspective fixed-positioning bug!
   return (
     <>
-      {/* ---------------- LEAD GEN POPUP MODAL (Now positioned flawlessly) ---------------- */}
+      {/* ---------------- LEAD GEN POPUP MODAL ---------------- */}
       <AnimatePresence>
         {showLeadPopup && (
           <motion.div 
@@ -293,7 +295,6 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* ---------------- MAIN CONTENT WRAPPER ---------------- */}
       <main suppressHydrationWarning className="bg-[#080E21] text-white overflow-hidden min-h-screen relative perspective-[1000px]">
         
         {/* GLOBAL CSS OPTIMIZATIONS */}
@@ -430,194 +431,180 @@ export default function Home() {
         </section>
 
       
-  {/* ---------------- 2. WHY CHOOSE US (Tree Branch & Glowing Dots Layout) ---------------- */}
-      <section className="min-h-[100vh] py-24 relative overflow-hidden bg-[linear-gradient(180deg,#0B132A_0%,#050914_100%)] flex flex-col items-center justify-center">
-        {/* Background Ambient Glows */}
-        <div className="absolute top-[20%] left-[10%] w-[40%] h-[40%] rounded-full bg-[#BF953F]/10 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[20%] right-[10%] w-[40%] h-[40%] rounded-full bg-[#0074A5]/10 blur-[120px] pointer-events-none" />
+        {/* ---------------- 2. WHY CHOOSE US (Tree Branch & Glowing Dots Layout) ---------------- */}
+        <section className="min-h-[100vh] py-24 relative overflow-hidden bg-[linear-gradient(180deg,#0B132A_0%,#050914_100%)] flex flex-col items-center justify-center">
+          <div className="absolute top-[20%] left-[10%] w-[40%] h-[40%] rounded-full bg-[#BF953F]/10 blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-[20%] right-[10%] w-[40%] h-[40%] rounded-full bg-[#0074A5]/10 blur-[120px] pointer-events-none" />
 
-        {/* Animated Connecting Gradient Lines (Desktop Only) */}
-        <svg className="hidden lg:block absolute inset-0 w-full h-full pointer-events-none z-10">
-          <defs>
-            <linearGradient id="tree-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#0074A5" stopOpacity="0" />
-              <stop offset="40%" stopColor="#BF953F" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#FFD700" stopOpacity="1" />
-            </linearGradient>
-          </defs>
-          {/* Drawing curved branches mapped to the 2x4 grid on the right */}
-          {[
-            { x: 58, y: 22 }, { x: 78, y: 22 },
-            { x: 58, y: 40 }, { x: 78, y: 40 },
-            { x: 58, y: 58 }, { x: 78, y: 58 },
-            { x: 58, y: 76 }, { x: 78, y: 76 }
-          ].map((pos, i) => (
-            <motion.path 
-              key={`line-${i}`}
-              // Starts from the left text (x: 35%, y: 50%) and curves into the grid items
-              d={`M 35% 50% C 42% 50%, 45% ${pos.y}%, ${pos.x}% ${pos.y}%`}
-              fill="none"
-              stroke="url(#tree-grad)"
-              strokeWidth="1.5"
-              strokeDasharray="5 5"
-              // The classic neurolink opacity fade animation
-              animate={{ opacity: [0.05, 0.7, 0.05] }} 
-              transition={{ repeat: Infinity, duration: 3 + (i % 2), delay: i * 0.2, ease: "easeInOut" }}
-            />
-          ))}
-        </svg>
-
-        <div className="max-w-7xl w-full mx-auto px-4 flex flex-col lg:flex-row items-center justify-between relative z-20 gap-16 lg:gap-8">
-          
-          {/* LEFT SIDE: Content & Text */}
-          <div className="w-full lg:w-5/12 flex flex-col items-center lg:items-start text-center lg:text-left shrink-0">
-            <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="h-[2px] bg-[#FFD700] mb-8" />
-            
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-              <GoldText text="Why NSFA Academy" className="text-5xl md:text-7xl mb-6 drop-shadow-2xl" />
-              <p className="text-white/70 text-lg md:text-xl leading-relaxed font-light">
-                NSFA Academy is a globally recognized advanced aesthetic science academy. We are the ONLY institute offering true monopoly masterclasses and 8 CPDs in one course.
-              </p>
-            </motion.div>
-
-            <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }} className="h-[2px] bg-[#FFD700] mt-8" />
-          </div>
-
-          {/* RIGHT SIDE: Key Points Grid */}
-          <div className="w-full lg:w-7/12 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 relative z-20">
-            {advancedFeatures.map((f, i) => (
-              <motion.div 
-                key={f.id} 
-                onClick={() => setActiveFeature(f.id)}
-                initial={{ opacity: 0, x: 50 }} 
-                whileInView={{ opacity: 1, x: 0 }} 
-                viewport={{ once: true }} 
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                whileHover={{ scale: 1.03, x: -5 }} 
-                whileTap={{ scale: 0.97 }}
-                className="w-full px-5 py-4 md:px-6 md:py-5 rounded-2xl bg-[#0A1128]/60 border border-white/10 shadow-[0_10px_20px_rgba(0,0,0,0.4)] cursor-pointer group hover:border-[#BF953F]/60 active:border-[#BF953F]/60 transition-all relative flex items-center justify-start text-left overflow-hidden"
-              >
-                {/* Subtle golden hover background */}
-                <div className="absolute inset-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] opacity-0 group-hover:opacity-[0.05] group-active:opacity-[0.05] transition-opacity duration-300" />
-                
-                {/* "Overgrown" Animated Dot */}
-                <div className="relative flex items-center justify-center w-4 h-4 mr-4 shrink-0">
-                  {/* The core solid dot */}
-                  <div className="w-1.5 h-1.5 bg-[#FBF5B7] rounded-full z-10" />
-                  {/* The pulsing 'overgrown' ripple */}
-                  <motion.div 
-                    animate={{ scale: [1, 3.5, 1], opacity: [0.8, 0, 0.8] }}
-                    transition={{ repeat: Infinity, duration: 2.5, delay: i * 0.15 }}
-                    className="absolute inset-0 bg-[#BF953F] rounded-full"
-                  />
-                </div>
-
-                <h4 className="text-[#FBF5B7] font-serif font-bold text-base md:text-lg group-hover:text-white transition-colors relative z-10 truncate">
-                  {f.title}
-                </h4>
-              </motion.div>
+          <svg className="hidden lg:block absolute inset-0 w-full h-full pointer-events-none z-10">
+            <defs>
+              <linearGradient id="tree-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#0074A5" stopOpacity="0" />
+                <stop offset="40%" stopColor="#BF953F" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#FFD700" stopOpacity="1" />
+              </linearGradient>
+            </defs>
+            {[
+              { x: 58, y: 22 }, { x: 78, y: 22 },
+              { x: 58, y: 40 }, { x: 78, y: 40 },
+              { x: 58, y: 58 }, { x: 78, y: 58 },
+              { x: 58, y: 76 }, { x: 78, y: 76 }
+            ].map((pos, i) => (
+              <motion.path 
+                key={`line-${i}`}
+                d={`M 35% 50% C 42% 50%, 45% ${pos.y}%, ${pos.x}% ${pos.y}%`}
+                fill="none"
+                stroke="url(#tree-grad)"
+                strokeWidth="1.5"
+                strokeDasharray="5 5"
+                animate={{ opacity: [0.05, 0.7, 0.05] }} 
+                transition={{ repeat: Infinity, duration: 3 + (i % 2), delay: i * 0.2, ease: "easeInOut" }}
+              />
             ))}
-          </div>
+          </svg>
 
-        </div>
+          <div className="max-w-7xl w-full mx-auto px-4 flex flex-col lg:flex-row items-center justify-between relative z-20 gap-16 lg:gap-8">
+            
+            <div className="w-full lg:w-5/12 flex flex-col items-center lg:items-start text-center lg:text-left shrink-0">
+              <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="h-[2px] bg-[#FFD700] mb-8" />
+              
+              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+                <GoldText text="Why NSFA Academy" className="text-5xl md:text-7xl mb-6 drop-shadow-2xl" />
+                <p className="text-white/70 text-lg md:text-xl leading-relaxed font-light">
+                  NSFA Academy is a globally recognized advanced aesthetic science academy. We are the ONLY institute offering true monopoly masterclasses and 8 CPDs in one course.
+                </p>
+              </motion.div>
 
-        {/* MODAL - Confined inside the section using 'absolute' */}
-        <AnimatePresence>
-          {activeFeature && (
-            <motion.div 
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 1 }} 
-              exit={{ opacity: 0 }} 
-              onClick={() => setActiveFeature(null)} 
-              // 'absolute inset-0' traps the modal inside the 'relative' section parent
-              className="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 cursor-pointer"
-            >
-              {advancedFeatures.filter(f => f.id === activeFeature).map(f => (
+              <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }} className="h-[2px] bg-[#FFD700] mt-8" />
+            </div>
+
+            <div className="w-full lg:w-7/12 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 relative z-20">
+              {advancedFeatures.map((f, i) => (
                 <motion.div 
                   key={f.id} 
-                  initial={{ scale: 0.9, y: 20 }}
-                  animate={{ scale: 1, y: 0 }}
-                  exit={{ scale: 0.9, y: 20 }}
-                  transition={{ type: "spring", bounce: 0.4 }}
-                  className="bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] p-6 md:p-10 rounded-3xl max-w-[90vw] md:max-w-lg w-full shadow-[0_20px_60px_rgba(191,149,63,0.6)] cursor-default text-center relative overflow-hidden" 
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={() => setActiveFeature(f.id)}
+                  initial={{ opacity: 0, x: 50 }} 
+                  whileInView={{ opacity: 1, x: 0 }} 
+                  viewport={{ once: true }} 
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  whileHover={{ scale: 1.03, x: -5 }} 
+                  whileTap={{ scale: 0.97 }}
+                  className="w-full px-5 py-4 md:px-6 md:py-5 rounded-2xl bg-[#0A1128]/60 border border-white/10 shadow-[0_10px_20px_rgba(0,0,0,0.4)] cursor-pointer group hover:border-[#BF953F]/60 active:border-[#BF953F]/60 transition-all relative flex items-center justify-start text-left overflow-hidden"
                 >
-                  <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-overlay pointer-events-none" />
+                  <div className="absolute inset-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] opacity-0 group-hover:opacity-[0.05] group-active:opacity-[0.05] transition-opacity duration-300" />
                   
-                  <div className="relative z-10 flex flex-col items-center">
-                    <div className="w-12 md:w-16 h-1.5 md:h-2 bg-[#080E21]/20 rounded-full mb-6 md:mb-8" />
-                    <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#080E21] mb-4 md:mb-6">{f.title}</h3>
-                    <p className="text-[#080E21]/90 text-base md:text-lg font-medium leading-relaxed">{f.desc}</p>
-                    
-                    <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mt-8 md:mt-10 w-full justify-center">
-                      <button 
-                        onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I would like to know more about: ${f.title}.`)}`, '_blank')} 
-                        className="px-6 py-3 md:px-8 rounded-full bg-[#080E21] text-[#FBF5B7] font-bold tracking-widest text-xs md:text-sm uppercase hover:scale-[1.02] active:scale-95 transition-all shadow-lg w-full sm:w-auto"
-                      >
-                        Enquire Now
-                      </button>
-                      <button 
-                        onClick={() => setActiveFeature(null)} 
-                        className="px-6 py-3 md:px-8 rounded-full border-2 border-[#080E21]/40 text-[#080E21] font-bold tracking-widest text-xs md:text-sm uppercase hover:bg-[#080E21] active:bg-[#080E21] hover:text-[#FBF5B7] active:text-[#FBF5B7] transition-all w-full sm:w-auto"
-                      >
-                        Close
-                      </button>
-                    </div>
+                  <div className="relative flex items-center justify-center w-4 h-4 mr-4 shrink-0">
+                    <div className="w-1.5 h-1.5 bg-[#FBF5B7] rounded-full z-10" />
+                    <motion.div 
+                      animate={{ scale: [1, 3.5, 1], opacity: [0.8, 0, 0.8] }}
+                      transition={{ repeat: Infinity, duration: 2.5, delay: i * 0.15 }}
+                      className="absolute inset-0 bg-[#BF953F] rounded-full"
+                    />
                   </div>
 
+                  <h4 className="text-[#FBF5B7] font-serif font-bold text-base md:text-lg group-hover:text-white transition-colors relative z-10 truncate">
+                    {f.title}
+                  </h4>
                 </motion.div>
               ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </section>
-        {/* ---------------- 3. TO THE JOURNEY AHEAD ---------------- */}
-        <section className="py-24 md:py-32 relative bg-white text-black overflow-hidden border-y-4 border-[#BF953F]">
-          <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
-            
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} className="space-y-6">
-              <h3 className="text-[#8B6914] tracking-[0.2em] uppercase text-xs md:text-sm font-bold text-center lg:text-left">To The Journey Ahead</h3>
-              <motion.div variants={wipeReveal} className="text-center lg:text-left">
-                <DarkGoldText text="Gain Valuable Knowledge & Experience" className="text-3xl md:text-5xl lg:text-6xl leading-tight" />
-              </motion.div>
+            </div>
 
-              <div className="space-y-8 md:space-y-12 pt-4 md:pt-8">
-                {journeyFeatures.map((item, idx) => (
-                  <motion.div key={idx} custom={idx} variants={grandCardUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 md:gap-8 group cursor-default">
-                    <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center shrink-0 bg-gradient-to-br ${item.color} shadow-xl group-hover:scale-110 group-active:scale-110 group-hover:rotate-6 group-active:rotate-6 transition-all duration-500`}>
-                      <item.icon className="w-8 h-8 md:w-10 md:h-10 text-white" />
+          </div>
+
+          <AnimatePresence>
+            {activeFeature && (
+              <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                exit={{ opacity: 0 }} 
+                onClick={() => setActiveFeature(null)} 
+                className="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 cursor-pointer"
+              >
+                {advancedFeatures.filter(f => f.id === activeFeature).map(f => (
+                  <motion.div 
+                    key={f.id} 
+                    initial={{ scale: 0.9, y: 20 }}
+                    animate={{ scale: 1, y: 0 }}
+                    exit={{ scale: 0.9, y: 20 }}
+                    transition={{ type: "spring", bounce: 0.4 }}
+                    className="bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] p-6 md:p-10 rounded-3xl max-w-[90vw] md:max-w-lg w-full shadow-[0_20px_60px_rgba(191,149,63,0.6)] cursor-default text-center relative overflow-hidden" 
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-overlay pointer-events-none" />
+                    
+                    <div className="relative z-10 flex flex-col items-center">
+                      <div className="w-12 md:w-16 h-1.5 md:h-2 bg-[#080E21]/20 rounded-full mb-6 md:mb-8" />
+                      <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#080E21] mb-4 md:mb-6">{f.title}</h3>
+                      <p className="text-[#080E21]/90 text-base md:text-lg font-medium leading-relaxed">{f.desc}</p>
+                      
+                      <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mt-8 md:mt-10 w-full justify-center">
+                        <button 
+                          onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I would like to know more about: ${f.title}.`)}`, '_blank')} 
+                          className="px-6 py-3 md:px-8 rounded-full bg-[#080E21] text-[#FBF5B7] font-bold tracking-widest text-xs md:text-sm uppercase hover:scale-[1.02] active:scale-95 transition-all shadow-lg w-full sm:w-auto"
+                        >
+                          Enquire Now
+                        </button>
+                        <button 
+                          onClick={() => setActiveFeature(null)} 
+                          className="px-6 py-3 md:px-8 rounded-full border-2 border-[#080E21]/40 text-[#080E21] font-bold tracking-widest text-xs md:text-sm uppercase hover:bg-[#080E21] active:bg-[#080E21] hover:text-[#FBF5B7] active:text-[#FBF5B7] transition-all w-full sm:w-auto"
+                        >
+                          Close
+                        </button>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="text-xl md:text-3xl font-serif font-bold text-[#080E21] mb-2 md:mb-3 group-hover:text-[#8B6914] group-active:text-[#8B6914] transition-colors duration-300">{item.title}</h4>
-                      <p className="text-gray-600 text-sm md:text-lg leading-relaxed">{item.desc}</p>
-                    </div>
+
                   </motion.div>
                 ))}
-              </div>
-            </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </section>
 
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 1, type: "spring" }} 
-              className="flex overflow-x-auto gap-4 snap-x snap-mandatory w-full h-[350px] no-scrollbar pb-4 md:grid md:grid-cols-2 md:grid-rows-2 md:h-[700px] md:gap-6 perspective-[1000px]"
-            >
-              <div className="min-w-[85vw] snap-center md:min-w-0 bg-[linear-gradient(135deg,#1A2D4A,#080E21)] p-6 md:p-10 rounded-3xl flex flex-col justify-center text-white shadow-2xl hover:-translate-y-4 active:-translate-y-4 md:hover:rotate-2 transition-all duration-500 cursor-pointer border border-[#1A2D4A]/50">
-                <h4 className="text-2xl md:text-3xl font-serif font-bold mb-3 md:mb-4">Having any queries?</h4>
-                <p className="text-white/80 text-sm md:text-base leading-relaxed">Ready to move into a fast-growing industry with multiple career path opportunities available?</p>
-              </div>
-              <div className="min-w-[85vw] snap-center md:min-w-0 rounded-3xl overflow-hidden shadow-2xl">
-                <img src="/assets/j1.png" alt="Graduation" className="w-full h-full object-cover hover:scale-110 active:scale-110 transition-transform duration-700" loading="lazy" />
-              </div>
-              <div className="min-w-[85vw] snap-center md:min-w-0 rounded-3xl overflow-hidden shadow-2xl">
-                <img src="/assets/j2.png" alt="Students Learning" className="w-full h-full object-cover hover:scale-110 active:scale-110 transition-transform duration-700" loading="lazy" />
-              </div>
-              <div className="min-w-[85vw] snap-center md:min-w-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] p-6 md:p-10 rounded-3xl flex flex-col justify-center text-[#080E21] shadow-[0_20px_40px_rgba(191,149,63,0.4)] hover:-translate-y-4 active:-translate-y-4 md:hover:-rotate-2 transition-all duration-500 cursor-pointer">
-                <h4 className="text-2xl md:text-3xl font-serif font-bold mb-3 md:mb-4">Connect with us!</h4>
-                <p className="text-[#080E21]/80 text-sm md:text-base leading-relaxed font-bold">We are here to help you. It's time to earn your Aesthetician certification with NSFA Academy!</p>
-              </div>
-            </motion.div>
+      {/* ---------------- 3. STATS SECTION (White Glassmorphism) ---------------- */}
+        <section className="py-24 md:py-32 relative bg-[#FAFAFA] border-y-4 border-[#BF953F] overflow-hidden z-10">
+          {/* Subtle ambient glows for the glass to blur over */}
+          <div className="absolute top-[-10%] right-[-5%] w-[400px] h-[400px] bg-[#BF953F]/10 rounded-full blur-[100px] -z-10" />
+          <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-[#0074A5]/10 rounded-full blur-[100px] -z-10" />
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-[0.03] pointer-events-none -z-10" />
+          
+          <div className="max-w-7xl mx-auto px-4 relative z-10">
+            <div className="text-center mb-16 md:mb-24">
+              <h3 className="text-[#8B6914] tracking-[0.2em] uppercase text-xs md:text-sm font-bold mb-4 drop-shadow-sm">Our Impact</h3>
+              <DarkGoldText text="By The Numbers" className="text-4xl md:text-6xl" />
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+              {[
+                { number: 5000, suffix: "+", label: "Global Students", icon: GraduationCap },
+                { number: 50, suffix: "+", label: "Expert Faculty", icon: Users },
+                { number: 30, suffix: "+", label: "Advanced Courses", icon: BookOpen },
+                { number: 12, suffix: "+", label: "Countries Reached", icon: Globe },
+              ].map((stat, i) => (
+                <motion.div 
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.8 }}
+                  className="bg-white/60 backdrop-blur-xl border border-white shadow-[0_15px_30px_rgba(0,0,0,0.05)] rounded-3xl p-6 md:p-10 flex flex-col items-center justify-center text-center group hover:bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] hover:border-transparent hover:shadow-[0_20px_50px_rgba(191,149,63,0.5)] transition-all duration-500 hover:-translate-y-3"
+                >
+                  {/* Icon Box */}
+                  <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white border border-gray-100 flex items-center justify-center mb-4 md:mb-6 shadow-sm group-hover:bg-[#080E21] transition-colors duration-500">
+                    <stat.icon className="w-6 h-6 md:w-8 md:h-8 text-[#8B6914] group-hover:text-[#FBF5B7] transition-colors duration-500" />
+                  </div>
+                  
+                  {/* Counter */}
+                  <div className="text-3xl md:text-5xl font-serif font-bold text-[#080E21] mb-2 drop-shadow-sm group-hover:drop-shadow-none transition-colors duration-500">
+                    <Counter from={0} to={stat.number} duration={2.5} suffix={stat.suffix} />
+                  </div>
+                  
+                  <p className="text-gray-500 text-[10px] md:text-xs font-bold uppercase tracking-widest group-hover:text-[#080E21]/80 transition-colors duration-500">
+                    {stat.label}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </section>
 
-     {/* ---------------- 4. PROGRAMS SECTION (Two Rows) ---------------- */}
+        {/* ---------------- 4. PROGRAMS SECTION (Two Rows) ---------------- */}
         <section className="py-24 md:py-32 relative bg-[linear-gradient(180deg,#080E21_0%,#0B132A_100%)] overflow-hidden">
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="meteor" /><div className="meteor" /><div className="meteor" /><div className="meteor" /><div className="meteor" />
@@ -780,10 +767,12 @@ export default function Home() {
           </div>
         </section>
 
-      
+       
 
       </main>
     </>
   );
 }
 
+
+ 
