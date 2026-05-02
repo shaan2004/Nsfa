@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Phone, Mail, MapPin, ChevronRight, MessageCircle } from "lucide-react"; // Removed Instagram and Facebook
+import { Phone, Mail, MapPin, ChevronRight, MessageCircle } from "lucide-react"; 
 
 // --- CUSTOM SVG ICONS ---
 const FacebookIcon = ({ size = 24 }: { size?: number }) => (
@@ -23,7 +23,6 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
   const whatsappMsg = encodeURIComponent("Hello NSFA Academy, I have some questions regarding your courses.");
 
-
   return (
     <footer className="bg-[#02040A] text-white border-t border-white/5 relative overflow-hidden">
       
@@ -42,17 +41,20 @@ export default function Footer() {
             <p className="text-white/60 leading-relaxed font-light text-sm">
               Zeal To Excellence In Aesthetics Science. We are India's premier globally recognised international education academy for advanced beauty, aesthetic, and dental science.
             </p>
-            <div className="flex gap-4">
-          <span className="text-[#D4AF37] font-bold uppercase tracking-widest text-sm">Follow Us</span>
-              <a href="https://www.facebook.com/nsfaacademy/" target="_blank" className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-[#D4AF37] hover:border-[#D4AF37] hover:text-[#040814] transition-all duration-300">
+            <div className="flex items-center gap-4">
+              <span className="text-[#D4AF37] font-bold uppercase tracking-widest text-sm">Follow Us</span>
+              
+              {/* Added aria-labels and rel="noopener noreferrer" for SEO/Accessibility */}
+              <a href="https://www.facebook.com/nsfaacademy/" target="_blank" rel="noopener noreferrer" aria-label="Visit NSFA Academy on Facebook" className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-[#D4AF37] hover:border-[#D4AF37] hover:text-[#040814] transition-all duration-300">
                 <FacebookIcon size={20} />
               </a>
-              <a href="https://www.instagram.com/nsfa_courses/" target="_blank" className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-[#D4AF37] hover:border-[#D4AF37] hover:text-[#040814] transition-all duration-300">
+              <a href="https://www.instagram.com/nsfa_courses/" target="_blank" rel="noopener noreferrer" aria-label="Visit NSFA Academy on Instagram" className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-[#D4AF37] hover:border-[#D4AF37] hover:text-[#040814] transition-all duration-300">
                 <InstagramIcon size={20} />
               </a>
-              <a href={`https://wa.me/919884718883?text=${whatsappMsg}`} target="_blank" className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-[#D4AF37] hover:border-[#D4AF37] hover:text-[#040814] transition-all duration-300">
+              <a href={`https://wa.me/919884718883?text=${whatsappMsg}`} target="_blank" rel="noopener noreferrer" aria-label="Chat with NSFA Academy on WhatsApp" className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-[#D4AF37] hover:border-[#D4AF37] hover:text-[#040814] transition-all duration-300">
                 <MessageCircle size={20} />
-              </a></div>
+              </a>
+            </div>
           </div>
 
           {/* Column 2: Quick Links */}
@@ -103,19 +105,19 @@ export default function Footer() {
             <h4 className="text-lg font-serif font-bold text-[#FBF5B7] mb-6">Get In Touch</h4>
             <ul className="space-y-4">
               <li>
-                <a href="https://maps.app.goo.gl/v3xZ4Z39Z9Z9Z9Z9" target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 text-white/60 hover:text-[#D4AF37] transition-colors text-sm group">
+                <a href="https://www.google.com/maps/search/?api=1&query=No:+31,+Ramalingam+Nagar+1st+St,+Kamdar+nagar,+Nungambakkam,+Chennai+600034" target="_blank" rel="noopener noreferrer" aria-label="View NSFA Academy on Google Maps" className="flex items-start gap-3 text-white/60 hover:text-[#D4AF37] transition-colors text-sm group">
                   <MapPin size={18} className="shrink-0 text-[#D4AF37]/70 group-hover:text-[#D4AF37]" />
                   <span>No: 31, Ramalingam Nagar 1st St, Kamdar nagar, Nungambakkam, Chennai 600034</span>
                 </a>
               </li>
               <li>
-                <a href="tel:+919884718883" className="flex items-center gap-3 text-white/60 hover:text-[#D4AF37] transition-colors text-sm group">
+                <a href="tel:+919884718883" aria-label="Call NSFA Academy" className="flex items-center gap-3 text-white/60 hover:text-[#D4AF37] transition-colors text-sm group">
                   <Phone size={18} className="shrink-0 text-[#D4AF37]/70 group-hover:text-[#D4AF37]" />
                   <span>+91 98847 18883</span>
                 </a>
               </li>
               <li>
-                <a href="mailto:info@nsfaacademy.com" className="flex items-center gap-3 text-white/60 hover:text-[#D4AF37] transition-colors text-sm group">
+                <a href="mailto:info@nsfaacademy.com" aria-label="Email NSFA Academy" className="flex items-center gap-3 text-white/60 hover:text-[#D4AF37] transition-colors text-sm group">
                   <Mail size={18} className="shrink-0 text-[#D4AF37]/70 group-hover:text-[#D4AF37]" />
                   <span>info@nsfaacademy.com</span>
                 </a>
@@ -125,17 +127,13 @@ export default function Footer() {
 
         </div>
 
-        {/* SEO Keywords Hidden from view but readable by crawlers */}
-        <div className="sr-only">
-          Keywords: Facial Aesthetics Training India, Aesthetic Medicine Courses Chennai, Cosmetology Fellowship, PG Diploma in Aesthetics, Dental Science Academy, Non-Surgical Facial Aesthetics, Medical Trichology Course, IAO Accredited Beauty Academy.
-        </div>
-
         {/* ---------------- COPYRIGHT STRIP ---------------- */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-white/40 text-sm font-light tracking-wide text-center md:text-left">
             Copyright © {currentYear} | All Rights Reserved | Non Surgical Facial Aesthetics Academy
           </p>
           <div className="flex gap-6">
+            {/* Note: Update these hrefs when you have actual privacy/terms pages */}
             <Link href="#" className="text-white/40 hover:text-white text-xs font-light">Privacy Policy</Link>
             <Link href="#" className="text-white/40 hover:text-white text-xs font-light">Terms of Service</Link>
           </div>

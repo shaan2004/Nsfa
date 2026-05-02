@@ -3,6 +3,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import { motion, Variants, AnimatePresence, useInView, useMotionValue, useTransform, animate } from "framer-motion";
 import { useRouter } from "next/navigation";
+import Aurora from '../components/ui/Aurora/Aurora';
+import BounceCards from '../components/ui/BounceCards/BounceCards'; // Adjust path if needed
 import { Award, BookOpen, Globe, Stethoscope, Briefcase, GraduationCap, Play, PlayCircle, Star, Volume2, VolumeX, Building2, Users, MonitorPlay, MessageCircle, ChevronDown, Sparkles, X, CheckCircle2 } from "lucide-react";
 
 /* ---------------- PREMIUM COMPONENTS ---------------- */
@@ -362,75 +364,128 @@ export default function Home() {
           </p>
         </div>
 
-        {/* ---------------- 1. HERO SECTION ---------------- */}
-        <section className="min-h-[95vh] flex items-center justify-center text-center px-4 relative overflow-hidden">
-          <div className="absolute inset-0 -z-30 bg-[#050914]">
-            {[1, 2].map((num, i) => (
-              <motion.div
-                key={i}
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url('/assets/hero${num}.png')`, willChange: "opacity, transform" }}
-                animate={{ opacity: [0, 1, 1, 0, 0], scale: [1.05, 1, 1, 1.05, 1.05] }}
-                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", times: [0, 0.1, 0.33, 0.43, 1], delay: i * 5 }}
-              />
-            ))}
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,9,20,0.7)_0%,rgba(8,14,33,0.9)_100%)] mix-blend-multiply" />
+     {/* ---------------- 1. HERO SECTION ---------------- */}
+{/* ---------------- 1. HERO SECTION ---------------- */}
+        <section className="min-h-screen flex items-center justify-center px-4 md:px-8 xl:px-12 relative overflow-hidden pt-28 pb-16">
+          
+          {/* Dark Base Background */}
+          <div className="absolute inset-0 -z-40 bg-[#050914]" />
+
+          {/* Golden Aurora Animation (NO BLUR OVERLAYS) */}
+          <div className="absolute inset-0 -z-30 opacity-80">
+            <Aurora
+              colorStops={["#BF953F", "#FCF6BA", "#B38728"]}
+              blend={0.6}
+              amplitude={1.2}
+              speed={0.5}
+            />
           </div>
 
-          <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#0074A5]/30 blur-[150px] -z-10" />
-          <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#BF953F]/20 blur-[150px] -z-10" />
+          {/* Very light vignette so text is readable without blurring the aurora */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#040814_100%)] -z-20 pointer-events-none opacity-80" />
 
-          <motion.div 
-            initial={{ opacity: 1, y: 0 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} exit={{ opacity: 0, scale: 0.95 }}
-            className="max-w-6xl z-10 flex flex-col items-center pt-10"
-          >
-            <motion.h3 
-              initial={{ opacity: 0, letterSpacing: "0.1em" }} animate={{ opacity: 1, letterSpacing: "0.4em" }} transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
-              className="text-[#FBF5B7] uppercase mb-4 font-bold text-xs md:text-base drop-shadow-md tracking-widest"
-            >
-              Welcome to
-            </motion.h3>
-
-            <div className="overflow-hidden py-2 md:py-4 px-2">
-              <motion.h1
-                initial={{ y: "100%", clipPath: "inset(100% 0 0 0)" }} animate={{ y: "0%", clipPath: "inset(0% 0 0 0)" }} transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1], delay: 0.2 }}
-                className="text-6xl md:text-9xl lg:text-[10rem] font-serif font-extrabold text-transparent bg-clip-text drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] leading-none"
-                style={{ backgroundImage: "linear-gradient(to bottom right, #FCF6BA, #BF953F, #B38728)", willChange: "transform, clip-path" }}
-              >
-                NSFA
-              </motion.h1>
-            </div>
+          <div className="max-w-[1920px] w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center z-10 perspective-[1500px]">
             
-            <div className="overflow-hidden pb-2 md:pb-4">
-              <motion.h1
-                initial={{ y: "-100%", clipPath: "inset(0 0 100% 0)" }} animate={{ y: "0%", clipPath: "inset(0 0 0% 0)" }} transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1], delay: 0.4 }}
-                className="text-5xl md:text-8xl lg:text-[7rem] font-serif font-bold text-transparent bg-clip-text drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] leading-none"
-                style={{ backgroundImage: "linear-gradient(to top right, #FCF6BA, #BF953F, #B38728)", willChange: "transform, clip-path" }}
+            {/* LEFT COLUMN: Text & Button */}
+            <motion.div 
+              initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, ease: "easeOut" }}
+              className="flex flex-col items-center lg:items-start text-center lg:text-left z-10 mt-10 lg:mt-0"
+            >
+              <motion.h3 
+                initial={{ opacity: 0, letterSpacing: "0.1em" }} animate={{ opacity: 1, letterSpacing: "0.4em" }} transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }}
+                className="text-[#FBF5B7] uppercase mb-4 md:mb-6 font-bold text-xs md:text-sm drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-widest"
               >
-                ACADEMY
-              </motion.h1>
+                Welcome to
+              </motion.h3>
+
+              <div className="flex flex-col mb-4 md:mb-6 leading-none">
+                <h1 
+                  className="text-6xl md:text-8xl lg:text-[8.5rem] font-serif font-extrabold text-transparent bg-clip-text drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] leading-[1.1]"
+                  style={{ backgroundImage: "linear-gradient(to bottom right, #FCF6BA, #BF953F, #B38728)" }}
+                >
+                  NSFA
+                </h1>
+                <h1 
+                  className="text-5xl md:text-7xl lg:text-[6.5rem] font-serif font-bold text-transparent bg-clip-text drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] leading-[1.1]"
+                  style={{ backgroundImage: "linear-gradient(to top right, #FCF6BA, #BF953F, #B38728)" }}
+                >
+                  ACADEMY
+                </h1>
+              </div>
+
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }}
+                className="text-white text-lg md:text-2xl lg:text-3xl font-light italic font-serif tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] max-w-xl"
+              >
+                Zeal To Excellence In Upskilling Education
+              </motion.p>
+
+              <motion.button
+                onClick={() => router.push('/courses')}
+                initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.9, type: "spring" }}
+                whileHover={{ scale: 1.05, boxShadow: "0 10px 40px rgba(191,149,63,0.5)", y: -5 }} whileTap={{ scale: 0.95 }}
+                className="mt-8 md:mt-12 px-8 py-4 md:px-12 md:py-4 rounded-full font-bold text-[#080E21] tracking-[0.2em] text-xs md:text-sm uppercase cursor-pointer shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/20 backdrop-blur-md relative overflow-hidden"
+                style={{ background: "linear-gradient(135deg, #BF953F 0%, #FCF6BA 50%, #B38728 100%)" }}
+              >
+                Explore Courses
+              </motion.button>
+            </motion.div>
+
+            {/* RIGHT COLUMN: 3D Floating Assets */}
+            <div className="flex flex-col items-center justify-center gap-12 lg:gap-16 relative z-10 w-full h-full">
+              
+              {/* 1. Floating Bounce Cards */}
+              <motion.div 
+                initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.5 }}
+                className="relative w-full flex justify-center h-[250px] md:h-[300px]"
+              >
+                <BounceCards
+                  images={[
+                    "/assets/hero5.jpeg",
+                    "/assets/hero2.png",
+                    "/assets/hero3.jpg",
+                    "/assets/hero4.jpeg"
+                  ]}
+                  containerWidth="100%"
+                  containerHeight="100%"
+                  animationDelay={0.8}
+                  animationStagger={0.1}
+                  easeType="elastic.out(1, 0.8)"
+                  transformStyles={[
+                    "rotate(-12deg) translate(-140px)",
+                    "rotate(-5deg) translate(-50px)",
+                    "rotate(5deg) translate(50px)",
+                    "rotate(12deg) translate(140px)"
+                  ]}
+                  enableHover={true}
+                />
+              </motion.div>
+
+             {/* 2. Floating Video Player Box */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1, y: [-10, 10, -10] }} 
+                transition={{ opacity: { duration: 1, delay: 0.8 }, scale: { duration: 1, delay: 0.8 }, y: { duration: 6, repeat: Infinity, ease: "easeInOut" } }}
+                className="relative w-full max-w-[450px] aspect-video rounded-3xl p-1.5 shadow-[0_20px_50px_rgba(191,149,63,0.4)] z-20"
+                style={{ background: "linear-gradient(135deg, #BF953F, #FCF6BA, #B38728)" }}
+              >
+                <div className="w-full h-full rounded-[1.25rem] overflow-hidden bg-black relative flex items-center justify-center">
+                  
+                  <video 
+                    controls 
+                    playsInline 
+                    className="w-full h-full object-contain outline-none rounded-[1.25rem]"
+                    poster="/assets/hero1.png"
+                  >
+                    <source src="/assets/r5.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                  
+                </div>
+              </motion.div>
             </div>
 
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1.2 }}
-              className="mt-4 md:mt-8 text-white/90 text-lg md:text-4xl font-light italic font-serif tracking-wide px-4"
-            >
-              Zeal To Excellence In Upskilling Education
-            </motion.p>
-
-            <motion.button
-              onClick={() => router.push('/courses')}
-              initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 1.5, type: "spring" }}
-              whileHover={{ scale: 1.05, boxShadow: "0 10px 50px rgba(191,149,63,0.5)", y: -5 }} whileTap={{ scale: 0.95 }}
-              className="mt-8 md:mt-14 px-8 py-4 md:px-14 md:py-5 rounded-full font-bold text-[#080E21] tracking-[0.2em] text-sm md:text-lg uppercase cursor-pointer shadow-xl border border-white/20 backdrop-blur-md"
-              style={{ background: "linear-gradient(135deg, #BF953F 0%, #FCF6BA 50%, #B38728 100%)" }}
-            >
-              Explore Courses
-            </motion.button>
-          </motion.div>
+          </div>
         </section>
-
-      
         {/* ---------------- 2. WHY CHOOSE US (Tree Branch & Glowing Dots Layout) ---------------- */}
         <section className="min-h-[100vh] py-24 relative overflow-hidden bg-[linear-gradient(180deg,#0B132A_0%,#050914_100%)] flex flex-col items-center justify-center">
           <div className="absolute top-[20%] left-[10%] w-[40%] h-[40%] rounded-full bg-[#BF953F]/10 blur-[120px] pointer-events-none" />
@@ -478,36 +533,43 @@ export default function Home() {
               <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }} className="h-[2px] bg-[#FFD700] mt-8" />
             </div>
 
-            <div className="w-full lg:w-7/12 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 relative z-20">
-              {advancedFeatures.map((f, i) => (
-                <motion.div 
-                  key={f.id} 
-                  onClick={() => setActiveFeature(f.id)}
-                  initial={{ opacity: 0, x: 50 }} 
-                  whileInView={{ opacity: 1, x: 0 }} 
-                  viewport={{ once: true }} 
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  whileHover={{ scale: 1.03, x: -5 }} 
-                  whileTap={{ scale: 0.97 }}
-                  className="w-full px-5 py-4 md:px-6 md:py-5 rounded-2xl bg-[#0A1128]/60 border border-white/10 shadow-[0_10px_20px_rgba(0,0,0,0.4)] cursor-pointer group hover:border-[#BF953F]/60 active:border-[#BF953F]/60 transition-all relative flex items-center justify-start text-left overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] opacity-0 group-hover:opacity-[0.05] group-active:opacity-[0.05] transition-opacity duration-300" />
+            {/* RIGHT SIDE: Key Points Grid */}
+          <div className="w-full lg:w-7/12 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 relative z-20">
+            {advancedFeatures.map((f, i) => (
+              <motion.div 
+                key={f.id} 
+                onClick={() => setActiveFeature(f.id)}
+                initial={{ opacity: 0, x: 50 }} 
+                whileInView={{ opacity: 1, x: 0 }} 
+                viewport={{ once: true }} 
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                whileHover={{ scale: 1.03, x: -5 }} 
+                whileTap={{ scale: 0.97 }}
+                className="w-full px-5 py-4 md:px-6 md:py-5 rounded-2xl bg-[#0A1128]/80 border border-white/10 shadow-[0_10px_20px_rgba(0,0,0,0.4)] cursor-pointer group transition-all relative flex items-center justify-start text-left overflow-hidden"
+              >
+                {/* 1. THE GOLDEN HOVER GRADIENT (Fades in smoothly on hover) */}
+                <div className="absolute inset-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
+                
+                {/* 2. "Overgrown" Animated Dot Container */}
+                <div className="relative flex items-center justify-center w-4 h-4 mr-4 shrink-0 z-10">
+                  {/* Core solid dot (Turns dark on hover) */}
+                  <div className="w-1.5 h-1.5 bg-[#FBF5B7] group-hover:bg-[#080E21] transition-colors duration-500 rounded-full z-10" />
                   
-                  <div className="relative flex items-center justify-center w-4 h-4 mr-4 shrink-0">
-                    <div className="w-1.5 h-1.5 bg-[#FBF5B7] rounded-full z-10" />
-                    <motion.div 
-                      animate={{ scale: [1, 3.5, 1], opacity: [0.8, 0, 0.8] }}
-                      transition={{ repeat: Infinity, duration: 2.5, delay: i * 0.15 }}
-                      className="absolute inset-0 bg-[#BF953F] rounded-full"
-                    />
-                  </div>
+                  {/* Pulsing ripple (Turns to dark translucent on hover) */}
+                  <motion.div 
+                    animate={{ scale: [1, 3.5, 1], opacity: [0.8, 0, 0.8] }}
+                    transition={{ repeat: Infinity, duration: 2.5, delay: i * 0.15 }}
+                    className="absolute inset-0 bg-[#BF953F] group-hover:bg-[#080E21]/30 transition-colors duration-500 rounded-full"
+                  />
+                </div>
 
-                  <h4 className="text-[#FBF5B7] font-serif font-bold text-base md:text-lg group-hover:text-white transition-colors relative z-10 truncate">
-                    {f.title}
-                  </h4>
-                </motion.div>
-              ))}
-            </div>
+                {/* 3. Text Content (Turns dark on hover for readability) */}
+                <h4 className="text-[#FBF5B7] group-hover:text-[#080E21] font-serif font-bold text-base md:text-lg transition-colors duration-500 relative z-10 truncate">
+                  {f.title}
+                </h4>
+              </motion.div>
+            ))}
+          </div>
 
           </div>
 
@@ -569,8 +631,8 @@ export default function Home() {
           
           <div className="max-w-7xl mx-auto px-4 relative z-10">
             <div className="text-center mb-16 md:mb-24">
-              <h3 className="text-[#8B6914] tracking-[0.2em] uppercase text-xs md:text-sm font-bold mb-4 drop-shadow-sm">Our Impact</h3>
-              <DarkGoldText text="By The Numbers" className="text-4xl md:text-6xl" />
+              <h3 className="text-[#8B6914] tracking-[0.2em] uppercase text-xs md:text-sm font-bold mb-4 drop-shadow-sm">A GLOBAL COMMUNITY</h3>
+              <DarkGoldText text="Transforming Careers Worldwide" className="text-4xl md:text-6xl" />
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
@@ -578,7 +640,7 @@ export default function Home() {
                 { number: 5000, suffix: "+", label: "Global Students", icon: GraduationCap },
                 { number: 50, suffix: "+", label: "Expert Faculty", icon: Users },
                 { number: 30, suffix: "+", label: "Advanced Courses", icon: BookOpen },
-                { number: 12, suffix: "+", label: "Countries Reached", icon: Globe },
+                { number: 10, suffix: "+", label: "Countries Reached", icon: Globe },
               ].map((stat, i) => (
                 <motion.div 
                   key={i}
@@ -604,7 +666,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------------- 4. PROGRAMS SECTION (Two Rows) ---------------- */}
+      {/* ---------------- 4. PROGRAMS SECTION (Two Rows) ---------------- */}
         <section className="py-24 md:py-32 relative bg-[linear-gradient(180deg,#080E21_0%,#0B132A_100%)] overflow-hidden">
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="meteor" /><div className="meteor" /><div className="meteor" /><div className="meteor" /><div className="meteor" />
@@ -617,99 +679,116 @@ export default function Home() {
             </motion.div>
           </div>
 
-          <div className="w-full flex flex-col gap-8 md:gap-12 overflow-hidden cursor-grab active:cursor-grabbing pb-16 pt-4 md:pt-8 pause-on-hover relative z-10" ref={programsRef}>
+          <div className="w-full flex flex-col gap-8 md:gap-12 overflow-hidden pb-16 pt-4 md:pt-8 relative z-10" ref={programsRef}>
             
             {/* ROW 1: Aesthetic Courses */}
-            <motion.div drag="x" dragConstraints={programsRef} className="animate-programs gap-4 md:gap-8 px-4">
-              {[...aestheticCourses, ...aestheticCourses].map((c, i) => (
+            <div className="pause-on-hover w-full overflow-visible">
+              <div className="animate-programs w-max">
                 <motion.div 
-                  key={`aesthetic-${i}`} 
-                  whileHover={{ y: -10, scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }} 
-                  className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-white/10 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)] active:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)]"
+                  drag="x" 
+                  dragConstraints={programsRef} 
+                  className="flex gap-4 md:gap-8 px-4 w-max cursor-grab active:cursor-grabbing"
                 >
-                  <div className="absolute inset-0 bg-white/5 backdrop-blur-md transition-opacity duration-500 group-hover:opacity-0 group-active:opacity-0" />
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)]" />
-                  
-                  <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#BF953F]/50 text-[#FBF5B7] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-black group-active:bg-white group-active:text-black transition-colors">
-                    {c.badge}
-                  </div>
-                  
-                  <div className="relative z-10 flex flex-col items-center text-center px-4 md:px-6 w-full h-full">
-                    <div className="mb-4 md:mb-6 p-4 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-active:border-black/20 group-hover:bg-black/10 group-active:bg-black/10 transition-colors duration-500 shadow-inner">
-                      <c.icon className="w-8 h-8 md:w-10 md:h-10 text-[#FBF5B7] group-hover:text-black group-active:text-black transition-colors duration-500" />
-                    </div>
-                    <h3 className="text-xl md:text-2xl font-serif text-white group-hover:text-black group-active:text-black font-bold transition-colors duration-500 mb-2">
-                      {c.title}
-                    </h3>
-                    <p className="text-xs md:text-sm text-[#BF953F] group-hover:text-black/70 group-active:text-black/70 font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">
-                      📍 {c.loc}
-                    </p>
-                    <p className="text-xs md:text-sm text-white/60 group-hover:text-black/80 group-active:text-black/80 font-light mb-auto transition-colors duration-500 line-clamp-3">
-                      {c.desc}
-                    </p>
+                  {[...aestheticCourses, ...aestheticCourses].map((c, i) => (
+                    <motion.div 
+                      key={`aesthetic-${i}`} 
+                      whileHover={{ y: -10, scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }} 
+                      className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-white/10 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)] active:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)]"
+                    >
+                      <div className="absolute inset-0 bg-white/5 backdrop-blur-md transition-opacity duration-500 group-hover:opacity-0 group-active:opacity-0" />
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)]" />
+                      
+                      <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#BF953F]/50 text-[#FBF5B7] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-black group-active:bg-white group-active:text-black transition-colors">
+                        {c.badge}
+                      </div>
+                      
+                      <div className="relative z-10 flex flex-col items-center text-center px-4 md:px-6 w-full h-full">
+                        <div className="mb-4 md:mb-6 p-4 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-active:border-black/20 group-hover:bg-black/10 group-active:bg-black/10 transition-colors duration-500 shadow-inner">
+                          <c.icon className="w-8 h-8 md:w-10 md:h-10 text-[#FBF5B7] group-hover:text-black group-active:text-black transition-colors duration-500" />
+                        </div>
+                        <h3 className="text-xl md:text-2xl font-serif text-white group-hover:text-black group-active:text-black font-bold transition-colors duration-500 mb-2">
+                          {c.title}
+                        </h3>
+                        <p className="text-xs md:text-sm text-[#BF953F] group-hover:text-black/70 group-active:text-black/70 font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">
+                          📍 {c.loc}
+                        </p>
+                        <p className="text-xs md:text-sm text-white/60 group-hover:text-black/80 group-active:text-black/80 font-light mb-auto transition-colors duration-500 line-clamp-3">
+                          {c.desc}
+                        </p>
 
-                    <div className="w-full flex flex-col gap-2 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6 mt-4">
-                      <button onClick={() => window.location.href = '/courses'} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-black text-[#FBF5B7] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-white hover:text-black active:bg-white active:text-black transition-colors border border-white/10 md:border-none">
-                        View Details
-                      </button>
-                      <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title} (${c.loc}).`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 md:border-black/30 text-white md:text-black font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:text-[#FBF5B7] active:text-[#FBF5B7] transition-colors">
-                        Enquire Now
-                      </button>
-                    </div>
-                  </div>
+                        <div className="w-full flex flex-col gap-2 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6 mt-4">
+                          <button onClick={() => window.location.href = '/courses'} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-black text-[#FBF5B7] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-white hover:text-black active:bg-white active:text-black transition-colors border border-white/10 md:border-none">
+                            View Details
+                          </button>
+                          <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title} (${c.loc}).`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 md:border-black/30 text-white md:text-black font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:text-[#FBF5B7] active:text-[#FBF5B7] transition-colors">
+                            Enquire Now
+                          </button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
                 </motion.div>
-              ))}
-            </motion.div>
+              </div>
+            </div>
 
             {/* ROW 2: Dental Courses */}
-            <motion.div drag="x" dragConstraints={programsRef} className="animate-programs gap-4 md:gap-8 px-4" style={{ animationDirection: "reverse" }}>
-              {[...dentalCourses, ...dentalCourses].map((c, i) => (
+            <div className="pause-on-hover w-full overflow-visible">
+              <div className="animate-programs w-max" style={{ animationDirection: "reverse" }}>
                 <motion.div 
-                  key={`dental-${i}`} 
-                  whileHover={{ y: -10, scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }} 
-                  className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-[#0074A5]/30 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,116,165,0.4)] active:shadow-[0_30px_60px_-15px_rgba(0,116,165,0.4)]"
+                  drag="x" 
+                  dragConstraints={programsRef} 
+                  className="flex gap-4 md:gap-8 px-4 w-max cursor-grab active:cursor-grabbing"
                 >
-                  <div className="absolute inset-0 bg-white/5 backdrop-blur-md transition-opacity duration-500 group-hover:opacity-0 group-active:opacity-0" />
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,#0074A5,#0A1128,#0074A5)]" />
-                  
-                  <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#0074A5]/50 text-[#88D4FF] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-[#0074A5] group-active:bg-white group-active:text-[#0074A5] transition-colors">
-                    {c.badge}
-                  </div>
-                  
-                  <div className="relative z-10 flex flex-col items-center text-center px-4 md:px-6 w-full h-full">
-                    <div className="mb-4 md:mb-6 p-4 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-active:border-black/20 group-hover:bg-black/20 group-active:bg-black/20 transition-colors duration-500 shadow-inner">
-                      <c.icon className="w-8 h-8 md:w-10 md:h-10 text-[#88D4FF] group-hover:text-white group-active:text-white transition-colors duration-500" />
-                    </div>
-                    <h3 className="text-xl md:text-2xl font-serif text-white font-bold transition-colors duration-500 mb-2">
-                      {c.title}
-                    </h3>
-                    <p className="text-xs md:text-sm text-[#88D4FF] font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">
-                      📍 {c.loc}
-                    </p>
-                    <p className="text-xs md:text-sm text-white/60 group-hover:text-white/90 group-active:text-white/90 font-light mb-auto transition-colors duration-500 line-clamp-3">
-                      {c.desc}
-                    </p>
+                  {[...dentalCourses, ...dentalCourses].map((c, i) => (
+                    <motion.div 
+                      key={`dental-${i}`} 
+                      whileHover={{ y: -10, scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }} 
+                      className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-[#0074A5]/30 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,116,165,0.4)] active:shadow-[0_30px_60px_-15px_rgba(0,116,165,0.4)]"
+                    >
+                      <div className="absolute inset-0 bg-white/5 backdrop-blur-md transition-opacity duration-500 group-hover:opacity-0 group-active:opacity-0" />
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,#0074A5,#0A1128,#0074A5)]" />
+                      
+                      <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#0074A5]/50 text-[#88D4FF] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-[#0074A5] group-active:bg-white group-active:text-[#0074A5] transition-colors">
+                        {c.badge}
+                      </div>
+                      
+                      <div className="relative z-10 flex flex-col items-center text-center px-4 md:px-6 w-full h-full">
+                        <div className="mb-4 md:mb-6 p-4 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-active:border-black/20 group-hover:bg-black/20 group-active:bg-black/20 transition-colors duration-500 shadow-inner">
+                          <c.icon className="w-8 h-8 md:w-10 md:h-10 text-[#88D4FF] group-hover:text-white group-active:text-white transition-colors duration-500" />
+                        </div>
+                        <h3 className="text-xl md:text-2xl font-serif text-white font-bold transition-colors duration-500 mb-2">
+                          {c.title}
+                        </h3>
+                        <p className="text-xs md:text-sm text-[#88D4FF] font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">
+                          📍 {c.loc}
+                        </p>
+                        <p className="text-xs md:text-sm text-white/60 group-hover:text-white/90 group-active:text-white/90 font-light mb-auto transition-colors duration-500 line-clamp-3">
+                          {c.desc}
+                        </p>
 
-                    <div className="w-full flex flex-col gap-2 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6 mt-4">
-                      <button onClick={() => window.location.href = '/courses'} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-white text-white md:text-[#0074A5] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black hover:text-white active:bg-black active:text-white transition-colors border border-white/10 md:border-none shadow-lg">
-                        View Details
-                      </button>
-                      <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title} (${c.loc}).`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 text-white font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:border-black active:border-black transition-colors">
-                        Enquire Now
-                      </button>
-                    </div>
-                  </div>
+                        <div className="w-full flex flex-col gap-2 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6 mt-4">
+                          <button onClick={() => window.location.href = '/courses'} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-white text-white md:text-[#0074A5] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black hover:text-white active:bg-black active:text-white transition-colors border border-white/10 md:border-none shadow-lg">
+                            View Details
+                          </button>
+                          <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title} (${c.loc}).`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 text-white font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:border-black active:border-black transition-colors">
+                            Enquire Now
+                          </button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
                 </motion.div>
-              ))}
-            </motion.div>
+              </div>
+            </div>
             
           </div>
         </section>
 
-        {/* ---------------- 5. GLOBALLY RECOGNISED ---------------- */}
+      {/* ---------------- 5. GLOBALLY RECOGNISED ---------------- */}
         <section className="py-24 relative overflow-hidden bg-[#050914] flex flex-col items-center justify-center">
+          {/* Background Map */}
           <div className="absolute inset-0 z-0 flex items-center justify-center opacity-30 mix-blend-screen pointer-events-none">
             <img src="/assets/map.png" alt="World Map" className="w-[100%] max-w-[1600px] object-contain drop-shadow-[0_0_30px_rgba(191,149,63,0.3)]" loading="lazy" />
           </div>
@@ -723,20 +802,45 @@ export default function Home() {
                 Comprehensive training and upgradation of skills on a global scale.
               </motion.p>
             </motion.div>
+          </div>
 
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={{ visible: { transition: { staggerChildren: 0.3 } } }} 
-              className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory md:flex-wrap justify-start md:justify-center gap-6 md:gap-16 items-center w-full no-scrollbar pb-8 md:pb-0"
-            >
-              {[{ src: "/assets/mets.png", w: "w-[240px] md:w-[280px]" }, { src: "/assets/mount.png", w: "w-[280px] md:w-[380px]", center: true }, { src: "/assets/meds.png", w: "w-[240px] md:w-[280px]" }].map((logo, i) => (
-                <motion.div key={i} variants={grandCardUp} whileHover={{ y: -10, scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                  className={`snap-center shrink-0 rounded-3xl flex items-center justify-center cursor-pointer transition-all duration-500 shadow-2xl backdrop-blur-xl ${logo.w} ${
-                    logo.center ? 'p-8 md:p-10 border border-[#BF953F]/40 h-[160px] md:h-[200px] bg-[linear-gradient(145deg,rgba(191,149,63,0.15)_0%,rgba(0,0,0,0)_100%)] shadow-[0_20px_40px_-10px_rgba(191,149,63,0.3)]' : 'p-6 md:p-8 h-[120px] md:h-[160px] bg-white/5 border border-white/10 hover:border-[#BF953F]/30 active:border-[#BF953F]/30'
-                  }`}
+          {/* HORIZONTAL CONTINUOUS LOGO TRACK */}
+          <div className="w-full relative z-10 overflow-hidden py-10 pause-on-hover">
+            {/* Edge Fades for premium scroll effect */}
+            <div className="absolute left-0 top-0 bottom-0 w-16 md:w-48 bg-gradient-to-r from-[#050914] to-transparent z-20 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-16 md:w-48 bg-gradient-to-l from-[#050914] to-transparent z-20 pointer-events-none" />
+
+            {/* Continuous Marquee Animation */}
+            <div className="animate-programs w-max flex items-center gap-16 md:gap-32 px-8">
+              {[
+                "/assets/mets.png", 
+                "/assets/mount.png", 
+                "/assets/meds.png", 
+                "/assets/iso.png", 
+                "/assets/iao.png", 
+                "/assets/iaf.png",
+                // Duplicated array for seamless infinite looping
+                "/assets/mets.png", 
+                "/assets/mount.png", 
+                "/assets/meds.png", 
+                "/assets/iso.png", 
+                "/assets/iao.png", 
+                "/assets/iaf.png"
+              ].map((src, i) => (
+                <motion.div 
+                  key={i} 
+                  whileHover={{ scale: 1.15 }} 
+                  className="shrink-0 flex items-center justify-center cursor-pointer transition-transform duration-500 group"
                 >
-                  <img src={logo.src} alt="Partner" className="max-w-[85%] max-h-[85%] object-contain" loading="lazy" />
+                  <img 
+                    src={src} 
+                    alt={`Accreditation Logo ${i}`} 
+                    className="h-16 md:h-28 object-contain filter brightness-75 group-hover:brightness-110 drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] transition-all duration-500" 
+                    loading="lazy" 
+                  />
                 </motion.div>
               ))}
-            </motion.div>
+            </div>
           </div>
         </section>
 

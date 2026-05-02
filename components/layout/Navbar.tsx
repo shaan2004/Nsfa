@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion , AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Phone, Mail } from "lucide-react";
 
 // Standardize the premium gradient class for reuse
@@ -13,13 +13,13 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // The exact navigation links extracted from nsfaacademy.com
+  // Updated path for "Blog & Download" to be SEO-friendly (no ampersands)
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "About Us", path: "/about-us" },
     { name: "Gallery", path: "/gallery" },
     { name: "Courses", path: "/courses" },
-    { name: "Blog & Download", path: "/blog&downloads" }, // Updated path slightly for standard URL convention
+    { name: "Blog & Downloads", path: "/blog-and-downloads" }, 
     { name: "Contact", path: "/contact" },
   ];
 
@@ -42,8 +42,8 @@ export default function Navbar() {
           
           {/* 1. Logo Area (Left Aligned) */}
           <div className="flex-1 flex justify-start">
-            <Link href="/" className="flex items-center">
-              <img src="/assets/nsfa-logo.png" alt="NSFA Academy" className="h-14 lg:h-16 w-auto object-contain" />
+            <Link href="/" className="flex items-center" aria-label="NSFA Academy Home">
+              <img src="/assets/nsfa-logo.png" alt="NSFA Academy Official Logo" className="h-14 lg:h-16 w-auto object-contain" />
             </Link>
           </div>
 
@@ -67,6 +67,7 @@ export default function Navbar() {
             {/* Email Button */}
             <a 
               href="mailto:info@nsfaacademy.com" 
+              aria-label="Email NSFA Academy"
               className="flex items-center gap-2 px-4 py-2 xl:px-5 xl:py-2.5 rounded-full border border-[#BF953F]/40 text-[#FBF5B7] hover:border-transparent transition-all duration-300 text-xs xl:text-sm tracking-wider font-bold shadow-[0_0_15px_rgba(191,149,63,0.1)] group relative overflow-hidden whitespace-nowrap shrink-0"
             >
               <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${premiumGoldGradient}`} />
@@ -77,6 +78,7 @@ export default function Navbar() {
             {/* Phone Button */}
             <a 
               href="tel:+919884718883" 
+              aria-label="Call NSFA Academy"
               className="flex items-center gap-2 px-4 py-2 xl:px-5 xl:py-2.5 rounded-full border border-[#BF953F]/40 text-[#FBF5B7] hover:border-transparent transition-all duration-300 text-xs xl:text-sm tracking-wider font-bold shadow-[0_0_15px_rgba(191,149,63,0.1)] group relative overflow-hidden whitespace-nowrap shrink-0"
             >
               <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${premiumGoldGradient}`} />
@@ -85,8 +87,10 @@ export default function Navbar() {
             </a>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button - Added aria-label for SEO/Accessibility */}
           <button 
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileMenuOpen}
             className="lg:hidden text-white/90 hover:text-[#FBF5B7] transition-colors flex-1 flex justify-end"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
@@ -118,10 +122,10 @@ export default function Navbar() {
               ))}
               
               <div className="pt-6 border-t border-white/10 flex flex-col gap-4">
-                <a href="tel:+919884718883" className="flex items-center gap-4 text-[#FBF5B7] text-lg font-bold">
+                <a href="tel:+919884718883" aria-label="Call us" className="flex items-center gap-4 text-[#FBF5B7] text-lg font-bold">
                   <Phone size={20} className="text-[#BF953F]" /> +91-9884718883
                 </a>
-                <a href="mailto:info@nsfaacademy.com" className="flex items-center gap-4 text-white/70 text-lg">
+                <a href="mailto:info@nsfaacademy.com" aria-label="Email us" className="flex items-center gap-4 text-white/70 text-lg">
                   <Mail size={20} className="text-[#BF953F]" /> info@nsfaacademy.com
                 </a>
               </div>
