@@ -468,7 +468,7 @@ export default function Home() {
                         alt={`Academy Highlight ${i + 1}`} 
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                       />
-                      {/* Premium subtle glow overlay on hover */}
+                     
                       <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(191,149,63,0.4)_0%,rgba(0,0,0,0)_50%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay" />
                     </motion.div>
                   ))}
