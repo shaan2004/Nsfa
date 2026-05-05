@@ -364,9 +364,8 @@ export default function Home() {
           </p>
         </div>
 
-     {/* ---------------- 1. HERO SECTION ---------------- */}
-{/* ---------------- 1. HERO SECTION ---------------- */}
-        <section className="min-h-screen flex items-center justify-center px-4 md:px-8 xl:px-12 relative overflow-hidden pt-28 pb-16">
+    {/* ---------------- 1. HERO SECTION ---------------- */}
+        <section className="min-h-screen flex flex-col justify-center px-4 md:px-8 xl:px-12 relative overflow-hidden pt-24 pb-16">
           
           {/* Dark Base Background */}
           <div className="absolute inset-0 -z-40 bg-[#050914]" />
@@ -384,106 +383,121 @@ export default function Home() {
           {/* Very light vignette so text is readable without blurring the aurora */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#040814_100%)] -z-20 pointer-events-none opacity-80" />
 
-          <div className="max-w-[1920px] w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center z-10 perspective-[1500px]">
+          {/* MAIN CONTENT WRAPPER */}
+          <div className="max-w-[1920px] w-full mx-auto flex flex-col z-10 perspective-[1500px]">
             
-            {/* LEFT COLUMN: Text & Button */}
-            <motion.div 
-              initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, ease: "easeOut" }}
-              className="flex flex-col items-center lg:items-start text-center lg:text-left z-10 mt-10 lg:mt-0"
-            >
-              <motion.h3 
-                initial={{ opacity: 0, letterSpacing: "0.1em" }} animate={{ opacity: 1, letterSpacing: "0.4em" }} transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }}
-                className="text-[#FBF5B7] uppercase mb-4 md:mb-6 font-bold text-xs md:text-sm drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-widest"
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center w-full">
+              
+              {/* ================= LEFT COLUMN: Text & Button ================= */}
+              <motion.div 
+                initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, ease: "easeOut" }}
+                className="lg:col-span-5 flex flex-col items-center lg:items-start text-center lg:text-left z-10"
               >
-                Welcome to
-              </motion.h3>
+                <motion.h3 
+                  initial={{ opacity: 0, letterSpacing: "0.1em" }} animate={{ opacity: 1, letterSpacing: "0.4em" }} transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }}
+                  className="text-[#FBF5B7] uppercase mb-4 md:mb-6 font-bold text-xs md:text-sm drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-widest"
+                >
+                  Welcome to
+                </motion.h3>
 
-              <div className="flex flex-col mb-4 md:mb-6 leading-none">
-                <h1 
-                  className="text-6xl md:text-8xl lg:text-[8.5rem] font-serif font-extrabold text-transparent bg-clip-text drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] leading-[1.1]"
-                  style={{ backgroundImage: "linear-gradient(to bottom right, #FCF6BA, #BF953F, #B38728)" }}
+                <div className="flex flex-col mb-4 md:mb-6 leading-none">
+                  <h1 
+                    className="text-6xl md:text-7xl xl:text-[7.5rem] font-serif font-extrabold text-transparent bg-clip-text drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] leading-[1.1]"
+                    style={{ backgroundImage: "linear-gradient(to bottom right, #FCF6BA, #BF953F, #B38728)" }}
+                  >
+                    NSFA
+                  </h1>
+                  <h1 
+                    className="text-5xl md:text-6xl xl:text-[5.5rem] font-serif font-bold text-transparent bg-clip-text drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] leading-[1.1]"
+                    style={{ backgroundImage: "linear-gradient(to top right, #FCF6BA, #BF953F, #B38728)" }}
+                  >
+                    ACADEMY
+                  </h1>
+                </div>
+
+                <motion.p 
+                  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }}
+                  className="text-white text-lg md:text-2xl xl:text-3xl font-light italic font-serif tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] max-w-lg"
                 >
-                  NSFA
-                </h1>
-                <h1 
-                  className="text-5xl md:text-7xl lg:text-[6.5rem] font-serif font-bold text-transparent bg-clip-text drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] leading-[1.1]"
-                  style={{ backgroundImage: "linear-gradient(to top right, #FCF6BA, #BF953F, #B38728)" }}
+                  Zeal To Excellence In Upskilling Education
+                    
+                </motion.p>
+
+                <motion.button
+                  onClick={() => router.push('/courses')}
+                  initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.9, type: "spring" }}
+                  whileHover={{ scale: 1.05, boxShadow: "0 10px 40px rgba(191,149,63,0.5)", y: -5 }} whileTap={{ scale: 0.95 }}
+                  className="mt-8 md:mt-12 px-8 py-4 md:px-10 md:py-4 rounded-full font-bold text-[#080E21] tracking-[0.2em] text-xs md:text-sm uppercase cursor-pointer shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/20 backdrop-blur-md relative overflow-hidden"
+                  style={{ background: "linear-gradient(135deg, #BF953F 0%, #FCF6BA 50%, #B38728 100%)" }}
                 >
-                  ACADEMY
-                </h1>
+                  Explore Courses
+                </motion.button>
+              </motion.div>
+
+              {/* ================= RIGHT COLUMN: "Honourable Mention" Showcase ================= */}
+              <div className="lg:col-span-7 flex flex-col gap-6 md:gap-8 w-full relative z-10 lg:pl-10">
+                 {/* 2. Honourable Mentions Divider */}
+                <motion.div 
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.8 }}
+                  className="flex items-center gap-4 w-full px-2"
+                >
+                  <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-[#BF953F]/60" />
+                  <span className="text-[#FBF5B7] text-[10px] md:text-xs font-bold uppercase tracking-[0.3em]">
+                    Honourable Highlights
+                  </span>
+                  <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-[#BF953F]/60" />
+                </motion.div>
+
+                {/* 3. The Honours Gallery (4 Photos) */}
+                <div className="grid grid-cols-4 gap-3 md:gap-4 w-full">
+                  {[
+                    "/assets/hero5.jpeg", 
+                    "/assets/hero3.jpg", 
+                    "/assets/hero2.png", 
+                    "/assets/hero4.jpeg"
+                  ].map((src, i) => (
+                    <motion.div 
+                      key={i}
+                      initial={{ opacity: 0, y: 30 }} 
+                      animate={{ opacity: 1, y: 0 }} 
+                      transition={{ duration: 0.8, delay: 1 + (i * 0.15) }}
+                      className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden border border-[#BF953F]/30 shadow-lg transition-all duration-500 hover:border-[#BF953F] hover:-translate-y-2 hover:shadow-[0_10px_20px_rgba(191,149,63,0.4)] group"
+                    >
+                      <img 
+                        src={src} 
+                        alt={`Academy Highlight ${i + 1}`} 
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                      />
+                      {/* Premium subtle glow overlay on hover */}
+                      <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(191,149,63,0.4)_0%,rgba(0,0,0,0)_50%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay" />
+                    </motion.div>
+                  ))}
+                </div>
+                {/* 1. The Main Spotlight (Video) */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9, y: 30 }} 
+                  animate={{ opacity: 1, scale: 1, y: 0 }} 
+                  transition={{ duration: 1, delay: 0.5 }}
+                  className="relative w-full aspect-video rounded-[2rem] p-1.5 shadow-[0_20px_50px_rgba(191,149,63,0.3)] bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)]"
+                >
+                  <div className="w-full h-full rounded-[1.5rem] overflow-hidden bg-black relative flex items-center justify-center group">
+                    <video 
+                      controls 
+                      playsInline 
+                      className="w-full h-full object-contain outline-none rounded-[1.5rem]"
+                      poster="/assets/hero1.png"
+                    >
+                      <source src="/assets/r5.mp4" type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                </motion.div>
+
+               
+
               </div>
 
-              <motion.p 
-                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }}
-                className="text-white text-lg md:text-2xl lg:text-3xl font-light italic font-serif tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] max-w-xl"
-              >
-                Zeal To Excellence In Upskilling Education
-              </motion.p>
-
-              <motion.button
-                onClick={() => router.push('/courses')}
-                initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.9, type: "spring" }}
-                whileHover={{ scale: 1.05, boxShadow: "0 10px 40px rgba(191,149,63,0.5)", y: -5 }} whileTap={{ scale: 0.95 }}
-                className="mt-8 md:mt-12 px-8 py-4 md:px-12 md:py-4 rounded-full font-bold text-[#080E21] tracking-[0.2em] text-xs md:text-sm uppercase cursor-pointer shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/20 backdrop-blur-md relative overflow-hidden"
-                style={{ background: "linear-gradient(135deg, #BF953F 0%, #FCF6BA 50%, #B38728 100%)" }}
-              >
-                Explore Courses
-              </motion.button>
-            </motion.div>
-
-            {/* RIGHT COLUMN: 3D Floating Assets */}
-            <div className="flex flex-col items-center justify-center gap-12 lg:gap-16 relative z-10 w-full h-full">
-              
-              {/* 1. Floating Bounce Cards */}
-              <motion.div 
-                initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.5 }}
-                className="relative w-full flex justify-center h-[250px] md:h-[300px]"
-              >
-                <BounceCards
-                  images={[
-                    "/assets/hero5.jpeg",
-                    "/assets/hero2.png",
-                    "/assets/hero3.jpg",
-                    "/assets/hero4.jpeg"
-                  ]}
-                  containerWidth="100%"
-                  containerHeight="100%"
-                  animationDelay={0.8}
-                  animationStagger={0.1}
-                  easeType="elastic.out(1, 0.8)"
-                  transformStyles={[
-                    "rotate(-12deg) translate(-140px)",
-                    "rotate(-5deg) translate(-50px)",
-                    "rotate(5deg) translate(50px)",
-                    "rotate(12deg) translate(140px)"
-                  ]}
-                  enableHover={true}
-                />
-              </motion.div>
-
-             {/* 2. Floating Video Player Box */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1, y: [-10, 10, -10] }} 
-                transition={{ opacity: { duration: 1, delay: 0.8 }, scale: { duration: 1, delay: 0.8 }, y: { duration: 6, repeat: Infinity, ease: "easeInOut" } }}
-                className="relative w-full max-w-[450px] aspect-video rounded-3xl p-1.5 shadow-[0_20px_50px_rgba(191,149,63,0.4)] z-20"
-                style={{ background: "linear-gradient(135deg, #BF953F, #FCF6BA, #B38728)" }}
-              >
-                <div className="w-full h-full rounded-[1.25rem] overflow-hidden bg-black relative flex items-center justify-center">
-                  
-                  <video 
-                    controls 
-                    playsInline 
-                    className="w-full h-full object-contain outline-none rounded-[1.25rem]"
-                    poster="/assets/hero1.png"
-                  >
-                    <source src="/assets/r5.mp4" type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                  
-                </div>
-              </motion.div>
             </div>
-
           </div>
         </section>
         {/* ---------------- 2. WHY CHOOSE US (Tree Branch & Glowing Dots Layout) ---------------- */}
@@ -679,113 +693,132 @@ export default function Home() {
             </motion.div>
           </div>
 
-          <div className="w-full flex flex-col gap-8 md:gap-12 overflow-hidden pb-16 pt-4 md:pt-8 relative z-10" ref={programsRef}>
+          <div className="w-full flex flex-col gap-12 md:gap-20 overflow-hidden pb-16 pt-4 md:pt-8 relative z-10" ref={programsRef}>
             
             {/* ROW 1: Aesthetic Courses */}
-            <div className="pause-on-hover w-full overflow-visible">
-              <div className="animate-programs w-max">
-                <motion.div 
-                  drag="x" 
-                  dragConstraints={programsRef} 
-                  className="flex gap-4 md:gap-8 px-4 w-max cursor-grab active:cursor-grabbing"
-                >
-                  {[...aestheticCourses, ...aestheticCourses].map((c, i) => (
-                    <motion.div 
-                      key={`aesthetic-${i}`} 
-                      whileHover={{ y: -10, scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }} 
-                      className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-white/10 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)] active:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)]"
-                    >
-                      <div className="absolute inset-0 bg-white/5 backdrop-blur-md transition-opacity duration-500 group-hover:opacity-0 group-active:opacity-0" />
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)]" />
-                      
-                      <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#BF953F]/50 text-[#FBF5B7] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-black group-active:bg-white group-active:text-black transition-colors">
-                        {c.badge}
-                      </div>
-                      
-                      <div className="relative z-10 flex flex-col items-center text-center px-4 md:px-6 w-full h-full">
-                        <div className="mb-4 md:mb-6 p-4 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-active:border-black/20 group-hover:bg-black/10 group-active:bg-black/10 transition-colors duration-500 shadow-inner">
-                          <c.icon className="w-8 h-8 md:w-10 md:h-10 text-[#FBF5B7] group-hover:text-black group-active:text-black transition-colors duration-500" />
-                        </div>
-                        <h3 className="text-xl md:text-2xl font-serif text-white group-hover:text-black group-active:text-black font-bold transition-colors duration-500 mb-2">
-                          {c.title}
-                        </h3>
-                        <p className="text-xs md:text-sm text-[#BF953F] group-hover:text-black/70 group-active:text-black/70 font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">
-                          📍 {c.loc}
-                        </p>
-                        <p className="text-xs md:text-sm text-white/60 group-hover:text-black/80 group-active:text-black/80 font-light mb-auto transition-colors duration-500 line-clamp-3">
-                          {c.desc}
-                        </p>
+            <div className="w-full flex flex-col gap-6">
+              {/* Aesthetic Title Bar */}
+              <div className="max-w-7xl mx-auto px-4 w-full flex items-center gap-4">
+                <h3 className="text-xl md:text-3xl font-serif font-bold uppercase tracking-widest text-transparent bg-clip-text bg-[linear-gradient(to_right,#BF953F,#FCF6BA)] drop-shadow-md">
+                  Aesthetic Courses
+                </h3>
+                <div className="h-[1px] flex-1 bg-gradient-to-r from-[#BF953F]/50 to-transparent" />
+              </div>
 
-                        <div className="w-full flex flex-col gap-2 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6 mt-4">
-                          <button onClick={() => window.location.href = '/courses'} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-black text-[#FBF5B7] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-white hover:text-black active:bg-white active:text-black transition-colors border border-white/10 md:border-none">
-                            View Details
-                          </button>
-                          <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title} (${c.loc}).`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 md:border-black/30 text-white md:text-black font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:text-[#FBF5B7] active:text-[#FBF5B7] transition-colors">
-                            Enquire Now
-                          </button>
+              <div className="pause-on-hover w-full overflow-visible">
+                <div className="animate-programs w-max">
+                  <motion.div 
+                    drag="x" 
+                    dragConstraints={programsRef} 
+                    className="flex gap-4 md:gap-8 px-4 w-max cursor-grab active:cursor-grabbing"
+                  >
+                    {[...aestheticCourses, ...aestheticCourses].map((c, i) => (
+                      <motion.div 
+                        key={`aesthetic-${i}`} 
+                        whileHover={{ y: -10, scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }} 
+                        className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-white/10 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)] active:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)]"
+                      >
+                        <div className="absolute inset-0 bg-white/5 backdrop-blur-md transition-opacity duration-500 group-hover:opacity-0 group-active:opacity-0" />
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)]" />
+                        
+                        <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#BF953F]/50 text-[#FBF5B7] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-black group-active:bg-white group-active:text-black transition-colors">
+                          {c.badge}
                         </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </motion.div>
+                        
+                        <div className="relative z-10 flex flex-col items-center text-center px-4 md:px-6 w-full h-full">
+                          <div className="mb-4 md:mb-6 p-4 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-active:border-black/20 group-hover:bg-black/10 group-active:bg-black/10 transition-colors duration-500 shadow-inner">
+                            <c.icon className="w-8 h-8 md:w-10 md:h-10 text-[#FBF5B7] group-hover:text-black group-active:text-black transition-colors duration-500" />
+                          </div>
+                          <h3 className="text-xl md:text-2xl font-serif text-white group-hover:text-black group-active:text-black font-bold transition-colors duration-500 mb-2">
+                            {c.title}
+                          </h3>
+                          <p className="text-xs md:text-sm text-[#BF953F] group-hover:text-black/70 group-active:text-black/70 font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">
+                            📍 {c.loc}
+                          </p>
+                          <p className="text-xs md:text-sm text-white/60 group-hover:text-black/80 group-active:text-black/80 font-light mb-auto transition-colors duration-500 line-clamp-3">
+                            {c.desc}
+                          </p>
+
+                          <div className="w-full flex flex-col gap-2 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6 mt-4">
+                            <button onClick={() => window.location.href = '/courses'} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-black text-[#FBF5B7] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-white hover:text-black active:bg-white active:text-black transition-colors border border-white/10 md:border-none">
+                              View Details
+                            </button>
+                            <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title} (${c.loc}).`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 md:border-black/30 text-white md:text-black font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:text-[#FBF5B7] active:text-[#FBF5B7] transition-colors">
+                              Enquire Now
+                            </button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                </div>
               </div>
             </div>
 
             {/* ROW 2: Dental Courses */}
-            <div className="pause-on-hover w-full overflow-visible">
-              <div className="animate-programs w-max" style={{ animationDirection: "reverse" }}>
-                <motion.div 
-                  drag="x" 
-                  dragConstraints={programsRef} 
-                  className="flex gap-4 md:gap-8 px-4 w-max cursor-grab active:cursor-grabbing"
-                >
-                  {[...dentalCourses, ...dentalCourses].map((c, i) => (
-                    <motion.div 
-                      key={`dental-${i}`} 
-                      whileHover={{ y: -10, scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }} 
-                      className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-[#0074A5]/30 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,116,165,0.4)] active:shadow-[0_30px_60px_-15px_rgba(0,116,165,0.4)]"
-                    >
-                      <div className="absolute inset-0 bg-white/5 backdrop-blur-md transition-opacity duration-500 group-hover:opacity-0 group-active:opacity-0" />
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,#0074A5,#0A1128,#0074A5)]" />
-                      
-                      <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#0074A5]/50 text-[#88D4FF] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-[#0074A5] group-active:bg-white group-active:text-[#0074A5] transition-colors">
-                        {c.badge}
-                      </div>
-                      
-                      <div className="relative z-10 flex flex-col items-center text-center px-4 md:px-6 w-full h-full">
-                        <div className="mb-4 md:mb-6 p-4 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-active:border-black/20 group-hover:bg-black/20 group-active:bg-black/20 transition-colors duration-500 shadow-inner">
-                          <c.icon className="w-8 h-8 md:w-10 md:h-10 text-[#88D4FF] group-hover:text-white group-active:text-white transition-colors duration-500" />
-                        </div>
-                        <h3 className="text-xl md:text-2xl font-serif text-white font-bold transition-colors duration-500 mb-2">
-                          {c.title}
-                        </h3>
-                        <p className="text-xs md:text-sm text-[#88D4FF] font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">
-                          📍 {c.loc}
-                        </p>
-                        <p className="text-xs md:text-sm text-white/60 group-hover:text-white/90 group-active:text-white/90 font-light mb-auto transition-colors duration-500 line-clamp-3">
-                          {c.desc}
-                        </p>
+            <div className="w-full flex flex-col gap-6">
+              {/* Dental Title Bar */}
+              <div className="max-w-7xl mx-auto px-4 w-full flex items-center gap-4">
+                <h3 className="text-xl md:text-3xl font-serif font-bold uppercase tracking-widest text-transparent bg-clip-text bg-[linear-gradient(to_right,#88D4FF,#FFFFFF)] drop-shadow-md">
+                  Dental Courses
+                </h3>
+                <div className="h-[1px] flex-1 bg-gradient-to-r from-[#0074A5]/50 to-transparent" />
+              </div>
 
-                        <div className="w-full flex flex-col gap-2 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6 mt-4">
-                          <button onClick={() => window.location.href = '/courses'} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-white text-white md:text-[#0074A5] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black hover:text-white active:bg-black active:text-white transition-colors border border-white/10 md:border-none shadow-lg">
-                            View Details
-                          </button>
-                          <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title} (${c.loc}).`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 text-white font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:border-black active:border-black transition-colors">
-                            Enquire Now
-                          </button>
+              <div className="pause-on-hover w-full overflow-visible">
+                <div className="animate-programs w-max" style={{ animationDirection: "reverse" }}>
+                  <motion.div 
+                    drag="x" 
+                    dragConstraints={programsRef} 
+                    className="flex gap-4 md:gap-8 px-4 w-max cursor-grab active:cursor-grabbing"
+                  >
+                    {[...dentalCourses, ...dentalCourses].map((c, i) => (
+                      <motion.div 
+                        key={`dental-${i}`} 
+                        whileHover={{ y: -10, scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }} 
+                        className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-[#0074A5]/30 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,116,165,0.4)] active:shadow-[0_30px_60px_-15px_rgba(0,116,165,0.4)]"
+                      >
+                        <div className="absolute inset-0 bg-white/5 backdrop-blur-md transition-opacity duration-500 group-hover:opacity-0 group-active:opacity-0" />
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,#0074A5,#0A1128,#0074A5)]" />
+                        
+                        <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#0074A5]/50 text-[#88D4FF] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-[#0074A5] group-active:bg-white group-active:text-[#0074A5] transition-colors">
+                          {c.badge}
                         </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </motion.div>
+                        
+                        <div className="relative z-10 flex flex-col items-center text-center px-4 md:px-6 w-full h-full">
+                          <div className="mb-4 md:mb-6 p-4 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-active:border-black/20 group-hover:bg-black/20 group-active:bg-black/20 transition-colors duration-500 shadow-inner">
+                            <c.icon className="w-8 h-8 md:w-10 md:h-10 text-[#88D4FF] group-hover:text-white group-active:text-white transition-colors duration-500" />
+                          </div>
+                          <h3 className="text-xl md:text-2xl font-serif text-white font-bold transition-colors duration-500 mb-2">
+                            {c.title}
+                          </h3>
+                          <p className="text-xs md:text-sm text-[#88D4FF] font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">
+                            📍 {c.loc}
+                          </p>
+                          <p className="text-xs md:text-sm text-white/60 group-hover:text-white/90 group-active:text-white/90 font-light mb-auto transition-colors duration-500 line-clamp-3">
+                            {c.desc}
+                          </p>
+
+                          <div className="w-full flex flex-col gap-2 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6 mt-4">
+                            <button onClick={() => window.location.href = '/courses'} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-white text-white md:text-[#0074A5] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black hover:text-white active:bg-black active:text-white transition-colors border border-white/10 md:border-none shadow-lg">
+                              View Details
+                            </button>
+                            <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title} (${c.loc}).`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 text-white font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:border-black active:border-black transition-colors">
+                              Enquire Now
+                            </button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                </div>
               </div>
             </div>
             
           </div>
         </section>
-
       {/* ---------------- 5. GLOBALLY RECOGNISED ---------------- */}
         <section className="py-24 relative overflow-hidden bg-[#050914] flex flex-col items-center justify-center">
           {/* Background Map */}

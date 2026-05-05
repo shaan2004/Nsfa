@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Bot } from "lucide-react";
 
-// 1. CHANGED "bot" to "assistant" HERE
 type Message = {
   id: string;
   role: "user" | "assistant"; 
@@ -16,13 +15,19 @@ export default function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
-      role: "assistant", // 2. CHANGED HERE
+      role: "assistant", 
       content: "Hello! I am the NSFA Academy Assistant. You can ask me questions about clinical setups, Indian medical guidelines for injectables, or global aesthetic regulations."
     }
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // --- NEW STATES FOR LEAD CAPTURE ---
+  const [messageCount, setMessageCount] = useState(0);
+  const [isAwaitingLead, setIsAwaitingLead] = useState(false);
+  const [leadCaptured, setLeadCaptured] = useState(false);
+  const [pendingQuestion, setPendingQuestion] = useState("");
 
   // Auto-scroll to bottom of chat
   useEffect(() => {
@@ -32,17 +37,80 @@ export default function Chatbot() {
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const userMsg: Message = { id: Date.now().toString(), role: "user", content: input };
+    const userText = input;
+    const userMsg: Message = { id: Date.now().toString(), role: "user", content: userText };
+    
     setMessages(prev => [...prev, userMsg]);
     setInput("");
     setIsTyping(true);
+
+    // ---------------------------------------------------------
+    // 1. IF WAITING FOR LEAD INFO (NAME & NUMBER)
+    // ---------------------------------------------------------
+    if (isAwaitingLead) {
+      setIsAwaitingLead(false);
+      setLeadCaptured(true);
+      
+      // Acknowledge the details
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: "Thank you! Let me check on your previous question..."
+      }]);
+
+      // Automatically fetch the answer for their PENDING question
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            // We send the chat history + their PENDING question (ignoring their name/number msg so the AI doesn't get confused)
+            messages: messages.concat({ role: "user", content: pendingQuestion }).map(m => ({ role: m.role, content: m.content })) 
+          })
+        });
+
+        if (!response.ok) throw new Error("API Error");
+        const data = await response.json();
+        
+        setMessages(prev => [...prev, { id: (Date.now() + 2).toString(), role: "assistant", content: data.reply }]);
+      } catch (error) {
+        setMessages(prev => [...prev, { id: (Date.now() + 2).toString(), role: "assistant", content: "I'm having trouble connecting right now. Please try again later." }]);
+      } finally {
+        setIsTyping(false);
+      }
+      return;
+    }
+
+    // ---------------------------------------------------------
+    // 2. INTERCEPT ON THE 3RD MESSAGE (If details not captured)
+    // ---------------------------------------------------------
+    if (messageCount === 2 && !leadCaptured) {
+      setPendingQuestion(userText); // Save their question so we can answer it AFTER they give details
+      setIsAwaitingLead(true);
+      
+      setTimeout(() => {
+        setMessages(prev => [...prev, {
+          id: (Date.now() + 1).toString(),
+          role: "assistant",
+          content: "To serve you better and continue our chat, could you please provide your Name and Phone Number?"
+        }]);
+        setIsTyping(false);
+      }, 800);
+      return;
+    }
+
+    // ---------------------------------------------------------
+    // 3. NORMAL CHAT FLOW
+    // ---------------------------------------------------------
+    setMessageCount(prev => prev + 1);
 
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          messages: messages.concat(userMsg).map(m => ({ role: m.role, content: m.content })) 
+          // We send the chat history + their PENDING question (ignoring their name/number msg so the AI doesn't get confused)
+          messages: messages.concat({ id: "pending", role: "user", content: pendingQuestion }).map(m => ({ role: m.role, content: m.content })) 
         })
       });
 
@@ -52,14 +120,14 @@ export default function Chatbot() {
       
       setMessages(prev => [...prev, { 
         id: (Date.now() + 1).toString(), 
-        role: "assistant", // 3. CHANGED HERE
+        role: "assistant", 
         content: data.reply 
       }]);
 
     } catch (error) {
       setMessages(prev => [...prev, { 
         id: (Date.now() + 1).toString(), 
-        role: "assistant", // 4. CHANGED HERE
+        role: "assistant", 
         content: "I'm having trouble connecting right now. Please try again later." 
       }]);
     } finally {
@@ -124,7 +192,6 @@ export default function Chatbot() {
                     {msg.content}
                     
                     {/* Render WhatsApp Button if Fallback Triggered */}
-                    {/* 5. CHANGED HERE */}
                     {msg.role === 'assistant' && isWhatsAppFallback(msg.content) && (
                       <a 
                         href="https://wa.me/919884718883?text=Hello%20NSFA%20Academy,%20I%20need%20more%20information." 
@@ -159,7 +226,7 @@ export default function Chatbot() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder="Ask about guidelines..."
+                  placeholder={isAwaitingLead ? "Enter Name & Number..." : "Ask about guidelines..."}
                   className="w-full bg-white/5 border border-white/10 text-white text-sm rounded-full py-3 pl-4 pr-12 focus:outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition-all"
                 />
                 <button 
