@@ -65,7 +65,7 @@ export default function Chatbot() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
             // We send the chat history + their PENDING question (ignoring their name/number msg so the AI doesn't get confused)
-            messages: messages.concat({ role: "user", content: pendingQuestion }).map(m => ({ role: m.role, content: m.content })) 
+           messages: messages.concat({ id: "pending", role: "user", content: pendingQuestion }).map(m => ({ role: m.role, content: m.content })) 
           })
         });
 
