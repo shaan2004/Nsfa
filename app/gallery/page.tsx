@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, AnimatePresence, Variants } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, Images } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, ChevronLeft, ChevronRight, Images, MousePointerClick } from "lucide-react";
 import Image from "next/image";
 
 /* ---------------- PREMIUM COMPONENTS ---------------- */
@@ -28,7 +28,6 @@ const generateImagePaths = (basePath: string, totalImages: number, ext: string =
 const premiumGoldGradient = "bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#AA771C_100%)]";
 
 /* ---------------- GALLERY DATA STRUCTURE ---------------- */
-// Re-assigned categories to match the international locations
 const galleryEvents = [
   { id: "1", category: "India", title: "Certificate Award Ceremony", cover: "/assets/certificate awards/1.jpg", images: generateImagePaths("/assets/certificate awards", 25) },
   { id: "2", category: "India", title: "Lecture Sessions", cover: "/assets/lecture session/1.jpg", images: generateImagePaths("/assets/lecture session", 8) },
@@ -42,22 +41,13 @@ const galleryEvents = [
   { id: "10", category: "India", title: "PMU2 Batch Awards", cover: "/assets/pmu2/1.jpeg", images: generateImagePaths("/assets/pmu2", 8, "jpeg") }
 ];
 
-// Updated filter categories
 const categories = ["All", "India", "Dubai", "Korea", "Bangkok"];
-
-/* ---------------- ANIMATION VARIANTS (OPTIMIZED) ---------------- */
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 20, scale: 0.95 },
-  visible: (i: number) => ({
-    opacity: 1, y: 0, scale: 1,
-    transition: { delay: i * 0.05, duration: 0.5, ease: "easeOut" }
-  }),
-  exit: { opacity: 0, scale: 0.95, transition: { duration: 0.2 } }
-};
 
 /* ---------------- PAGE ---------------- */
 export default function Gallery() {
   const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCarouselIndex, setActiveCarouselIndex] = useState(0);
+  
   const [selectedEvent, setSelectedEvent] = useState<typeof galleryEvents[0] | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -65,6 +55,25 @@ export default function Gallery() {
     ? galleryEvents 
     : galleryEvents.filter(event => event.category === activeCategory);
 
+  // Reset carousel to first item when category changes
+  useEffect(() => {
+    setActiveCarouselIndex(0);
+  }, [activeCategory]);
+
+  /* --- CAROUSEL NAVIGATION --- */
+  const handleCarouselNext = () => {
+    if (activeCarouselIndex < filteredEvents.length - 1) {
+      setActiveCarouselIndex(prev => prev + 1);
+    }
+  };
+
+  const handleCarouselPrev = () => {
+    if (activeCarouselIndex > 0) {
+      setActiveCarouselIndex(prev => prev - 1);
+    }
+  };
+
+  /* --- LIGHTBOX NAVIGATION --- */
   const handleNextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (selectedEvent) {
@@ -90,9 +99,9 @@ export default function Gallery() {
   };
 
   return (
-    <main suppressHydrationWarning className="bg-[#040814] text-white min-h-screen pt-32 pb-32 relative">
+    <main suppressHydrationWarning className="bg-[#040814] text-white min-h-screen pt-32 pb-32 relative overflow-hidden">
       
-      {/* ---------------- DYNAMIC AURORA BACKGROUND (Optimized) ---------------- */}
+      {/* ---------------- DYNAMIC AURORA BACKGROUND ---------------- */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{ opacity: [0.1, 0.2, 0.1] }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
@@ -106,10 +115,10 @@ export default function Gallery() {
         />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
+      <div className="max-w-[1920px] mx-auto relative z-10">
         
         {/* 1. HEADER */}
-        <div className="text-center mb-16 max-w-3xl mx-auto">
+        <div className="text-center mb-10 max-w-3xl mx-auto px-4">
           <motion.h3 
             initial={{ opacity: 0, letterSpacing: "0.1em" }} animate={{ opacity: 1, letterSpacing: "0.4em" }} transition={{ duration: 1.5, ease: "easeOut" }}
             className="text-[#D4AF37] uppercase mb-4 text-sm font-bold"
@@ -117,26 +126,26 @@ export default function Gallery() {
             A Glimpse of Excellence
           </motion.h3>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}>
-             <GoldText text="The NSFA Gallery" className="text-5xl md:text-7xl mb-6" />
+             <GoldText text="The NSFA Gallery" className="text-4xl md:text-6xl mb-6" />
           </motion.div>
           <motion.p 
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.5 }}
-            className="text-white/70 text-lg md:text-xl font-light font-serif italic"
+            className="text-white/70 text-base md:text-xl font-light font-serif italic"
           >
             Explore the vibrant academic life, cutting-edge facilities, and proud moments of our international scholars.
           </motion.p>
         </div>
 
-        {/* 2. CATEGORY FILTERS (Country Based) */}
+        {/* 2. CATEGORY FILTERS */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-wrap justify-center gap-4 mb-16 md:mb-20"
+          className="flex flex-wrap justify-center gap-3 md:gap-4 mb-8 md:mb-12 px-4"
         >
           {categories.map((category) => (
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
-              className={`px-6 py-2.5 md:px-8 md:py-3 rounded-full md:rounded-2xl text-xs md:text-sm font-bold tracking-widest uppercase transition-all duration-300 ${
+              className={`px-5 py-2 md:px-8 md:py-3 rounded-full md:rounded-2xl text-[10px] md:text-xs font-bold tracking-widest uppercase transition-all duration-300 ${
                 activeCategory === category
                   ? `${premiumGoldGradient} text-[#040814] shadow-[0_5px_20px_rgba(212,175,55,0.4)] scale-105 border-transparent`
                   : "bg-white/5 border border-white/10 text-white/60 hover:text-white active:bg-white/10 hover:bg-white/10 hover:border-[#D4AF37]/50 active:border-[#D4AF37]/50"
@@ -147,77 +156,128 @@ export default function Gallery() {
           ))}
         </motion.div>
 
-        {/* 3. ROYAL ART GALLERY GRID (2-Col Mobile, 3-Col Desktop) */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-12">
-          <AnimatePresence mode="wait">
-            {filteredEvents.map((event, index) => (
-              <motion.div
-                key={event.id}
-                custom={index}
-                variants={cardVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                className="relative group cursor-pointer h-full outline-none"
-                onClick={() => openLightbox(event)}
-                tabIndex={0}
-              >
-                {/* THE ROYAL FRAME CONTAINER */}
-                <div className="p-1 md:p-2 rounded-2xl md:rounded-[2rem] shadow-[0_10px_30px_rgba(0,0,0,0.8)] md:shadow-[0_20px_50px_rgba(0,0,0,0.8)] transition-all duration-500 group-hover:shadow-[0_20px_50px_rgba(212,175,55,0.25)] group-active:shadow-[0_20px_50px_rgba(212,175,55,0.25)] group-hover:-translate-y-2 group-active:-translate-y-2 flex flex-col h-full relative overflow-hidden">
-                  
-                  {/* DUAL LAYER BACKGROUND FOR SMOOTH CROSSFADE */}
-                  <div className="absolute inset-0 bg-[#0A1128] border-2 border-[#BF953F]/30 rounded-2xl md:rounded-[2rem] transition-opacity duration-500 z-0 group-hover:opacity-0 group-active:opacity-0" />
-                  <div className={`absolute inset-0 ${premiumGoldGradient} rounded-2xl md:rounded-[2rem] opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 z-0`} />
+        {/* 3. 3D SPIRAL CAROUSEL */}
+        <div className="relative w-full h-[500px] md:h-[650px] flex items-center justify-center perspective-[1500px]">
+          
+          {/* Carousel Arrows */}
+          <button 
+            onClick={handleCarouselPrev}
+            disabled={activeCarouselIndex === 0}
+            className="absolute left-4 md:left-12 z-50 p-3 md:p-5 rounded-full bg-[#0A1128]/80 border border-[#BF953F]/40 text-[#FBF5B7] hover:bg-[#D4AF37] hover:text-[#040814] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-[0_0_30px_rgba(0,0,0,0.8)] backdrop-blur-md"
+          >
+            <ChevronLeft size={28} />
+          </button>
 
-                  {/* Inner Matte & Image */}
-                  <div className="relative overflow-hidden aspect-square md:aspect-[4/3] bg-black rounded-xl m-1 md:m-2 z-10 border border-white/10 group-hover:border-[#040814]/20 group-active:border-[#040814]/20 transition-colors duration-500">
-                    <Image
-                      src={event.cover}
-                      alt={event.title}
-                      fill
-                      sizes="(max-width: 1024px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-1000 group-hover:scale-105 group-active:scale-105"
-                      priority={index < 3} 
-                    />
-                    
-                    {/* Floating Counter Badge */}
-                    <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-[#0A1128]/80 backdrop-blur-md border border-[#BF953F]/50 px-2 py-1 md:px-3 md:py-1.5 rounded-lg md:rounded-xl flex items-center gap-1 md:gap-2 shadow-lg group-hover:bg-[#040814] group-active:bg-[#040814] transition-colors duration-500">
-                      <Images size={12} className="text-[#FBF5B7] md:w-3.5 md:h-3.5" />
-                      <span className="text-[#FBF5B7] text-[10px] md:text-xs font-bold tracking-wider">{event.images.length}</span>
+          <button 
+            onClick={handleCarouselNext}
+            disabled={activeCarouselIndex === filteredEvents.length - 1}
+            className="absolute right-4 md:right-12 z-50 p-3 md:p-5 rounded-full bg-[#0A1128]/80 border border-[#BF953F]/40 text-[#FBF5B7] hover:bg-[#D4AF37] hover:text-[#040814] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-[0_0_30px_rgba(0,0,0,0.8)] backdrop-blur-md"
+          >
+            <ChevronRight size={28} />
+          </button>
+
+          {/* Render Spiral Cards */}
+          <div className="relative w-[280px] h-[380px] md:w-[400px] md:h-[500px] transform-style-3d">
+            <AnimatePresence>
+              {filteredEvents.map((event, index) => {
+                // Determine position relative to the active index
+                const offset = index - activeCarouselIndex;
+                const absOffset = Math.abs(offset);
+                const sign = Math.sign(offset);
+                
+                // Hide cards that are too far back to improve performance and visuals
+                if (absOffset > 4) return null;
+
+                // 3D SPIRAL MATH
+                // x: Pushes left/right. 
+                // z: Pushes deep into the background (-200px per step).
+                // y: Drops them down slightly to form a spiral shape.
+                // rotateY: Angles them inward towards the user.
+                // rotateZ: Adds a subtle tilt like a fan/spiral.
+                const xOffset = offset * (typeof window !== "undefined" && window.innerWidth < 768 ? 100 : 180);
+                const zOffset = absOffset * -200;
+                const yOffset = absOffset * 25; 
+                const rotateY = sign * -25; 
+                const rotateZ = offset * 2;
+                
+                const isActive = offset === 0;
+
+                return (
+                  <motion.div
+                    key={event.id}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ 
+                      x: xOffset, 
+                      y: yOffset,
+                      z: zOffset, 
+                      rotateY: rotateY,
+                      rotateZ: rotateZ,
+                      opacity: isActive ? 1 : 1 - (absOffset * 0.25),
+                      scale: isActive ? 1 : 0.9,
+                      zIndex: 100 - absOffset
+                    }}
+                    transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
+                    className={`absolute inset-0 rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.8)] ${isActive ? "cursor-pointer" : "cursor-pointer"} border ${isActive ? "border-[#BF953F]" : "border-white/10"} overflow-hidden bg-[#0A1128]`}
+                    onClick={() => {
+                      if (isActive) {
+                        openLightbox(event);
+                      } else {
+                        setActiveCarouselIndex(index);
+                      }
+                    }}
+                  >
+                    {/* The Image */}
+                    <div className="absolute inset-0 bg-black">
+                      <Image
+                        src={event.cover}
+                        alt={event.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 500px"
+                        className={`object-cover transition-transform duration-1000 ${isActive ? "hover:scale-110" : ""}`}
+                        priority={absOffset <= 1}
+                      />
                     </div>
-                  </div>
-
-                  {/* Card Info Area */}
-                  <div className="p-3 md:p-6 pb-3 md:pb-4 flex flex-col items-center justify-center text-center flex-grow relative z-10">
-                    <span className="text-[#BF953F] group-hover:text-[#040814]/70 group-active:text-[#040814]/70 transition-colors duration-500 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-1 md:mb-3">
-                      {event.category}
-                    </span>
-                    <h4 className="text-white group-hover:text-[#040814] group-active:text-[#040814] transition-colors duration-500 font-serif text-sm md:text-xl font-bold mb-3 md:mb-6 leading-tight drop-shadow-md group-hover:drop-shadow-none group-active:drop-shadow-none">
-                      {event.title}
-                    </h4>
                     
-                    <button className="px-3 py-2 md:px-8 md:py-3 rounded-lg md:rounded-xl border border-[#BF953F]/40 bg-[linear-gradient(180deg,#121F3D,#0A1128)] group-hover:bg-none group-active:bg-none group-hover:bg-[#040814] group-active:bg-[#040814] text-[#FBF5B7] group-hover:text-[#FFF2CD] group-active:text-[#FFF2CD] group-hover:border-[#040814] group-active:border-[#040814] font-bold transition-all duration-500 text-[10px] md:text-xs uppercase tracking-widest shadow-inner mt-auto w-full">
-                      View
-                    </button>
-                  </div>
+                    {/* Dark gradient overlay for non-active cards */}
+                    <div className={`absolute inset-0 bg-black transition-opacity duration-700 ${isActive ? "opacity-0" : "opacity-50"}`} />
+                    
+                    {/* Inner content overlay for ACTIVE card */}
+                    <motion.div 
+                      animate={{ opacity: isActive ? 1 : 0 }}
+                      className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-6 md:p-8"
+                    >
+                      <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md border border-[#BF953F]/50 px-3 py-1.5 rounded-xl flex items-center gap-2">
+                        <Images size={14} className="text-[#FBF5B7]" />
+                        <span className="text-[#FBF5B7] text-xs font-bold">{event.images.length} Photos</span>
+                      </div>
 
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
+                      <span className="text-[#BF953F] text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] mb-2 drop-shadow-md">
+                        {event.category}
+                      </span>
+                      <h4 className="text-white font-serif text-xl md:text-3xl font-bold mb-4 leading-tight drop-shadow-lg">
+                        {event.title}
+                      </h4>
+                      
+                      <div className="flex items-center gap-3 text-[#FBF5B7] text-sm font-bold uppercase tracking-widest group">
+                        <MousePointerClick size={18} className="animate-pulse" />
+                        Click to view album
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </div>
         </div>
 
       </div>
 
-      {/* 4. OPTIMIZED LIGHTBOX MODAL */}
+      {/* 4. OPTIMIZED LIGHTBOX MODAL (Unchanged) */}
       <AnimatePresence>
         {selectedEvent && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-[#040814]/95 backdrop-blur-md p-0 md:p-4"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#040814]/95 backdrop-blur-md p-0 md:p-4"
             onClick={closeLightbox}
           >
             {/* Top Bar Controls */}

@@ -133,9 +133,9 @@ export default function Footer() {
             Copyright © {currentYear} | All Rights Reserved | Non Surgical Facial Aesthetics Academy
           </p>
           <div className="flex gap-6">
-            {/* Note: Update these hrefs when you have actual privacy/terms pages */}
-            <Link href="#" className="text-white/40 hover:text-white text-xs font-light">Privacy Policy</Link>
-            <Link href="#" className="text-white/40 hover:text-white text-xs font-light">Terms of Service</Link>
+            <Link href="/privacy" className="text-white/40 hover:text-white text-xs font-light transition-colors">Privacy Policy</Link>
+            {/* UPDATED LINK HERE */}
+            <Link href="/terms" className="text-white/40 hover:text-white text-xs font-light transition-colors">Terms of Service</Link>
           </div>
         </div>
 

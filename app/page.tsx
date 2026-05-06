@@ -147,15 +147,17 @@ const VideoReelCard = ({ num }: { num: number }) => {
 
 const advancedFeatures = [
   { id: 1, title: "8-in-1 Course", desc: "Only institute providing 8 CPD trainings in 1 comprehensive course.", x: 15, y: 15 },
-  { id: 2, title: "Monopoly", desc: "Exclusive ISPMU Permanent Makeup Masterclass in Bangkok.", x: 85, y: 18 },
+  { id: 2, title: "Multilevel Certification", desc: "Multi-level certifications across Dubai & South Korea.", x: 85, y: 18 },
   { id: 3, title: "Free Internships", desc: "Guaranteed free internship benefits and hands-on practice.", x: 12, y: 48 },
-  { id: 4, title: "Korea", desc: "Exclusive Korea University Programme. Only 30 seats per year.", x: 88, y: 45 },
+  { id: 4, title: "Multiple Flagship Global Programs", desc: "Access to multiple flagship global programs with international recognition.", x: 88, y: 45 },
   { id: 5, title: "Business Setup", desc: "Business & Entrepreneurship classes to open your own clinic.", x: 18, y: 78 },
   { id: 6, title: "Easy EMI", desc: "Highly accessible courses with flexible Easy EMI options.", x: 82, y: 75 },
   { id: 7, title: "Global Placement", desc: "100% Job Placement offers and career assistance globally.", x: 35, y: 92 },
-  { id: 8, title: "Master Fellowship", desc: "Multi-level certifications across Dubai & South Korea.", x: 65, y: 90 },
+  { id: 8, title: "University Program", desc: "Exclusive university programs with global recognition.", x: 65, y: 90 },
+  // Newly added cards below:
+  { id: 9, title: "Business Finance Analytics", desc: "Dedicated post-course support with business finance analytics for your clinic setup.", x: 50, y: 25 },
+  { id: 10, title: "Pioneer Global Faculty", desc: "Learn directly from a pioneer global faculty of industry leaders and renowned experts.", x: 50, y: 65 },
 ];
-
 const aestheticCourses = [
   { title: "PG Diploma", loc: "Clinical Cosmetology", desc: "Clinical Cosmetology, Trichology & Nutraceuticals.", badge: "Diploma", icon: BookOpen },
   { title: "PG Diploma", loc: "Facial Aesthetics", desc: "Non Surgical Facial Aesthetics, Bariatric Science & Nutrition.", badge: "Diploma", icon: Award },
@@ -177,7 +179,29 @@ const dentalCourses = [
   { title: "PG Certificate", loc: "Sports Dentistry", desc: "Sports Dentistry & Gum Rejuvenation.", badge: "Certificate", icon: Briefcase },
   { title: "M.SC", loc: "Aesthetic Dentistry", desc: "M.SC in Aesthetic Dentistry.", badge: "Degree", icon: Award },
 ];
-
+const generalMedicalCourses = [
+  { 
+    title: "Fellowship in Internal Medicine", 
+    badge: "LAUNCHING 2027", 
+    icon: Stethoscope, 
+    loc: "GLOBAL", 
+    desc: "Intensive training focusing on adult diseases, diagnostics, and non-surgical treatments. Officially launching in 2027." 
+  },
+  { 
+    title: "Mastership in General Practice", 
+    badge: "LAUNCHING 2027", 
+    icon: Stethoscope, 
+    loc: "GLOBAL", 
+    desc: "Advanced comprehensive program covering modern general medical practices. Enrollment begins late 2026." 
+  },
+  { 
+    title: "PG Diploma in Emergency Medicine", 
+    badge: "LAUNCHING 2027", 
+    icon: Stethoscope, 
+    loc: "GLOBAL", 
+    desc: "Equip yourself with life-saving skills and rapid diagnostic protocols. Coming in 2027." 
+  }
+];
 /* ---------------- ADVANCED ANIMATION VARIANTS ---------------- */
 const wipeReveal: Variants = {
   hidden: { clipPath: "inset(0 100% 0 0)", opacity: 0 },
@@ -443,7 +467,7 @@ export default function Home() {
                 >
                   <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-[#BF953F]/60" />
                   <span className="text-[#FBF5B7] text-[10px] md:text-xs font-bold uppercase tracking-[0.3em]">
-                    Honourable Highlights
+                    Multilevel Certification Program
                   </span>
                   <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-[#BF953F]/60" />
                 </motion.div>
@@ -451,25 +475,59 @@ export default function Home() {
                 {/* 3. The Honours Gallery (4 Photos) */}
                 <div className="grid grid-cols-4 gap-3 md:gap-4 w-full">
                   {[
-                    "/assets/hero5.jpeg", 
-                    "/assets/hero3.jpg", 
-                    "/assets/hero2.png", 
-                    "/assets/hero4.jpeg"
-                  ].map((src, i) => (
+                    {
+                      src: "/assets/hero5.jpeg",
+                      country: "India",
+                      // Saffron, White (subtle), Green
+                      gradient: "linear-gradient(to bottom, rgba(255, 153, 51, 0.65), rgba(255, 255, 255, 0.2), rgba(19, 136, 8, 0.75))"
+                    },
+                    {
+                      src: "/assets/hero3.jpg",
+                      country: "Dubai",
+                      // UAE Flag: Red, Green, Black
+                      gradient: "linear-gradient(to bottom, rgba(255, 0, 0, 0.5), rgba(0, 115, 47, 0.6), rgba(0, 0, 0, 0.8))"
+                    },
+                    {
+                      src: "/assets/hero2.png",
+                      country: "Bangkok",
+                      // Thailand Flag: Red, Dark Blue, Red
+                      gradient: "linear-gradient(to bottom, rgba(237, 28, 36, 0.6), rgba(36, 29, 79, 0.8), rgba(237, 28, 36, 0.6))"
+                    },
+                    {
+                      src: "/assets/hero4.jpeg",
+                      country: "Korea",
+                      // South Korea Flag: Red & Blue (Yin Yang)
+                      gradient: "linear-gradient(to bottom right, rgba(205, 46, 58, 0.7), rgba(255, 255, 255, 0.2), rgba(0, 71, 160, 0.8))"
+                    }
+                  ].map((card, i) => (
                     <motion.div 
                       key={i}
                       initial={{ opacity: 0, y: 30 }} 
                       animate={{ opacity: 1, y: 0 }} 
                       transition={{ duration: 0.8, delay: 1 + (i * 0.15) }}
-                      className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden border border-[#BF953F]/30 shadow-lg transition-all duration-500 hover:border-[#BF953F] hover:-translate-y-2 hover:shadow-[0_10px_20px_rgba(191,149,63,0.4)] group"
+                      className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden border border-[#BF953F]/30 shadow-lg transition-all duration-500 hover:border-white/50 hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(0,0,0,0.5)] group cursor-pointer"
                     >
                       <img 
-                        src={src} 
-                        alt={`Academy Highlight ${i + 1}`} 
+                        src={card.src} 
+                        alt={`NSFA Academy ${card.country}`} 
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                       />
-                     
-                      <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(191,149,63,0.4)_0%,rgba(0,0,0,0)_50%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay" />
+                      
+                      {/* Custom National Flag Gradient Overlay on Hover */}
+                      <div 
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" 
+                        style={{ background: card.gradient }}
+                      />
+
+                      {/* Persistent dark gradient at bottom so the text tag is always readable */}
+                      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 to-transparent z-10 opacity-70 group-hover:opacity-100 transition-opacity duration-500" />
+
+                      {/* Country Text Tag */}
+                      <div className="absolute bottom-3 md:bottom-5 left-1/2 -translate-x-1/2 z-20 w-max">
+                        <span className="px-3 md:px-5 py-1.5 md:py-2 bg-black/40 backdrop-blur-md rounded-full text-white text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] border border-white/20 group-hover:border-transparent group-hover:bg-gradient-to-r group-hover:from-[#BF953F] group-hover:via-[#FCF6BA] group-hover:to-[#B38728] group-hover:text-[#040814] group-hover:shadow-[0_0_20px_rgba(191,149,63,0.6)] transition-all duration-500">
+                          {card.country}
+                        </span>
+                      </div>
                     </motion.div>
                   ))}
                 </div>
@@ -680,7 +738,7 @@ export default function Home() {
           </div>
         </section>
 
-      {/* ---------------- 4. PROGRAMS SECTION (Two Rows) ---------------- */}
+      {/* ---------------- 4. PROGRAMS SECTION (Three Rows) ---------------- */}
         <section className="py-24 md:py-32 relative bg-[linear-gradient(180deg,#080E21_0%,#0B132A_100%)] overflow-hidden">
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="meteor" /><div className="meteor" /><div className="meteor" /><div className="meteor" /><div className="meteor" />
@@ -807,6 +865,72 @@ export default function Home() {
                             </button>
                             <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title} (${c.loc}).`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 text-white font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:border-black active:border-black transition-colors">
                               Enquire Now
+                            </button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+
+            {/* ROW 3: General Medical Courses (2027) */}
+            <div className="w-full flex flex-col gap-6">
+              {/* General Medical Title Bar */}
+              <div className="max-w-7xl mx-auto px-4 w-full flex items-center gap-4">
+                <h3 className="text-xl md:text-3xl font-serif font-bold uppercase tracking-widest text-transparent bg-clip-text bg-[linear-gradient(to_right,#34D399,#FFFFFF)] drop-shadow-md flex flex-col md:flex-row md:items-baseline gap-1 md:gap-3">
+                  General Medical 
+                  <span className="text-sm md:text-lg text-[#34D399] tracking-normal font-medium">
+                    (Launching 2027)
+                  </span>
+                </h3>
+                <div className="h-[1px] flex-1 bg-gradient-to-r from-[#059669]/50 to-transparent" />
+              </div>
+
+              <div className="pause-on-hover w-full overflow-visible">
+                <div className="animate-programs w-max">
+                  <motion.div 
+                    drag="x" 
+                    dragConstraints={programsRef} 
+                    className="flex gap-4 md:gap-8 px-4 w-max cursor-grab active:cursor-grabbing"
+                  >
+                    {/* Map the new generalMedicalCourses data */}
+                    {[...generalMedicalCourses, ...generalMedicalCourses].map((c, i) => (
+                      <motion.div 
+                        key={`medical-${i}`} 
+                        whileHover={{ y: -10, scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }} 
+                        className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-[#059669]/30 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(5,150,105,0.4)] active:shadow-[0_30px_60px_-15px_rgba(5,150,105,0.4)]"
+                      >
+                        {/* Emerald Green Glassmorphism background effect */}
+                        <div className="absolute inset-0 bg-white/5 backdrop-blur-md transition-opacity duration-500 group-hover:opacity-0 group-active:opacity-0" />
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,#059669,#0A1128,#059669)]" />
+                        
+                        <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#059669]/50 text-[#34D399] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-[#059669] group-active:bg-white group-active:text-[#059669] transition-colors">
+                          {c.badge}
+                        </div>
+                        
+                        <div className="relative z-10 flex flex-col items-center text-center px-4 md:px-6 w-full h-full">
+                          <div className="mb-4 md:mb-6 p-4 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-active:border-black/20 group-hover:bg-black/20 group-active:bg-black/20 transition-colors duration-500 shadow-inner">
+                            <c.icon className="w-8 h-8 md:w-10 md:h-10 text-[#34D399] group-hover:text-white group-active:text-white transition-colors duration-500" />
+                          </div>
+                          <h3 className="text-xl md:text-2xl font-serif text-white font-bold transition-colors duration-500 mb-2">
+                            {c.title}
+                          </h3>
+                          <p className="text-xs md:text-sm text-[#34D399] font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">
+                            📍 {c.loc}
+                          </p>
+                          <p className="text-xs md:text-sm text-white/60 group-hover:text-white/90 group-active:text-white/90 font-light mb-auto transition-colors duration-500 line-clamp-3">
+                            {c.desc}
+                          </p>
+
+                          <div className="w-full flex flex-col gap-2 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6 mt-4">
+                            <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, please notify me when the ${c.title} launches in 2027.`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-white text-white md:text-[#059669] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black hover:text-white active:bg-black active:text-white transition-colors border border-white/10 md:border-none shadow-lg">
+                              Notify Me
+                            </button>
+                            <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I would like to join the waitlist for ${c.title}.`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 text-white font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:border-black active:border-black transition-colors">
+                              Join Waitlist
                             </button>
                           </div>
                         </div>
