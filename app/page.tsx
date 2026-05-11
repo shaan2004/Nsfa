@@ -224,8 +224,24 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasDismissedPopup, showLeadPopup, popupSubmitted]);
 
-  const handleLeadSubmit = (e: React.FormEvent) => {
+  const handleLeadSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Grab the values from the form
+    const form = e.currentTarget;
+    const name = (form.elements.namedItem('name') as HTMLInputElement).value;
+    const phone = (form.elements.namedItem('phone') as HTMLInputElement).value;
+    const profession = (form.elements.namedItem('profession') as HTMLSelectElement).value;
+
+    // Format the WhatsApp message
+    const clientWhatsAppNumber = "919884718883";
+    const message = `*New Website Popup Lead!* 🚀\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Profession:* ${profession}`;
+    const waUrl = `https://wa.me/${clientWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+
+    // Open WhatsApp in a new tab
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
+
+    // Show the success screen in the popup
     setPopupSubmitted(true);
     setTimeout(() => {
       setShowLeadPopup(false);
@@ -265,19 +281,19 @@ export default function Home() {
                     
                     <form onSubmit={handleLeadSubmit} className="space-y-4">
                       <div>
-                        <input type="text" required placeholder="Full Name" className="w-full bg-white/5 border border-white/10 text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition-all" />
+                        <input name="name" type="text" required placeholder="Full Name" className="w-full bg-white/5 border border-white/10 text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition-all" />
                       </div>
                       <div>
-                        <input type="tel" required placeholder="WhatsApp Number" className="w-full bg-white/5 border border-white/10 text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition-all" />
+                        <input name="phone" type="tel" required placeholder="WhatsApp Number" className="w-full bg-white/5 border border-white/10 text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition-all" />
                       </div>
                       <div>
-                        <select required defaultValue="" className="w-full bg-[#0A1128] border border-white/10 text-white/80 text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition-all appearance-none">
+                        <select name="profession" required defaultValue="" className="w-full bg-[#0A1128] border border-white/10 text-white/80 text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition-all appearance-none">
                           <option value="" disabled>Select Your Profession</option>
-                          <option value="doctor">Medical Doctor (MBBS, BDS, etc.)</option>
-                          <option value="nurse">Nurse / Allied Health</option>
-                          <option value="beautician">Beautician / MUA</option>
-                          <option value="clinic_owner">Clinic / Salon Owner</option>
-                          <option value="other">Other</option>
+                          <option value="Medical Doctor (MBBS, BDS, etc.)">Medical Doctor (MBBS, BDS, etc.)</option>
+                          <option value="Nurse / Allied Health">Nurse / Allied Health</option>
+                          <option value="Beautician / MUA">Beautician / MUA</option>
+                          <option value="Clinic / Salon Owner">Clinic / Salon Owner</option>
+                          <option value="Other">Other</option>
                         </select>
                       </div>
                       <button type="submit" className="w-full mt-4 py-3.5 rounded-xl bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] text-[#080E21] font-bold text-sm tracking-widest uppercase hover:scale-[1.02] active:scale-95 transition-all shadow-lg">

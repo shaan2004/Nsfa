@@ -8,6 +8,7 @@ type Message = {
   id: string;
   role: "user" | "assistant"; 
   content: string;
+  waLeadLink?: string; // NEW: Added to support dynamic WhatsApp buttons
 };
 
 export default function Chatbot() {
@@ -23,7 +24,7 @@ export default function Chatbot() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // --- NEW STATES FOR LEAD CAPTURE ---
+  // --- STATES FOR LEAD CAPTURE ---
   const [messageCount, setMessageCount] = useState(0);
   const [isAwaitingLead, setIsAwaitingLead] = useState(false);
   const [leadCaptured, setLeadCaptured] = useState(false);
@@ -51,21 +52,32 @@ export default function Chatbot() {
       setIsAwaitingLead(false);
       setLeadCaptured(true);
       
-      // Acknowledge the details
+      // Format the WhatsApp message with the captured lead details
+      const clientWhatsAppNumber = "919884718883";
+      const leadMessage = `*New Website Lead!* 🚀\n\n*Contact Details:* ${userText}\n*Area of Interest / Question:* ${pendingQuestion}`;
+      const waUrl = `https://wa.me/${clientWhatsAppNumber}?text=${encodeURIComponent(leadMessage)}`;
+
+      // Acknowledge the details and provide the WhatsApp link
       setMessages(prev => [...prev, {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: "Thank you! Let me check on your previous question..."
+        content: "Thank you! I am connecting you to our counselor on WhatsApp with your details. I'm also fetching the answer to your question...",
+        waLeadLink: waUrl
       }]);
 
-      // Automatically fetch the answer for their PENDING question
+      // Automatically attempt to open WhatsApp in a new tab
+      setTimeout(() => {
+        window.open(waUrl, '_blank', 'noopener,noreferrer');
+      }, 1000);
+
+      // Continue to automatically fetch the answer for their PENDING question
       try {
         const response = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
-            // We send the chat history + their PENDING question (ignoring their name/number msg so the AI doesn't get confused)
-           messages: messages.concat({ id: "pending", role: "user", content: pendingQuestion }).map(m => ({ role: m.role, content: m.content })) 
+            // Send chat history + PENDING question (ignoring their name/number msg)
+            messages: messages.concat({ id: "pending", role: "user", content: pendingQuestion }).map(m => ({ role: m.role, content: m.content })) 
           })
         });
 
@@ -85,7 +97,7 @@ export default function Chatbot() {
     // 2. INTERCEPT ON THE 3RD MESSAGE (If details not captured)
     // ---------------------------------------------------------
     if (messageCount === 2 && !leadCaptured) {
-      setPendingQuestion(userText); // Save their question so we can answer it AFTER they give details
+      setPendingQuestion(userText); // Save their question as their "Area of Interest"
       setIsAwaitingLead(true);
       
       setTimeout(() => {
@@ -109,8 +121,7 @@ export default function Chatbot() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          // We send the chat history + their PENDING question (ignoring their name/number msg so the AI doesn't get confused)
-          messages: messages.concat({ id: "pending", role: "user", content: pendingQuestion }).map(m => ({ role: m.role, content: m.content })) 
+          messages: messages.concat(userMsg).map(m => ({ role: m.role, content: m.content })) 
         })
       });
 
@@ -191,13 +202,25 @@ export default function Chatbot() {
                   }`}>
                     {msg.content}
                     
-                    {/* Render WhatsApp Button if Fallback Triggered */}
-                    {msg.role === 'assistant' && isWhatsAppFallback(msg.content) && (
+                    {/* Render Dynamic WhatsApp LEAD Button */}
+                    {msg.waLeadLink && (
+                      <a 
+                        href={msg.waLeadLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold uppercase tracking-wider text-[10px] transition-colors shadow-md"
+                      >
+                        <MessageCircle size={16} /> Send Details to Counselor
+                      </a>
+                    )}
+
+                    {/* Render Standard WhatsApp Fallback Button */}
+                    {msg.role === 'assistant' && !msg.waLeadLink && isWhatsAppFallback(msg.content) && (
                       <a 
                         href="https://wa.me/919884718883?text=Hello%20NSFA%20Academy,%20I%20need%20more%20information." 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold uppercase tracking-wider text-xs transition-colors"
+                        className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold uppercase tracking-wider text-xs transition-colors shadow-md"
                       >
                         <MessageCircle size={16} /> Chat on WhatsApp
                       </a>
