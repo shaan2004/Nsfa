@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Calendar, ChevronRight, User, FileText, Download, BookOpen } from "lucide-react";
 import Image from "next/image";
@@ -25,112 +25,57 @@ const premiumGoldGradient = "bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#
 const categories = ["All", "India", "Dubai", "Korea", "Bangkok"];
 
 const blogPosts = [
-  {
-    id: 1,
-    title: "Mastering Facial Aesthetics in Chennai",
-    category: "India",
-    author: "Dr. Sarah Jenkins",
-    date: "April 10, 2026",
-    image: "/assets/fillers.jpg", 
-    excerpt: "An inside look at our Level 4 Fellowship program in India, covering advanced clinical cosmetology and aesthetic medicine.",
-  },
-  {
-    id: 2,
-    title: "Global Exposure: The Dubai Master Fellowship",
-    category: "Dubai",
-    author: "NSFA Faculty",
-    date: "April 05, 2026",
-    image: "/assets/facial.jpg",
-    excerpt: "How our multi-level certification in Dubai is creating global placement opportunities for medical professionals.",
-  },
-  {
-    id: 3,
-    title: "Exclusive Korea University Programme",
-    category: "Korea",
-    author: "Dr. Michael Chen",
-    date: "March 28, 2026",
-    image: "/assets/dental.jpg",
-    excerpt: "Exploring the cutting-edge techniques and monopoly training offered at our 30-seat exclusive program in South Korea.",
-  },
-  {
-    id: 4,
-    title: "ISPMU Permanent Makeup Masterclass",
-    category: "Bangkok",
-    author: "NSFA Faculty",
-    date: "March 15, 2026",
-    image: "/assets/injectables.jpg",
-    excerpt: "A comprehensive review of the advanced PMU techniques taught during our biannual Bangkok monopoly masterclass.",
-  },
-  {
-    id: 5,
-    title: "Setting Up Your Aesthetic Clinic in India",
-    category: "India",
-    author: "Business Dept",
-    date: "March 02, 2026",
-    image: "/assets/face.jpg",
-    excerpt: "Insights from our Business & Entrepreneurship classes to help you launch your own successful clinic in India.",
-  }
+  { id: 1, title: "Mastering Facial Aesthetics in Chennai", category: "India", author: "Dr. Sarah Jenkins", date: "April 10, 2026", image: "/assets/fillers.jpg", excerpt: "An inside look at our Level 4 Fellowship program in India, covering advanced clinical cosmetology." },
+  { id: 2, title: "Global Exposure: Dubai Master Fellowship", category: "Dubai", author: "NSFA Faculty", date: "April 05, 2026", image: "/assets/facial.jpg", excerpt: "How our multi-level certification in Dubai is creating global placement opportunities." },
+  { id: 3, title: "Exclusive Korea University Programme", category: "Korea", author: "Dr. Michael Chen", date: "March 28, 2026", image: "/assets/dental.jpg", excerpt: "Exploring the cutting-edge techniques and monopoly training offered in South Korea." },
+  { id: 4, title: "ISPMU Permanent Makeup Masterclass", category: "Bangkok", author: "NSFA Faculty", date: "March 15, 2026", image: "/assets/injectables.jpg", excerpt: "A comprehensive review of the advanced PMU techniques taught during our Bangkok masterclass." },
+  { id: 5, title: "Setting Up Your Aesthetic Clinic in India", category: "India", author: "Business Dept", date: "March 02, 2026", image: "/assets/face.jpg", excerpt: "Insights from our Business classes to help you launch your own successful clinic in India." }
 ];
 
 const downloads = [
-  {
-    id: "d1",
-    title: "Aesthetic Clinical Set Up In India",
-    desc: "Guidelines for reference regarding setting up an aesthetic clinical practice in India.",
-    file: "/assets/CLINICAL.pdf" 
-  },
-  {
-    id: "d2",
-    title: "Global Aesthetic Guidelines for Injectables",
-    desc: "Botulinum Toxin & Dermal Fillers for cosmetic indications globally accepted standards.",
-    file: "/assets/comman.pdf"
-  },
-  {
-    id: "d3",
-    title: "Guidelines of Facial Injectables Practise in India",
-    desc: "Invasive Cosmetology reference based on NMC & DCI guidelines.",
-    file: "/assets/GUIDELINES OF FACIAL INJECTABLES.pdf"
-  }
+  { id: "d1", title: "Aesthetic Clinical Set Up In India", desc: "Guidelines for reference regarding setting up an aesthetic clinical practice in India.", file: "/assets/CLINICAL.pdf" },
+  { id: "d2", title: "Global Aesthetic Guidelines for Injectables", desc: "Botulinum Toxin & Dermal Fillers for cosmetic indications globally accepted standards.", file: "/assets/comman.pdf" },
+  { id: "d3", title: "Guidelines of Facial Injectables Practise in India", desc: "Invasive Cosmetology reference based on NMC & DCI guidelines.", file: "/assets/GUIDELINES OF FACIAL INJECTABLES.pdf" }
 ];
 
 export default function BlogAndDownloads() {
-  // Main Tab State: "blog" or "downloads"
   const [activeTab, setActiveTab] = useState<"blog" | "downloads">("blog");
-  
-  // Blog Filter States
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
 
-  const filteredPosts = blogPosts.filter((post) => {
-    const matchesCategory = activeCategory === "All" || post.category === activeCategory;
-    const matchesSearch = 
-      post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  // Memoized filtering for performance
+  const filteredPosts = useMemo(() => {
+    return blogPosts.filter((post) => {
+      const matchesCategory = activeCategory === "All" || post.category === activeCategory;
+      const matchesSearch = 
+        post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [activeCategory, searchQuery]);
 
   return (
     <main suppressHydrationWarning className="bg-[#040814] text-white min-h-screen pt-32 pb-32 relative overflow-hidden">
       
-      {/* ---------------- 1. GLOWING BRAIN BACKGROUND ---------------- */}
+      {/* ---------------- 1. GLOWING BRAIN BACKGROUND (OPTIMIZED) ---------------- */}
       <div className="absolute top-0 left-0 w-full h-[600px] z-0 overflow-hidden pointer-events-none flex items-center justify-center">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.15)_0%,rgba(0,0,0,0)_60%)] blur-[50px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.12)_0%,rgba(0,0,0,0)_60%)] blur-[50px]" />
         
         <motion.div
-          animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.02, 1] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          animate={{ opacity: [0.3, 0.5, 0.3], scale: [1, 1.02, 1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           className="relative w-[600px] h-[600px] opacity-40 mix-blend-screen"
+          style={{ willChange: "transform, opacity" }}
         >
           <Image 
             src="/assets/brain-glow.png" 
             alt="Neural Network Brain" 
             fill
-            sizes="(max-width: 768px) 100vw, 600px" 
-            className="object-contain drop-shadow-[0_0_50px_rgba(212,175,55,0.6)]" 
+            sizes="600px" 
+            className="object-contain drop-shadow-[0_0_50px_rgba(212,175,55,0.4)]" 
             priority
           />
         </motion.div>
-        
         <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-[#040814] to-transparent" />
       </div>
 
@@ -153,18 +98,18 @@ export default function BlogAndDownloads() {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.5 }}
             className="text-white/70 text-lg md:text-xl font-light font-serif italic leading-relaxed max-w-3xl mx-auto"
           >
-            Explore global clinical discussions, technique breakdowns, and download essential regulatory guidelines and practice setup resources.
+            Explore global clinical discussions, technique breakdowns, and download essential regulatory guidelines.
           </motion.p>
         </div>
 
         {/* ---------------- 3. MAIN NAVIGATION TABS ---------------- */}
         <div className="flex justify-center mb-16">
           <div className="bg-[#0A1128] border border-white/10 p-2 rounded-full inline-flex relative shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
-            {/* Sliding Tab Highlight */}
             <motion.div 
               className="absolute top-2 bottom-2 w-[calc(50%-8px)] rounded-full bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] shadow-[0_5px_15px_rgba(191,149,63,0.4)]"
               animate={{ x: activeTab === "blog" ? 0 : "100%" }}
               transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+              style={{ willChange: "transform" }}
             />
             
             <button 
@@ -185,23 +130,21 @@ export default function BlogAndDownloads() {
         {/* ---------------- 4. TAB CONTENT AREA ---------------- */}
         <AnimatePresence mode="wait">
           
-          {/* BLOG CONTENT */}
           {activeTab === "blog" && (
             <motion.div
               key="blog-view"
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }}
             >
-              {/* Blog Search & Filter Bar */}
-              <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12 bg-white/5 backdrop-blur-xl border border-white/10 p-4 rounded-3xl shadow-lg">
-                <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
+              <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12 bg-white/[0.03] backdrop-blur-xl border border-white/10 p-4 rounded-3xl shadow-lg">
+                <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar">
                   {categories.map((category) => (
                     <button
                       key={category}
                       onClick={() => setActiveCategory(category)}
                       className={`px-6 py-2.5 rounded-full text-xs font-bold tracking-widest uppercase transition-all duration-300 shrink-0 ${
                         activeCategory === category
-                          ? `${premiumGoldGradient} text-[#040814] shadow-[0_5px_20px_rgba(212,175,55,0.4)] border-transparent`
-                          : "bg-white/5 border border-white/10 text-white/60 hover:text-white active:bg-white/10 hover:bg-white/10 hover:border-[#D4AF37]/50 active:border-[#D4AF37]/50"
+                          ? `${premiumGoldGradient} text-[#040814] shadow-[0_5px_20px_rgba(212,175,55,0.4)]`
+                          : "bg-white/5 border border-white/10 text-white/60 hover:text-white hover:border-[#D4AF37]/50"
                       }`}
                     >
                       {category}
@@ -215,16 +158,15 @@ export default function BlogAndDownloads() {
                     placeholder="Search articles..." 
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-[#0A1128]/80 border border-white/20 text-white rounded-full py-3 pl-12 pr-4 focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/50 transition-all duration-300"
+                    className="w-full bg-[#0A1128]/80 border border-white/20 text-white rounded-full py-3 pl-12 pr-4 focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/50 transition-all"
                   />
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-[#D4AF37] transition-colors w-5 h-5" />
                 </div>
               </div>
 
-              {/* Blog Grid */}
               {filteredPosts.length === 0 ? (
                 <div className="text-center py-20">
-                  <h4 className="text-2xl text-white/50 font-serif">No articles found matching your criteria.</h4>
+                  <h4 className="text-2xl text-white/50 font-serif">No articles found.</h4>
                   <button onClick={() => {setSearchQuery(""); setActiveCategory("All");}} className="mt-4 text-[#D4AF37] underline hover:text-white transition-colors">Clear all filters</button>
                 </div>
               ) : (
@@ -232,19 +174,25 @@ export default function BlogAndDownloads() {
                   <AnimatePresence mode="popLayout">
                     {filteredPosts.map((post) => (
                       <motion.article
-                        key={post.id} layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.4 }} tabIndex={0}
-                        className="bg-[#0A1128] border border-white/10 rounded-2xl md:rounded-[2rem] overflow-hidden shadow-2xl group cursor-pointer hover:-translate-y-2 active:-translate-y-2 transition-all duration-500 hover:border-[#BF953F]/60 active:border-[#BF953F]/60 hover:shadow-[0_15px_40px_rgba(191,149,63,0.3)] active:shadow-[0_15px_40px_rgba(191,149,63,0.3)] flex flex-col h-full"
+                        key={post.id} layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.4 }}
+                        className="bg-[#0A1128] border border-white/10 rounded-2xl md:rounded-[2rem] overflow-hidden shadow-2xl group cursor-pointer hover:-translate-y-2 transition-all duration-500 hover:border-[#BF953F]/60 flex flex-col h-full"
+                        style={{ willChange: "transform, opacity" }}
                       >
                         <div className="relative h-32 md:h-64 overflow-hidden bg-black">
-                          <div className="absolute inset-0 bg-gradient-to-br from-[#121F3D] to-[#0A1128]" />
-                          <Image src={post.image} alt={post.title} fill sizes="(max-width: 1024px) 50vw, 33vw" className="object-cover transition-transform duration-1000 group-hover:scale-110 group-active:scale-110 opacity-80 group-hover:opacity-100 group-active:opacity-100 mix-blend-lighten" />
-                          <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-[#040814]/80 backdrop-blur-md border border-[#BF953F]/50 px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[#FBF5B7] text-[10px] md:text-xs font-bold uppercase tracking-wider shadow-lg">
+                          <Image 
+                            src={post.image} 
+                            alt={post.title} 
+                            fill 
+                            sizes="(max-width: 1024px) 50vw, 33vw" 
+                            className="object-cover transition-transform duration-1000 group-hover:scale-110 opacity-80 group-hover:opacity-100 mix-blend-lighten" 
+                          />
+                          <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-[#040814]/80 backdrop-blur-md border border-[#BF953F]/50 px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[#FBF5B7] text-[10px] md:text-xs font-bold uppercase tracking-wider">
                             {post.category}
                           </div>
                         </div>
 
                         <div className="p-4 md:p-8 flex flex-col flex-grow">
-                          <h4 className="text-base md:text-2xl font-serif font-bold text-white mb-2 md:mb-4 leading-tight group-hover:text-transparent group-active:text-transparent group-hover:bg-clip-text group-active:bg-clip-text group-hover:bg-[linear-gradient(to_right,#BF953F,#FCF6BA,#B38728)] group-active:bg-[linear-gradient(to_right,#BF953F,#FCF6BA,#B38728)] transition-all duration-500">
+                          <h4 className="text-base md:text-2xl font-serif font-bold text-white mb-2 md:mb-4 leading-tight group-hover:text-[#FBF5B7] transition-colors duration-500">
                             {post.title}
                           </h4>
                           <p className="text-white/60 text-xs md:text-base font-light leading-relaxed mb-4 md:mb-8 line-clamp-2 md:line-clamp-3">
@@ -255,8 +203,8 @@ export default function BlogAndDownloads() {
                               <span className="flex items-center gap-1 md:gap-2 text-[10px] md:text-xs text-white/50 uppercase tracking-widest"><User size={12}/> {post.author}</span>
                               <span className="flex items-center gap-1 md:gap-2 text-[10px] md:text-xs text-white/50 uppercase tracking-widest"><Calendar size={12}/> {post.date}</span>
                             </div>
-                            <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-white/5 border border-white/10 flex shrink-0 items-center justify-center group-hover:bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] group-active:bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] group-hover:border-transparent group-active:border-transparent transition-all duration-300 group-hover:shadow-[0_5px_15px_rgba(191,149,63,0.4)] group-active:shadow-[0_5px_15px_rgba(191,149,63,0.4)]">
-                              <ChevronRight className="w-4 h-4 md:w-6 md:h-6 text-white/50 group-hover:text-[#040814] group-active:text-[#040814] transition-colors" />
+                            <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-white/5 border border-white/10 flex shrink-0 items-center justify-center group-hover:bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] group-hover:border-transparent transition-all duration-300">
+                              <ChevronRight className="w-4 h-4 md:w-6 md:h-6 text-white/50 group-hover:text-[#040814] transition-colors" />
                             </div>
                           </div>
                         </div>
@@ -268,7 +216,6 @@ export default function BlogAndDownloads() {
             </motion.div>
           )}
 
-          {/* DOWNLOADS CONTENT */}
           {activeTab === "downloads" && (
             <motion.div
               key="downloads-view"
@@ -284,7 +231,8 @@ export default function BlogAndDownloads() {
                     rel="noopener noreferrer"
                     initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4, delay: i * 0.1 }}
                     whileHover={{ y: -5 }}
-                    className="bg-[#0A1128]/80 backdrop-blur-md border border-[#BF953F]/30 p-6 md:p-8 rounded-[2rem] flex flex-col h-full group transition-all duration-300 hover:shadow-[0_15px_40px_rgba(191,149,63,0.2)] hover:border-[#BF953F]"
+                    className="bg-[#0A1128]/80 backdrop-blur-md border border-[#BF953F]/30 p-6 md:p-8 rounded-[2rem] flex flex-col h-full group transition-all duration-300 hover:border-[#BF953F]"
+                    style={{ willChange: "transform" }}
                   >
                     <div className="w-14 h-14 rounded-2xl bg-[#040814] border border-[#BF953F]/50 flex items-center justify-center mb-6 shadow-inner group-hover:bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] transition-all duration-500">
                       <FileText className="w-7 h-7 text-[#FBF5B7] group-hover:text-[#040814] transition-colors duration-500" />
@@ -308,7 +256,6 @@ export default function BlogAndDownloads() {
           )}
 
         </AnimatePresence>
-
       </div>
     </main>
   );

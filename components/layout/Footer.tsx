@@ -19,6 +19,36 @@ const InstagramIcon = ({ size = 24 }: { size?: number }) => (
   </svg>
 );
 
+// --- 100 HIGH-VALUE SEO KEYWORDS ---
+const seoKeywords = [
+  "Clinical Cosmetology Courses", "Facial Aesthetics Fellowship", "Medical Trichology Training India", "Aesthetic Medicine Diploma Dubai", 
+  "Laser Dentistry Masterclass", "Botulinum Toxin Certification", "Fillers Training Course", "PMU Masterclass Bangkok", 
+  "Cosmetic Dentistry Programs", "Aesthetic Clinic Setup Guidelines", "CPD Certified Aesthetic Courses", "Non Surgical Hair Restoration", 
+  "Bariatric Science & Nutrition", "Implantology Masterclass Korea", "PG Diploma in Clinical Cosmetology", "Advanced Lasers Training", 
+  "Chemical Peels Certification", "Medifacial Course", "Trichopigmentation Training", "Medical Cupping Therapy", 
+  "BBGlow Certification", "Micropigmentation Course", "Clinical Nutrition Diploma", "Derma Planning Class", 
+  "Cosmeceutical Formation Science", "Fibroblast Pen Training", "Biostimulation in Aesthetics", "Acne Treatment Course", 
+  "Hyperpigmentation Management", "Orthodontics Fellowship", "Aesthetic Dentistry Mastership", "Endodontics Training", 
+  "Comprehensive Clinical Dentistry", "Sports Dentistry Certificate", "Gum Rejuvenation Course", "Internal Medicine Fellowship", 
+  "General Practice Mastership", "Emergency Medicine PG Diploma", "Medical Aesthetics India", "Cosmetology Institute Chennai", 
+  "Aesthetic Training Dubai", "Dental Courses Bangkok", "Aesthetic Injectables Training", "Best Cosmetology Academy", 
+  "Aesthetic Dermatology Courses", "Non-Surgical Rhinoplasty Training", "Lip Filler Masterclass", "Under Eye Filler Course", 
+  "Thread Lift Certification", "PRP Training for Doctors", "Jawline Contouring Class", "Anti-Aging Medicine Fellowship", 
+  "Skin Rejuvenation Techniques", "Aesthetic Gynecology Course", "Mesotherapy Training", "Fat Dissolving Injections Course", 
+  "Sclerotherapy Masterclass", "IV Nutrition Therapy Training", "Stem Cell Therapy Aesthetics", "Advanced Skincare Diploma", 
+  "Facial Anatomy for Injectors", "Complications Management Aesthetics", "Botox Training for Dentists", "Dental Implantology India", 
+  "Clear Aligner Certification", "Smile Designing Masterclass", "Veneers Training Course", "Teeth Whitening Certification", 
+  "Full Mouth Rehabilitation", "Root Canal Training", "Micro-Endodontics Course", "Pediatric Dentistry Certificate", 
+  "Oral Surgery Masterclass", "Periodontology Fellowship", "Prosthodontics Training", "Maxillofacial Surgery Basics", 
+  "Dental Photography Course", "Practice Management for Dentists", "Aesthetic Clinic Marketing", "Medical Tourism India Aesthetics", 
+  "Cosmetology Board Certification", "International Beauty Academy", "Aesthetic Conferences 2026", "Hands-on Cosmetology Training", 
+  "Cadaver Dissection Aesthetics", "Live Patient Aesthetic Training", "Cosmetic Formulations Course", "Nutrigenomics Masterclass", 
+  "Hair Transplant Observer", "FUE Follicular Unit Extraction", "FUT Hair Transplant Course", "Scalp Micropigmentation SMP", 
+  "Laser Hair Removal Training", "Tattoo Removal Course", "Pigmentation Laser Training", "Scar Revision Aesthetics", 
+  "Fractional CO2 Laser Class", "Q-Switch Laser Masterclass", "Nd:YAG Laser Training", "HIFU Certification Course", 
+  "RF Microneedling Training", "Body Contouring Masterclass"
+];
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const whatsappMsg = encodeURIComponent("Hello NSFA Academy, I have some questions regarding your courses.");
@@ -31,7 +61,7 @@ export default function Footer() {
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.05)_0%,rgba(0,0,0,0)_70%)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 pt-20 pb-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           
           {/* Column 1: Logo & About */}
           <div className="space-y-6">
@@ -44,7 +74,6 @@ export default function Footer() {
             <div className="flex items-center gap-4">
               <span className="text-[#D4AF37] font-bold uppercase tracking-widest text-sm">Follow Us</span>
               
-              {/* Added aria-labels and rel="noopener noreferrer" for SEO/Accessibility */}
               <a href="https://www.facebook.com/nsfaacademy/" target="_blank" rel="noopener noreferrer" aria-label="Visit NSFA Academy on Facebook" className="p-3 rounded-full bg-white/5 border border-white/10 hover:bg-[#D4AF37] hover:border-[#D4AF37] hover:text-[#040814] transition-all duration-300">
                 <FacebookIcon size={20} />
               </a>
@@ -127,15 +156,35 @@ export default function Footer() {
 
         </div>
 
+        {/* ---------------- SEO KEYWORD CLOUD (Matching Footer Grey) ---------------- */}
+        <div className="pt-8 pb-6 border-t border-white/5">
+          {/* Replaced hardcoded grey with text-white/40 to perfectly match the copyright strip */}
+          <div className="text-white/40 text-[10px] md:text-[11px] font-light leading-relaxed text-justify md:text-left">
+            <span className="font-bold mr-1 text-white/60">Popular Searches:</span>
+            {seoKeywords.map((keyword, i) => (
+              <React.Fragment key={i}>
+                <Link 
+                  href="/courses" 
+                  className="hover:text-[#D4AF37] transition-colors inline"
+                  aria-label={`Learn more about ${keyword}`}
+                >
+                  {keyword}
+                </Link>
+                {/* Subtle pipe separator */}
+                {i < seoKeywords.length - 1 && <span className="mx-1.5 opacity-50">|</span>}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+
         {/* ---------------- COPYRIGHT STRIP ---------------- */}
-        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-white/40 text-sm font-light tracking-wide text-center md:text-left">
+        <div className="pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-white/40 text-xs md:text-sm font-light tracking-wide text-center md:text-left">
             Copyright © {currentYear} | All Rights Reserved | Non Surgical Facial Aesthetics Academy
           </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-white/40 hover:text-white text-xs font-light transition-colors">Privacy Policy</Link>
-            {/* UPDATED LINK HERE */}
-            <Link href="/terms" className="text-white/40 hover:text-white text-xs font-light transition-colors">Terms of Service</Link>
+            <Link href="/privacy" className="text-white/40 hover:text-white text-[10px] md:text-xs font-light transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="text-white/40 hover:text-white text-[10px] md:text-xs font-light transition-colors">Terms of Service</Link>
           </div>
         </div>
 

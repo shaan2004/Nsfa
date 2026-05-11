@@ -3,9 +3,9 @@
 import React, { useRef, useEffect, useState } from "react";
 import { motion, Variants, AnimatePresence, useInView, useMotionValue, useTransform, animate } from "framer-motion";
 import { useRouter } from "next/navigation";
+import Image from "next/image"; 
 import Aurora from '../components/ui/Aurora/Aurora';
-import BounceCards from '../components/ui/BounceCards/BounceCards'; // Adjust path if needed
-import { Award, BookOpen, Globe, Stethoscope, Briefcase, GraduationCap, Play, PlayCircle, Star, Volume2, VolumeX, Building2, Users, MonitorPlay, MessageCircle, ChevronDown, Sparkles, X, CheckCircle2 } from "lucide-react";
+import { Award, BookOpen, Globe, Stethoscope, Briefcase, GraduationCap, Play, PlayCircle, Volume2, VolumeX, Users, MessageCircle, Sparkles, X, CheckCircle2 } from "lucide-react";
 
 /* ---------------- PREMIUM COMPONENTS ---------------- */
 const GoldText = ({ text, className = "" }: { text: string; className?: string }) => (
@@ -23,7 +23,7 @@ const GoldText = ({ text, className = "" }: { text: string; className?: string }
 
 const DarkGoldText = ({ text, className = "" }: { text: string; className?: string }) => (
   <h2
-    className={`font-serif font-bold text-transparent bg-clip-text ${className}`}
+    className={`font-serif font-bold text-transparent bg-clip-text pb-2 md:pb-4 ${className}`}
     style={{
       backgroundImage: "linear-gradient(to right, #8B6914, #B38728, #8B6914)",
       WebkitBackgroundClip: "text",
@@ -85,6 +85,7 @@ const VideoReelCard = ({ num }: { num: number }) => {
       whileTap={{ scale: 0.98 }}
       className="relative w-[260px] md:w-[300px] h-[460px] md:h-[533px] shrink-0 rounded-3xl overflow-hidden shadow-2xl cursor-pointer group transition-all duration-500 bg-black border-2 border-transparent hover:border-[#BF953F]/60 active:border-[#BF953F]/60 hover:shadow-[0_20px_50px_rgba(191,149,63,0.3)] active:shadow-[0_20px_50px_rgba(191,149,63,0.3)]"
       onClick={togglePlay}
+      style={{ willChange: "transform" }} 
     >
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#AA771C_100%)] pointer-events-none transition-opacity duration-500 -z-10 scale-[1.02]" />
 
@@ -106,7 +107,6 @@ const VideoReelCard = ({ num }: { num: number }) => {
         onEnded={() => setIsPlaying(false)}
         onError={() => setHasError(true)}
       >
-        <source src={`/assets/r${num}.mp4`} type="video/mp4" />
         <source src={`/assets/r${num}.mp4`} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
@@ -143,8 +143,7 @@ const VideoReelCard = ({ num }: { num: number }) => {
   );
 };
 
-
-
+/* ---------------- DATA ARRAYS ---------------- */
 const advancedFeatures = [
   { id: 1, title: "8-in-1 Course", desc: "Only institute providing 8 CPD trainings in 1 comprehensive course.", x: 15, y: 15 },
   { id: 2, title: "Multilevel Certification", desc: "Multi-level certifications across Dubai & South Korea.", x: 85, y: 18 },
@@ -154,10 +153,10 @@ const advancedFeatures = [
   { id: 6, title: "Easy EMI", desc: "Highly accessible courses with flexible Easy EMI options.", x: 82, y: 75 },
   { id: 7, title: "Global Placement", desc: "100% Job Placement offers and career assistance globally.", x: 35, y: 92 },
   { id: 8, title: "University Program", desc: "Exclusive university programs with global recognition.", x: 65, y: 90 },
-  // Newly added cards below:
   { id: 9, title: "Business Finance Analytics", desc: "Dedicated post-course support with business finance analytics for your clinic setup.", x: 50, y: 25 },
   { id: 10, title: "Pioneer Global Faculty", desc: "Learn directly from a pioneer global faculty of industry leaders and renowned experts.", x: 50, y: 65 },
 ];
+
 const aestheticCourses = [
   { title: "PG Diploma", loc: "Clinical Cosmetology", desc: "Clinical Cosmetology, Trichology & Nutraceuticals.", badge: "Diploma", icon: BookOpen },
   { title: "PG Diploma", loc: "Facial Aesthetics", desc: "Non Surgical Facial Aesthetics, Bariatric Science & Nutrition.", badge: "Diploma", icon: Award },
@@ -179,44 +178,24 @@ const dentalCourses = [
   { title: "PG Certificate", loc: "Sports Dentistry", desc: "Sports Dentistry & Gum Rejuvenation.", badge: "Certificate", icon: Briefcase },
   { title: "M.SC", loc: "Aesthetic Dentistry", desc: "M.SC in Aesthetic Dentistry.", badge: "Degree", icon: Award },
 ];
+
 const generalMedicalCourses = [
-  { 
-    title: "Fellowship in Internal Medicine", 
-    badge: "LAUNCHING 2027", 
-    icon: Stethoscope, 
-    loc: "GLOBAL", 
-    desc: "Intensive training focusing on adult diseases, diagnostics, and non-surgical treatments. Officially launching in 2027." 
-  },
-  { 
-    title: "Mastership in General Practice", 
-    badge: "LAUNCHING 2027", 
-    icon: Stethoscope, 
-    loc: "GLOBAL", 
-    desc: "Advanced comprehensive program covering modern general medical practices. Enrollment begins late 2026." 
-  },
-  { 
-    title: "PG Diploma in Emergency Medicine", 
-    badge: "LAUNCHING 2027", 
-    icon: Stethoscope, 
-    loc: "GLOBAL", 
-    desc: "Equip yourself with life-saving skills and rapid diagnostic protocols. Coming in 2027." 
-  }
+  { title: "Fellowship in Internal Medicine", badge: "LAUNCHING 2027", icon: Stethoscope, loc: "GLOBAL", desc: "Intensive training focusing on adult diseases, diagnostics, and non-surgical treatments. Officially launching in 2027." },
+  { title: "Mastership in General Practice", badge: "LAUNCHING 2027", icon: Stethoscope, loc: "GLOBAL", desc: "Advanced comprehensive program covering modern general medical practices. Enrollment begins late 2026." },
+  { title: "PG Diploma in Emergency Medicine", badge: "LAUNCHING 2027", icon: Stethoscope, loc: "GLOBAL", desc: "Equip yourself with life-saving skills and rapid diagnostic protocols. Coming in 2027." }
 ];
-/* ---------------- ADVANCED ANIMATION VARIANTS ---------------- */
+
+/* --- ENDLESS LOOP ARRAY GENERATORS --- */
+// By repeating the arrays to a massive length, we ensure the 24-item CSS scroll perfectly aligns with identical elements!
+const extendedAesthetic = Array(6).fill(aestheticCourses).flat(); // 48 items
+const extendedDental = Array(6).fill(dentalCourses).flat(); // 48 items
+const extendedMedical = Array(16).fill(generalMedicalCourses).flat(); // 48 items
+
 const wipeReveal: Variants = {
   hidden: { clipPath: "inset(0 100% 0 0)", opacity: 0 },
   visible: { clipPath: "inset(0 0% 0 0)", opacity: 1, transition: { duration: 1.2, ease: [0.77, 0, 0.175, 1] } }
 };
 
-const grandCardUp: Variants = {
-  hidden: { opacity: 0, y: 80, scale: 0.9, rotateX: 15 },
-  visible: (i: number) => ({
-    opacity: 1, y: 0, scale: 1, rotateX: 0,
-    transition: { delay: i * 0.15, duration: 0.8, type: "spring", bounce: 0.4 },
-  }),
-};
-
-/* ---------------- PAGE ---------------- */
 export default function Home() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -228,7 +207,7 @@ export default function Home() {
   const [popupSubmitted, setPopupSubmitted] = useState(false);
 
   const reviewsRef = useRef<HTMLDivElement>(null);
-  const programsRef = useRef<HTMLDivElement>(null);
+  const programsRef = useRef<HTMLDivElement>(null); 
 
   useEffect(() => {
     setMounted(true);
@@ -241,7 +220,7 @@ export default function Home() {
         setShowLeadPopup(true);
       }
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true }); 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasDismissedPopup, showLeadPopup, popupSubmitted]);
 
@@ -323,22 +302,33 @@ export default function Home() {
 
       <main suppressHydrationWarning className="bg-[#080E21] text-white overflow-hidden min-h-screen relative perspective-[1000px]">
         
-        {/* GLOBAL CSS OPTIMIZATIONS */}
+        {/* GLOBAL CSS OPTIMIZATIONS FOR FLAWLESS INFINITE MARQUEE */}
         <style dangerouslySetInnerHTML={{__html: `
-          @keyframes infinite-scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(calc(-300px * 5 - 2rem * 5)); }
-          }
-          @media (max-width: 768px) {
+          /* Desktop: Scrolls exactly 24 items (320px width + 32px gap = 352px per item) */
+          @media (min-width: 768px) {
             @keyframes infinite-scroll {
               0% { transform: translateX(0); }
-              100% { transform: translateX(calc(-260px * 5 - 1rem * 5)); }
+              100% { transform: translateX(calc(-352px * 24)); }
+            }
+            .animate-programs.reverse {
+              animation-direction: reverse;
             }
           }
+          /* Mobile: Scrolls exactly 24 items (260px width + 16px gap = 276px per item) */
+          @media (max-width: 767px) {
+            @keyframes infinite-scroll {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(calc(-276px * 24)); }
+            }
+            .animate-programs.reverse {
+              animation-direction: reverse;
+            }
+          }
+          
           .animate-programs {
             display: flex;
             width: max-content;
-            animation: infinite-scroll 25s linear infinite;
+            animation: infinite-scroll 120s linear infinite;
             will-change: transform; 
           }
           .pause-on-hover:hover .animate-programs,
@@ -346,13 +336,8 @@ export default function Home() {
           .pause-on-hover:focus-within .animate-programs {
             animation-play-state: paused;
           }
-          .no-scrollbar::-webkit-scrollbar {
-            display: none;
-          }
-          .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-          }
+          .no-scrollbar::-webkit-scrollbar { display: none; }
+          .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
           @keyframes meteor-fall {
             0% { transform: translate(0, 0) rotate(45deg); opacity: 0; }
             10% { opacity: 1; }
@@ -388,53 +373,34 @@ export default function Home() {
           </p>
         </div>
 
-    {/* ---------------- 1. HERO SECTION ---------------- */}
+        {/* ---------------- 1. HERO SECTION ---------------- */}
         <section className="min-h-screen flex flex-col justify-center px-4 md:px-8 xl:px-12 relative overflow-hidden pt-24 pb-16">
           
-          {/* Dark Base Background */}
           <div className="absolute inset-0 -z-40 bg-[#050914]" />
-
-          {/* Golden Aurora Animation (NO BLUR OVERLAYS) */}
-          <div className="absolute inset-0 -z-30 opacity-80">
-            <Aurora
-              colorStops={["#BF953F", "#FCF6BA", "#B38728"]}
-              blend={0.6}
-              amplitude={1.2}
-              speed={0.5}
-            />
+          <div className="absolute inset-0 -z-30 opacity-80" style={{ willChange: "opacity" }}>
+            <Aurora colorStops={["#BF953F", "#FCF6BA", "#B38728"]} blend={0.6} amplitude={1.2} speed={0.5} />
           </div>
-
-          {/* Very light vignette so text is readable without blurring the aurora */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#040814_100%)] -z-20 pointer-events-none opacity-80" />
 
-          {/* MAIN CONTENT WRAPPER */}
           <div className="max-w-[1920px] w-full mx-auto flex flex-col z-10 perspective-[1500px]">
-            
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-start w-full pt-4 lg:pt-8">
               
-              {/* ================= LEFT COLUMN: Text & Button ================= */}
               <motion.div 
                 initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, ease: "easeOut" }}
                 className="lg:col-span-5 flex flex-col items-center lg:items-start text-center lg:text-left z-10"
               >
                 <motion.h3 
                   initial={{ opacity: 0, letterSpacing: "0.1em" }} animate={{ opacity: 1, letterSpacing: "0.4em" }} transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }}
-                  className="text-[#FBF5B7] uppercase mb-4 md:mb-6 font-bold text-xs md:text-sm drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-widest"
+                  className="text-[#FBF5B7] uppercase mb-4 md:mb-6 font-bold text-xs md:text-sm drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-widest mt-1"
                 >
                   Welcome to
                 </motion.h3>
 
                 <div className="flex flex-col mb-4 md:mb-6 leading-none">
-                  <h1 
-                    className="text-6xl md:text-7xl xl:text-[7.5rem] font-serif font-extrabold text-transparent bg-clip-text drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] leading-[1.1]"
-                    style={{ backgroundImage: "linear-gradient(to bottom right, #FCF6BA, #BF953F, #B38728)" }}
-                  >
+                  <h1 className="text-6xl md:text-7xl xl:text-[7.5rem] font-serif font-extrabold text-transparent bg-clip-text drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] leading-[1.1]" style={{ backgroundImage: "linear-gradient(to bottom right, #FCF6BA, #BF953F, #B38728)" }}>
                     NSFA
                   </h1>
-                  <h1 
-                    className="text-5xl md:text-6xl xl:text-[5.5rem] font-serif font-bold text-transparent bg-clip-text drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] leading-[1.1]"
-                    style={{ backgroundImage: "linear-gradient(to top right, #FCF6BA, #BF953F, #B38728)" }}
-                  >
+                  <h1 className="text-5xl md:text-6xl xl:text-[5.5rem] font-serif font-bold text-transparent bg-clip-text drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] leading-[1.1]" style={{ backgroundImage: "linear-gradient(to top right, #FCF6BA, #BF953F, #B38728)" }}>
                     ACADEMY
                   </h1>
                 </div>
@@ -444,121 +410,77 @@ export default function Home() {
                   className="text-white text-lg md:text-2xl xl:text-3xl font-light italic font-serif tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] max-w-lg"
                 >
                   Zeal To Excellence In Upskilling Education
-                    
                 </motion.p>
+
+                <motion.ul
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.7 }}
+                  className="mt-6 md:mt-8 space-y-3 text-left w-full max-w-sm lg:max-w-md hidden md:block"
+                >
+                  {[
+                    "World-Class Monopoly Masterclasses",
+                    "100% Placement & Clinic Setup Support",
+                    "International Accreditations (IAO, ISO)"
+                  ].map((point, i) => (
+                    <li key={i} className="flex items-center gap-3 text-white/90 text-sm md:text-base font-medium drop-shadow-md">
+                      <div className="w-5 h-5 rounded-full bg-[#BF953F]/30 flex items-center justify-center shrink-0 border border-[#FCF6BA]/50">
+                        <CheckCircle2 size={12} className="text-[#FBF5B7]" />
+                      </div>
+                      {point}
+                    </li>
+                  ))}
+                </motion.ul>
 
                 <motion.button
                   onClick={() => router.push('/courses')}
                   initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.9, type: "spring" }}
                   whileHover={{ scale: 1.05, boxShadow: "0 10px 40px rgba(191,149,63,0.5)", y: -5 }} whileTap={{ scale: 0.95 }}
-                  className="mt-8 md:mt-12 px-8 py-4 md:px-10 md:py-4 rounded-full font-bold text-[#080E21] tracking-[0.2em] text-xs md:text-sm uppercase cursor-pointer shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/20 backdrop-blur-md relative overflow-hidden"
+                  className="mt-8 md:mt-10 px-8 py-4 md:px-10 md:py-4 rounded-full font-bold text-[#080E21] tracking-[0.2em] text-xs md:text-sm uppercase cursor-pointer shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/20 backdrop-blur-md relative overflow-hidden"
                   style={{ background: "linear-gradient(135deg, #BF953F 0%, #FCF6BA 50%, #B38728 100%)" }}
                 >
                   Explore Courses
                 </motion.button>
               </motion.div>
 
-              {/* ================= RIGHT COLUMN: "Honourable Mention" Showcase ================= */}
               <div className="lg:col-span-7 flex flex-col gap-6 md:gap-8 w-full relative z-10 lg:pl-10">
-                 {/* 2. Honourable Mentions Divider */}
-                <motion.div 
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.8 }}
-                  className="flex items-center gap-4 w-full px-2"
-                >
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.8 }} className="flex items-center gap-4 w-full px-2">
                   <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-[#BF953F]/60" />
-                  <span className="text-[#FBF5B7] text-[10px] md:text-xs font-bold uppercase tracking-[0.3em]">
-                    Multilevel Certification Program
-                  </span>
+                  <span className="text-[#FBF5B7] text-[10px] md:text-xs font-bold uppercase tracking-[0.3em]">Multilevel Certification Program</span>
                   <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-[#BF953F]/60" />
                 </motion.div>
 
-                {/* 3. The Honours Gallery (4 Photos) */}
                 <div className="grid grid-cols-4 gap-3 md:gap-4 w-full">
                   {[
-                    {
-                      src: "/assets/hero5.jpeg",
-                      country: "India",
-                      // Saffron, White (subtle), Green
-                      gradient: "linear-gradient(to bottom, rgba(255, 153, 51, 0.65), rgba(255, 255, 255, 0.2), rgba(19, 136, 8, 0.75))"
-                    },
-                    {
-                      src: "/assets/hero3.jpg",
-                      country: "Dubai",
-                      // UAE Flag: Red, Green, Black
-                      gradient: "linear-gradient(to bottom, rgba(255, 0, 0, 0.5), rgba(0, 115, 47, 0.6), rgba(0, 0, 0, 0.8))"
-                    },
-                    {
-                      src: "/assets/hero2.png",
-                      country: "Bangkok",
-                      // Thailand Flag: Red, Dark Blue, Red
-                      gradient: "linear-gradient(to bottom, rgba(237, 28, 36, 0.6), rgba(36, 29, 79, 0.8), rgba(237, 28, 36, 0.6))"
-                    },
-                    {
-                      src: "/assets/hero4.jpeg",
-                      country: "Korea",
-                      // South Korea Flag: Red & Blue (Yin Yang)
-                      gradient: "linear-gradient(to bottom right, rgba(205, 46, 58, 0.7), rgba(255, 255, 255, 0.2), rgba(0, 71, 160, 0.8))"
-                    }
+                    { src: "/assets/hero5.jpeg", country: "India", gradient: "linear-gradient(to bottom, rgba(255, 153, 51, 0.65), rgba(255, 255, 255, 0.2), rgba(19, 136, 8, 0.75))" },
+                    { src: "/assets/dubai/d26.jpg", country: "Dubai", gradient: "linear-gradient(to bottom, rgba(255, 0, 0, 0.5), rgba(0, 115, 47, 0.6), rgba(0, 0, 0, 0.8))" },
+                    { src: "/assets/bankok/b18.jpeg", country: "Bangkok", gradient: "linear-gradient(to bottom, rgba(237, 28, 36, 0.6), rgba(36, 29, 79, 0.8), rgba(237, 28, 36, 0.6))" },
+                    { src: "/assets/hero4.jpeg", country: "Korea", gradient: "linear-gradient(to bottom right, rgba(205, 46, 58, 0.7), rgba(255, 255, 255, 0.2), rgba(0, 71, 160, 0.8))" }
                   ].map((card, i) => (
-                    <motion.div 
-                      key={i}
-                      initial={{ opacity: 0, y: 30 }} 
-                      animate={{ opacity: 1, y: 0 }} 
-                      transition={{ duration: 0.8, delay: 1 + (i * 0.15) }}
-                      className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden border border-[#BF953F]/30 shadow-lg transition-all duration-500 hover:border-white/50 hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(0,0,0,0.5)] group cursor-pointer"
-                    >
-                      <img 
-                        src={card.src} 
-                        alt={`NSFA Academy ${card.country}`} 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
-                      />
-                      
-                      {/* Custom National Flag Gradient Overlay on Hover */}
-                      <div 
-                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" 
-                        style={{ background: card.gradient }}
-                      />
-
-                      {/* Persistent dark gradient at bottom so the text tag is always readable */}
+                    <motion.div key={i} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1 + (i * 0.15) }} className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden border border-[#BF953F]/30 shadow-lg transition-all duration-500 hover:border-white/50 hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(0,0,0,0.5)] group cursor-pointer" style={{ willChange: "transform, opacity" }}>
+                      <Image src={card.src} alt={`NSFA Academy ${card.country}`} fill sizes="(max-width: 768px) 50vw, 25vw" priority={true} className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" style={{ background: card.gradient }} />
                       <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/80 to-transparent z-10 opacity-70 group-hover:opacity-100 transition-opacity duration-500" />
-
-                      {/* Country Text Tag */}
                       <div className="absolute bottom-3 md:bottom-5 left-1/2 -translate-x-1/2 z-20 w-max">
-                        <span className="px-3 md:px-5 py-1.5 md:py-2 bg-black/40 backdrop-blur-md rounded-full text-white text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] border border-white/20 group-hover:border-transparent group-hover:bg-gradient-to-r group-hover:from-[#BF953F] group-hover:via-[#FCF6BA] group-hover:to-[#B38728] group-hover:text-[#040814] group-hover:shadow-[0_0_20px_rgba(191,149,63,0.6)] transition-all duration-500">
-                          {card.country}
-                        </span>
+                        <span className="px-3 md:px-5 py-1.5 md:py-2 bg-black/40 backdrop-blur-md rounded-full text-white text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] border border-white/20 group-hover:border-transparent group-hover:bg-gradient-to-r group-hover:from-[#BF953F] group-hover:via-[#FCF6BA] group-hover:to-[#B38728] group-hover:text-[#040814] group-hover:shadow-[0_0_20px_rgba(191,149,63,0.6)] transition-all duration-500">{card.country}</span>
                       </div>
                     </motion.div>
                   ))}
                 </div>
-                {/* 1. The Main Spotlight (Video) */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9, y: 30 }} 
-                  animate={{ opacity: 1, scale: 1, y: 0 }} 
-                  transition={{ duration: 1, delay: 0.5 }}
-                  className="relative w-full aspect-video rounded-[2rem] p-1.5 shadow-[0_20px_50px_rgba(191,149,63,0.3)] bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)]"
-                >
+                
+                <motion.div initial={{ opacity: 0, scale: 0.9, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 1, delay: 0.5 }} className="relative w-full aspect-video rounded-[2rem] p-1.5 shadow-[0_20px_50px_rgba(191,149,63,0.3)] bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] mt-2" style={{ willChange: "transform" }}>
                   <div className="w-full h-full rounded-[1.5rem] overflow-hidden bg-black relative flex items-center justify-center group">
-                    <video 
-                      controls 
-                      playsInline 
-                      className="w-full h-full object-contain outline-none rounded-[1.5rem]"
-                      poster="/assets/hero1.png"
-                    >
+                    <video controls playsInline className="w-full h-full object-contain outline-none rounded-[1.5rem]" poster="/assets/hero1.png" preload="metadata">
                       <source src="/assets/r5.mp4" type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
                   </div>
                 </motion.div>
-
-               
-
               </div>
 
             </div>
           </div>
         </section>
-        {/* ---------------- 2. WHY CHOOSE US (Tree Branch & Glowing Dots Layout) ---------------- */}
+
+        {/* ---------------- 2. WHY CHOOSE US ---------------- */}
         <section className="min-h-[100vh] py-24 relative overflow-hidden bg-[linear-gradient(180deg,#0B132A_0%,#050914_100%)] flex flex-col items-center justify-center">
           <div className="absolute top-[20%] left-[10%] w-[40%] h-[40%] rounded-full bg-[#BF953F]/10 blur-[120px] pointer-events-none" />
           <div className="absolute bottom-[20%] right-[10%] w-[40%] h-[40%] rounded-full bg-[#0074A5]/10 blur-[120px] pointer-events-none" />
@@ -586,6 +508,7 @@ export default function Home() {
                 strokeDasharray="5 5"
                 animate={{ opacity: [0.05, 0.7, 0.05] }} 
                 transition={{ repeat: Infinity, duration: 3 + (i % 2), delay: i * 0.2, ease: "easeInOut" }}
+                style={{ willChange: "opacity" }}
               />
             ))}
           </svg>
@@ -594,99 +517,62 @@ export default function Home() {
             
             <div className="w-full lg:w-5/12 flex flex-col items-center lg:items-start text-center lg:text-left shrink-0">
               <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="h-[2px] bg-[#FFD700] mb-8" />
-              
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
                 <GoldText text="Why NSFA Academy" className="text-5xl md:text-7xl mb-6 drop-shadow-2xl" />
                 <p className="text-white/70 text-lg md:text-xl leading-relaxed font-light">
                   NSFA Academy is a globally recognized advanced aesthetic science academy. We are the ONLY institute offering true monopoly masterclasses and 8 CPDs in one course.
                 </p>
               </motion.div>
-
               <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }} className="h-[2px] bg-[#FFD700] mt-8" />
             </div>
 
-            {/* RIGHT SIDE: Key Points Grid */}
-          <div className="w-full lg:w-7/12 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 relative z-20">
-            {advancedFeatures.map((f, i) => (
-              <motion.div 
-                key={f.id} 
-                onClick={() => setActiveFeature(f.id)}
-                initial={{ opacity: 0, x: 50 }} 
-                whileInView={{ opacity: 1, x: 0 }} 
-                viewport={{ once: true }} 
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                whileHover={{ scale: 1.03, x: -5 }} 
-                whileTap={{ scale: 0.97 }}
-                className="w-full px-5 py-4 md:px-6 md:py-5 rounded-2xl bg-[#0A1128]/80 border border-white/10 shadow-[0_10px_20px_rgba(0,0,0,0.4)] cursor-pointer group transition-all relative flex items-center justify-start text-left overflow-hidden"
-              >
-                {/* 1. THE GOLDEN HOVER GRADIENT (Fades in smoothly on hover) */}
-                <div className="absolute inset-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
-                
-                {/* 2. "Overgrown" Animated Dot Container */}
-                <div className="relative flex items-center justify-center w-4 h-4 mr-4 shrink-0 z-10">
-                  {/* Core solid dot (Turns dark on hover) */}
-                  <div className="w-1.5 h-1.5 bg-[#FBF5B7] group-hover:bg-[#080E21] transition-colors duration-500 rounded-full z-10" />
-                  
-                  {/* Pulsing ripple (Turns to dark translucent on hover) */}
-                  <motion.div 
-                    animate={{ scale: [1, 3.5, 1], opacity: [0.8, 0, 0.8] }}
-                    transition={{ repeat: Infinity, duration: 2.5, delay: i * 0.15 }}
-                    className="absolute inset-0 bg-[#BF953F] group-hover:bg-[#080E21]/30 transition-colors duration-500 rounded-full"
-                  />
-                </div>
-
-                {/* 3. Text Content (Turns dark on hover for readability) */}
-                <h4 className="text-[#FBF5B7] group-hover:text-[#080E21] font-serif font-bold text-base md:text-lg transition-colors duration-500 relative z-10 truncate">
-                  {f.title}
-                </h4>
-              </motion.div>
-            ))}
-          </div>
-
+            <div className="w-full lg:w-7/12 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 relative z-20">
+              {advancedFeatures.map((f, i) => (
+                <motion.div 
+                  key={f.id} 
+                  onClick={() => setActiveFeature(f.id)}
+                  initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
+                  whileHover={{ scale: 1.03, x: -5 }} whileTap={{ scale: 0.97 }}
+                  className="w-full px-5 py-4 md:px-6 md:py-5 rounded-2xl bg-[#0A1128]/80 border border-white/10 shadow-[0_10px_20px_rgba(0,0,0,0.4)] cursor-pointer group transition-all relative flex items-center justify-start text-left overflow-hidden"
+                  style={{ willChange: "transform" }}
+                >
+                  <div className="absolute inset-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
+                  <div className="relative flex items-center justify-center w-4 h-4 mr-4 shrink-0 z-10">
+                    <div className="w-1.5 h-1.5 bg-[#FBF5B7] group-hover:bg-[#080E21] transition-colors duration-500 rounded-full z-10" />
+                    <motion.div 
+                      animate={{ scale: [1, 3.5, 1], opacity: [0.8, 0, 0.8] }} transition={{ repeat: Infinity, duration: 2.5, delay: i * 0.15 }}
+                      className="absolute inset-0 bg-[#BF953F] group-hover:bg-[#080E21]/30 transition-colors duration-500 rounded-full" style={{ willChange: "transform, opacity" }}
+                    />
+                  </div>
+                  <h4 className="text-[#FBF5B7] group-hover:text-[#080E21] font-serif font-bold text-base md:text-lg transition-colors duration-500 relative z-10 truncate">{f.title}</h4>
+                </motion.div>
+              ))}
+            </div>
           </div>
 
           <AnimatePresence>
             {activeFeature && (
               <motion.div 
-                initial={{ opacity: 0 }} 
-                animate={{ opacity: 1 }} 
-                exit={{ opacity: 0 }} 
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} 
                 onClick={() => setActiveFeature(null)} 
-                className="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 cursor-pointer"
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 cursor-pointer"
               >
                 {advancedFeatures.filter(f => f.id === activeFeature).map(f => (
                   <motion.div 
-                    key={f.id} 
-                    initial={{ scale: 0.9, y: 20 }}
-                    animate={{ scale: 1, y: 0 }}
-                    exit={{ scale: 0.9, y: 20 }}
-                    transition={{ type: "spring", bounce: 0.4 }}
+                    key={f.id} initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }} transition={{ type: "spring", bounce: 0.4 }}
                     className="bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] p-6 md:p-10 rounded-3xl max-w-[90vw] md:max-w-lg w-full shadow-[0_20px_60px_rgba(191,149,63,0.6)] cursor-default text-center relative overflow-hidden" 
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-overlay pointer-events-none" />
-                    
                     <div className="relative z-10 flex flex-col items-center">
                       <div className="w-12 md:w-16 h-1.5 md:h-2 bg-[#080E21]/20 rounded-full mb-6 md:mb-8" />
                       <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#080E21] mb-4 md:mb-6">{f.title}</h3>
                       <p className="text-[#080E21]/90 text-base md:text-lg font-medium leading-relaxed">{f.desc}</p>
-                      
                       <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mt-8 md:mt-10 w-full justify-center">
-                        <button 
-                          onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I would like to know more about: ${f.title}.`)}`, '_blank')} 
-                          className="px-6 py-3 md:px-8 rounded-full bg-[#080E21] text-[#FBF5B7] font-bold tracking-widest text-xs md:text-sm uppercase hover:scale-[1.02] active:scale-95 transition-all shadow-lg w-full sm:w-auto"
-                        >
-                          Enquire Now
-                        </button>
-                        <button 
-                          onClick={() => setActiveFeature(null)} 
-                          className="px-6 py-3 md:px-8 rounded-full border-2 border-[#080E21]/40 text-[#080E21] font-bold tracking-widest text-xs md:text-sm uppercase hover:bg-[#080E21] active:bg-[#080E21] hover:text-[#FBF5B7] active:text-[#FBF5B7] transition-all w-full sm:w-auto"
-                        >
-                          Close
-                        </button>
+                        <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I would like to know more about: ${f.title}.`)}`, '_blank')} className="px-6 py-3 md:px-8 rounded-full bg-[#080E21] text-[#FBF5B7] font-bold tracking-widest text-xs md:text-sm uppercase hover:scale-[1.02] active:scale-95 transition-all shadow-lg w-full sm:w-auto">Enquire Now</button>
+                        <button onClick={() => setActiveFeature(null)} className="px-6 py-3 md:px-8 rounded-full border-2 border-[#080E21]/40 text-[#080E21] font-bold tracking-widest text-xs md:text-sm uppercase hover:bg-[#080E21] active:bg-[#080E21] hover:text-[#FBF5B7] active:text-[#FBF5B7] transition-all w-full sm:w-auto">Close</button>
                       </div>
                     </div>
-
                   </motion.div>
                 ))}
               </motion.div>
@@ -694,9 +580,8 @@ export default function Home() {
           </AnimatePresence>
         </section>
 
-      {/* ---------------- 3. STATS SECTION (White Glassmorphism) ---------------- */}
+      {/* ---------------- 3. STATS SECTION ---------------- */}
         <section className="py-24 md:py-32 relative bg-[#FAFAFA] border-y-4 border-[#BF953F] overflow-hidden z-10">
-          {/* Subtle ambient glows for the glass to blur over */}
           <div className="absolute top-[-10%] right-[-5%] w-[400px] h-[400px] bg-[#BF953F]/10 rounded-full blur-[100px] -z-10" />
           <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-[#0074A5]/10 rounded-full blur-[100px] -z-10" />
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-[0.03] pointer-events-none -z-10" />
@@ -704,7 +589,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 relative z-10">
             <div className="text-center mb-16 md:mb-24">
               <h3 className="text-[#8B6914] tracking-[0.2em] uppercase text-xs md:text-sm font-bold mb-4 drop-shadow-sm">A GLOBAL COMMUNITY</h3>
-              <DarkGoldText text="Transforming Careers Worldwide" className="text-4xl md:text-6xl" />
+              <DarkGoldText text="Transforming Careers Worldwide" className="text-4xl md:text-6xl leading-tight" />
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
@@ -718,27 +603,22 @@ export default function Home() {
                   key={i}
                   initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.8 }}
                   className="bg-white/60 backdrop-blur-xl border border-white shadow-[0_15px_30px_rgba(0,0,0,0.05)] rounded-3xl p-6 md:p-10 flex flex-col items-center justify-center text-center group hover:bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] hover:border-transparent hover:shadow-[0_20px_50px_rgba(191,149,63,0.5)] transition-all duration-500 hover:-translate-y-3"
+                  style={{ willChange: "transform, opacity" }}
                 >
-                  {/* Icon Box */}
                   <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white border border-gray-100 flex items-center justify-center mb-4 md:mb-6 shadow-sm group-hover:bg-[#080E21] transition-colors duration-500">
                     <stat.icon className="w-6 h-6 md:w-8 md:h-8 text-[#8B6914] group-hover:text-[#FBF5B7] transition-colors duration-500" />
                   </div>
-                  
-                  {/* Counter */}
                   <div className="text-3xl md:text-5xl font-serif font-bold text-[#080E21] mb-2 drop-shadow-sm group-hover:drop-shadow-none transition-colors duration-500">
                     <Counter from={0} to={stat.number} duration={2.5} suffix={stat.suffix} />
                   </div>
-                  
-                  <p className="text-gray-500 text-[10px] md:text-xs font-bold uppercase tracking-widest group-hover:text-[#080E21]/80 transition-colors duration-500">
-                    {stat.label}
-                  </p>
+                  <p className="text-gray-500 text-[10px] md:text-xs font-bold uppercase tracking-widest group-hover:text-[#080E21]/80 transition-colors duration-500">{stat.label}</p>
                 </motion.div>
               ))}
             </div>
           </div>
         </section>
 
-      {/* ---------------- 4. PROGRAMS SECTION (Three Rows) ---------------- */}
+      {/* ---------------- 4. PROGRAMS SECTION (CONTINUOUS SCROLL FIX) ---------------- */}
         <section className="py-24 md:py-32 relative bg-[linear-gradient(180deg,#080E21_0%,#0B132A_100%)] overflow-hidden">
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="meteor" /><div className="meteor" /><div className="meteor" /><div className="meteor" /><div className="meteor" />
@@ -755,56 +635,29 @@ export default function Home() {
             
             {/* ROW 1: Aesthetic Courses */}
             <div className="w-full flex flex-col gap-6">
-              {/* Aesthetic Title Bar */}
               <div className="max-w-7xl mx-auto px-4 w-full flex items-center gap-4">
-                <h3 className="text-xl md:text-3xl font-serif font-bold uppercase tracking-widest text-transparent bg-clip-text bg-[linear-gradient(to_right,#BF953F,#FCF6BA)] drop-shadow-md">
-                  Aesthetic Courses
-                </h3>
+                <h3 className="text-xl md:text-3xl font-serif font-bold uppercase tracking-widest text-transparent bg-clip-text bg-[linear-gradient(to_right,#BF953F,#FCF6BA)] drop-shadow-md">Aesthetic Courses</h3>
                 <div className="h-[1px] flex-1 bg-gradient-to-r from-[#BF953F]/50 to-transparent" />
               </div>
 
               <div className="pause-on-hover w-full overflow-visible">
                 <div className="animate-programs w-max">
-                  <motion.div 
-                    drag="x" 
-                    dragConstraints={programsRef} 
-                    className="flex gap-4 md:gap-8 px-4 w-max cursor-grab active:cursor-grabbing"
-                  >
-                    {[...aestheticCourses, ...aestheticCourses].map((c, i) => (
-                      <motion.div 
-                        key={`aesthetic-${i}`} 
-                        whileHover={{ y: -10, scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }} 
-                        className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-white/10 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)] active:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)]"
-                      >
+                  <motion.div drag="x" dragConstraints={programsRef} className="flex gap-4 md:gap-8 px-4 w-max cursor-grab active:cursor-grabbing">
+                    {extendedAesthetic.map((c, i) => (
+                      <motion.div key={`aesthetic-${i}`} whileHover={{ y: -10, scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-white/10 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)] active:shadow-[0_30px_60px_-15px_rgba(255,215,0,0.3)]" style={{ willChange: "transform" }}>
                         <div className="absolute inset-0 bg-white/5 backdrop-blur-md transition-opacity duration-500 group-hover:opacity-0 group-active:opacity-0" />
                         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)]" />
-                        
-                        <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#BF953F]/50 text-[#FBF5B7] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-black group-active:bg-white group-active:text-black transition-colors">
-                          {c.badge}
-                        </div>
-                        
+                        <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#BF953F]/50 text-[#FBF5B7] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-black group-active:bg-white group-active:text-black transition-colors">{c.badge}</div>
                         <div className="relative z-10 flex flex-col items-center text-center px-4 md:px-6 w-full h-full">
                           <div className="mb-4 md:mb-6 p-4 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-active:border-black/20 group-hover:bg-black/10 group-active:bg-black/10 transition-colors duration-500 shadow-inner">
                             <c.icon className="w-8 h-8 md:w-10 md:h-10 text-[#FBF5B7] group-hover:text-black group-active:text-black transition-colors duration-500" />
                           </div>
-                          <h3 className="text-xl md:text-2xl font-serif text-white group-hover:text-black group-active:text-black font-bold transition-colors duration-500 mb-2">
-                            {c.title}
-                          </h3>
-                          <p className="text-xs md:text-sm text-[#BF953F] group-hover:text-black/70 group-active:text-black/70 font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">
-                            📍 {c.loc}
-                          </p>
-                          <p className="text-xs md:text-sm text-white/60 group-hover:text-black/80 group-active:text-black/80 font-light mb-auto transition-colors duration-500 line-clamp-3">
-                            {c.desc}
-                          </p>
-
+                          <h3 className="text-xl md:text-2xl font-serif text-white group-hover:text-black group-active:text-black font-bold transition-colors duration-500 mb-2">{c.title}</h3>
+                          <p className="text-xs md:text-sm text-[#BF953F] group-hover:text-black/70 group-active:text-black/70 font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">📍 {c.loc}</p>
+                          <p className="text-xs md:text-sm text-white/60 group-hover:text-black/80 group-active:text-black/80 font-light mb-auto transition-colors duration-500 line-clamp-3">{c.desc}</p>
                           <div className="w-full flex flex-col gap-2 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6 mt-4">
-                            <button onClick={() => window.location.href = '/courses'} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-black text-[#FBF5B7] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-white hover:text-black active:bg-white active:text-black transition-colors border border-white/10 md:border-none">
-                              View Details
-                            </button>
-                            <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title} (${c.loc}).`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 md:border-black/30 text-white md:text-black font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:text-[#FBF5B7] active:text-[#FBF5B7] transition-colors">
-                              Enquire Now
-                            </button>
+                            <button onClick={() => window.location.href = '/courses'} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-black text-[#FBF5B7] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-white hover:text-black active:bg-white active:text-black transition-colors border border-white/10 md:border-none">View Details</button>
+                            <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title} (${c.loc}).`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 md:border-black/30 text-white md:text-black font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:text-[#FBF5B7] active:text-[#FBF5B7] transition-colors">Enquire Now</button>
                           </div>
                         </div>
                       </motion.div>
@@ -816,56 +669,29 @@ export default function Home() {
 
             {/* ROW 2: Dental Courses */}
             <div className="w-full flex flex-col gap-6">
-              {/* Dental Title Bar */}
               <div className="max-w-7xl mx-auto px-4 w-full flex items-center gap-4">
-                <h3 className="text-xl md:text-3xl font-serif font-bold uppercase tracking-widest text-transparent bg-clip-text bg-[linear-gradient(to_right,#88D4FF,#FFFFFF)] drop-shadow-md">
-                  Dental Courses
-                </h3>
+                <h3 className="text-xl md:text-3xl font-serif font-bold uppercase tracking-widest text-transparent bg-clip-text bg-[linear-gradient(to_right,#88D4FF,#FFFFFF)] drop-shadow-md">Dental Courses</h3>
                 <div className="h-[1px] flex-1 bg-gradient-to-r from-[#0074A5]/50 to-transparent" />
               </div>
 
               <div className="pause-on-hover w-full overflow-visible">
-                <div className="animate-programs w-max" style={{ animationDirection: "reverse" }}>
-                  <motion.div 
-                    drag="x" 
-                    dragConstraints={programsRef} 
-                    className="flex gap-4 md:gap-8 px-4 w-max cursor-grab active:cursor-grabbing"
-                  >
-                    {[...dentalCourses, ...dentalCourses].map((c, i) => (
-                      <motion.div 
-                        key={`dental-${i}`} 
-                        whileHover={{ y: -10, scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }} 
-                        className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-[#0074A5]/30 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,116,165,0.4)] active:shadow-[0_30px_60px_-15px_rgba(0,116,165,0.4)]"
-                      >
+                <div className="animate-programs reverse w-max">
+                  <motion.div drag="x" dragConstraints={programsRef} className="flex gap-4 md:gap-8 px-4 w-max cursor-grab active:cursor-grabbing">
+                    {extendedDental.map((c, i) => (
+                      <motion.div key={`dental-${i}`} whileHover={{ y: -10, scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-[#0074A5]/30 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,116,165,0.4)] active:shadow-[0_30px_60px_-15px_rgba(0,116,165,0.4)]" style={{ willChange: "transform" }}>
                         <div className="absolute inset-0 bg-white/5 backdrop-blur-md transition-opacity duration-500 group-hover:opacity-0 group-active:opacity-0" />
                         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,#0074A5,#0A1128,#0074A5)]" />
-                        
-                        <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#0074A5]/50 text-[#88D4FF] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-[#0074A5] group-active:bg-white group-active:text-[#0074A5] transition-colors">
-                          {c.badge}
-                        </div>
-                        
+                        <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#0074A5]/50 text-[#88D4FF] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-[#0074A5] group-active:bg-white group-active:text-[#0074A5] transition-colors">{c.badge}</div>
                         <div className="relative z-10 flex flex-col items-center text-center px-4 md:px-6 w-full h-full">
                           <div className="mb-4 md:mb-6 p-4 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-active:border-black/20 group-hover:bg-black/20 group-active:bg-black/20 transition-colors duration-500 shadow-inner">
                             <c.icon className="w-8 h-8 md:w-10 md:h-10 text-[#88D4FF] group-hover:text-white group-active:text-white transition-colors duration-500" />
                           </div>
-                          <h3 className="text-xl md:text-2xl font-serif text-white font-bold transition-colors duration-500 mb-2">
-                            {c.title}
-                          </h3>
-                          <p className="text-xs md:text-sm text-[#88D4FF] font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">
-                            📍 {c.loc}
-                          </p>
-                          <p className="text-xs md:text-sm text-white/60 group-hover:text-white/90 group-active:text-white/90 font-light mb-auto transition-colors duration-500 line-clamp-3">
-                            {c.desc}
-                          </p>
-
+                          <h3 className="text-xl md:text-2xl font-serif text-white font-bold transition-colors duration-500 mb-2">{c.title}</h3>
+                          <p className="text-xs md:text-sm text-[#88D4FF] font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">📍 {c.loc}</p>
+                          <p className="text-xs md:text-sm text-white/60 group-hover:text-white/90 group-active:text-white/90 font-light mb-auto transition-colors duration-500 line-clamp-3">{c.desc}</p>
                           <div className="w-full flex flex-col gap-2 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6 mt-4">
-                            <button onClick={() => window.location.href = '/courses'} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-white text-white md:text-[#0074A5] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black hover:text-white active:bg-black active:text-white transition-colors border border-white/10 md:border-none shadow-lg">
-                              View Details
-                            </button>
-                            <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title} (${c.loc}).`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 text-white font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:border-black active:border-black transition-colors">
-                              Enquire Now
-                            </button>
+                            <button onClick={() => window.location.href = '/courses'} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-white text-white md:text-[#0074A5] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black hover:text-white active:bg-black active:text-white transition-colors border border-white/10 md:border-none shadow-lg">View Details</button>
+                            <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I'm interested in ${c.title} (${c.loc}).`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 text-white font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:border-black active:border-black transition-colors">Enquire Now</button>
                           </div>
                         </div>
                       </motion.div>
@@ -875,63 +701,33 @@ export default function Home() {
               </div>
             </div>
 
-            {/* ROW 3: General Medical Courses (2027) */}
+            {/* ROW 3: General Medical Courses */}
             <div className="w-full flex flex-col gap-6">
-              {/* General Medical Title Bar */}
               <div className="max-w-7xl mx-auto px-4 w-full flex items-center gap-4">
                 <h3 className="text-xl md:text-3xl font-serif font-bold uppercase tracking-widest text-transparent bg-clip-text bg-[linear-gradient(to_right,#34D399,#FFFFFF)] drop-shadow-md flex flex-col md:flex-row md:items-baseline gap-1 md:gap-3">
-                  General Medical 
-                  <span className="text-sm md:text-lg text-[#34D399] tracking-normal font-medium">
-                    (Launching 2027)
-                  </span>
+                  General Medical <span className="text-sm md:text-lg text-[#34D399] tracking-normal font-medium">(Launching 2027)</span>
                 </h3>
                 <div className="h-[1px] flex-1 bg-gradient-to-r from-[#059669]/50 to-transparent" />
               </div>
 
               <div className="pause-on-hover w-full overflow-visible">
                 <div className="animate-programs w-max">
-                  <motion.div 
-                    drag="x" 
-                    dragConstraints={programsRef} 
-                    className="flex gap-4 md:gap-8 px-4 w-max cursor-grab active:cursor-grabbing"
-                  >
-                    {/* Map the new generalMedicalCourses data */}
-                    {[...generalMedicalCourses, ...generalMedicalCourses].map((c, i) => (
-                      <motion.div 
-                        key={`medical-${i}`} 
-                        whileHover={{ y: -10, scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }} 
-                        className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-[#059669]/30 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(5,150,105,0.4)] active:shadow-[0_30px_60px_-15px_rgba(5,150,105,0.4)]"
-                      >
-                        {/* Emerald Green Glassmorphism background effect */}
+                  <motion.div drag="x" dragConstraints={programsRef} className="flex gap-4 md:gap-8 px-4 w-max cursor-grab active:cursor-grabbing">
+                    {extendedMedical.map((c, i) => (
+                      <motion.div key={`medical-${i}`} whileHover={{ y: -10, scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-[260px] md:w-[320px] h-[340px] md:h-[400px] shrink-0 rounded-[2rem] relative overflow-hidden group flex flex-col items-center justify-start pt-8 md:pt-10 border border-[#059669]/30 shadow-2xl transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(5,150,105,0.4)] active:shadow-[0_30px_60px_-15px_rgba(5,150,105,0.4)]" style={{ willChange: "transform" }}>
                         <div className="absolute inset-0 bg-white/5 backdrop-blur-md transition-opacity duration-500 group-hover:opacity-0 group-active:opacity-0" />
                         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-500 bg-[linear-gradient(135deg,#059669,#0A1128,#059669)]" />
-                        
-                        <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#059669]/50 text-[#34D399] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-[#059669] group-active:bg-white group-active:text-[#059669] transition-colors">
-                          {c.badge}
-                        </div>
-                        
+                        <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm border border-[#059669]/50 text-[#34D399] text-[10px] md:text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-20 group-hover:bg-white group-hover:text-[#059669] group-active:bg-white group-active:text-[#059669] transition-colors">{c.badge}</div>
                         <div className="relative z-10 flex flex-col items-center text-center px-4 md:px-6 w-full h-full">
                           <div className="mb-4 md:mb-6 p-4 rounded-full bg-white/10 border border-white/20 group-hover:border-black/20 group-active:border-black/20 group-hover:bg-black/20 group-active:bg-black/20 transition-colors duration-500 shadow-inner">
                             <c.icon className="w-8 h-8 md:w-10 md:h-10 text-[#34D399] group-hover:text-white group-active:text-white transition-colors duration-500" />
                           </div>
-                          <h3 className="text-xl md:text-2xl font-serif text-white font-bold transition-colors duration-500 mb-2">
-                            {c.title}
-                          </h3>
-                          <p className="text-xs md:text-sm text-[#34D399] font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">
-                            📍 {c.loc}
-                          </p>
-                          <p className="text-xs md:text-sm text-white/60 group-hover:text-white/90 group-active:text-white/90 font-light mb-auto transition-colors duration-500 line-clamp-3">
-                            {c.desc}
-                          </p>
-
+                          <h3 className="text-xl md:text-2xl font-serif text-white font-bold transition-colors duration-500 mb-2">{c.title}</h3>
+                          <p className="text-xs md:text-sm text-[#34D399] font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">📍 {c.loc}</p>
+                          <p className="text-xs md:text-sm text-white/60 group-hover:text-white/90 group-active:text-white/90 font-light mb-auto transition-colors duration-500 line-clamp-3">{c.desc}</p>
                           <div className="w-full flex flex-col gap-2 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6 mt-4">
-                            <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, please notify me when the ${c.title} launches in 2027.`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-white text-white md:text-[#059669] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black hover:text-white active:bg-black active:text-white transition-colors border border-white/10 md:border-none shadow-lg">
-                              Notify Me
-                            </button>
-                            <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I would like to join the waitlist for ${c.title}.`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 text-white font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:border-black active:border-black transition-colors">
-                              Join Waitlist
-                            </button>
+                            <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, please notify me when the ${c.title} launches in 2027.`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-white text-white md:text-[#059669] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black hover:text-white active:bg-black active:text-white transition-colors border border-white/10 md:border-none shadow-lg">Notify Me</button>
+                            <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I would like to join the waitlist for ${c.title}.`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 text-white font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:border-black active:border-black transition-colors">Join Waitlist</button>
                           </div>
                         </div>
                       </motion.div>
@@ -940,14 +736,16 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            
+
           </div>
         </section>
+
       {/* ---------------- 5. GLOBALLY RECOGNISED ---------------- */}
         <section className="py-24 relative overflow-hidden bg-[#050914] flex flex-col items-center justify-center">
-          {/* Background Map */}
           <div className="absolute inset-0 z-0 flex items-center justify-center opacity-30 mix-blend-screen pointer-events-none">
-            <img src="/assets/map.png" alt="World Map" className="w-[100%] max-w-[1600px] object-contain drop-shadow-[0_0_30px_rgba(191,149,63,0.3)]" loading="lazy" />
+            <div className="relative w-full max-w-[1600px] h-full">
+              <Image src="/assets/map.png" alt="World Map" fill className="object-contain drop-shadow-[0_0_30px_rgba(191,149,63,0.3)]" sizes="100vw" />
+            </div>
           </div>
 
           <div className="max-w-7xl mx-auto px-4 relative z-10 w-full text-center flex flex-col items-center">
@@ -961,40 +759,14 @@ export default function Home() {
             </motion.div>
           </div>
 
-          {/* HORIZONTAL CONTINUOUS LOGO TRACK */}
           <div className="w-full relative z-10 overflow-hidden py-10 pause-on-hover">
-            {/* Edge Fades for premium scroll effect */}
             <div className="absolute left-0 top-0 bottom-0 w-16 md:w-48 bg-gradient-to-r from-[#050914] to-transparent z-20 pointer-events-none" />
             <div className="absolute right-0 top-0 bottom-0 w-16 md:w-48 bg-gradient-to-l from-[#050914] to-transparent z-20 pointer-events-none" />
 
-            {/* Continuous Marquee Animation */}
             <div className="animate-programs w-max flex items-center gap-16 md:gap-32 px-8">
-              {[
-                "/assets/mets.png", 
-                "/assets/mount.png", 
-                "/assets/meds.png", 
-                "/assets/iso.png", 
-                "/assets/iao.png", 
-                "/assets/iaf.png",
-                // Duplicated array for seamless infinite looping
-                "/assets/mets.png", 
-                "/assets/mount.png", 
-                "/assets/meds.png", 
-                "/assets/iso.png", 
-                "/assets/iao.png", 
-                "/assets/iaf.png"
-              ].map((src, i) => (
-                <motion.div 
-                  key={i} 
-                  whileHover={{ scale: 1.15 }} 
-                  className="shrink-0 flex items-center justify-center cursor-pointer transition-transform duration-500 group"
-                >
-                  <img 
-                    src={src} 
-                    alt={`Accreditation Logo ${i}`} 
-                    className="h-16 md:h-28 object-contain filter brightness-75 group-hover:brightness-110 drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] transition-all duration-500" 
-                    loading="lazy" 
-                  />
+              {[ "/assets/mets.png", "/assets/mount.png", "/assets/meds.png", "/assets/iso.png", "/assets/iao.png", "/assets/iaf.png", "/assets/mets.png", "/assets/mount.png", "/assets/meds.png", "/assets/iso.png", "/assets/iao.png", "/assets/iaf.png" ].map((src, i) => (
+                <motion.div key={i} whileHover={{ scale: 1.15 }} className="shrink-0 relative w-24 h-16 md:w-40 md:h-28 flex items-center justify-center cursor-pointer transition-transform duration-500 group" style={{ willChange: "transform" }}>
+                  <Image src={src} alt={`Accreditation Logo ${i}`} fill sizes="(max-width: 768px) 100px, 160px" className="object-contain filter brightness-75 group-hover:brightness-110 drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] transition-all duration-500" />
                 </motion.div>
               ))}
             </div>
@@ -1011,7 +783,7 @@ export default function Home() {
                 <Play className="w-4 h-4 md:w-5 md:h-5 fill-current" /> Watch Our Success Stories
               </h3>
               <motion.div variants={wipeReveal}>
-                <DarkGoldText text="Student Experience" className="text-4xl md:text-7xl" />
+                <DarkGoldText text="Student Experience" className="text-4xl md:text-7xl leading-tight" />
               </motion.div>
               <motion.p variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.5 }}}} className="text-gray-600 text-sm md:text-xl max-w-3xl mx-auto font-light pt-2 md:pt-4 px-4">
                 Swipe and click to watch real testimonials and clinical training experiences.
@@ -1028,12 +800,7 @@ export default function Home() {
           </div>
         </section>
 
-       
-
       </main>
     </>
   );
 }
-
-
- 

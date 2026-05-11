@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, Images, MousePointerClick } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Images, MousePointerClick, MapPin } from "lucide-react";
 import Image from "next/image";
+import Masonry from "../../components/ui/Masonry/Masonry"; // Verify this path matches your folder structure!
 
 /* ---------------- PREMIUM COMPONENTS ---------------- */
 const GoldText = ({ text, className = "" }: { text: string; className?: string }) => (
@@ -19,26 +20,41 @@ const GoldText = ({ text, className = "" }: { text: string; className?: string }
   </h2>
 );
 
-// Helper function to generate an array of image paths
-const generateImagePaths = (basePath: string, totalImages: number, ext: string = "jpg") => {
-  return Array.from({ length: totalImages }, (_, index) => `${basePath}/${index + 1}.${ext}`);
+// HELPER: Generates the "First Guess" image paths. 
+// If the guess is wrong (e.g. .jpeg instead of .jpg), our Masonry component will auto-fix it.
+const generateImagePaths = (basePath: string, totalImages: number, ext: string = "jpg", prefix: string = "") => {
+  return Array.from({ length: totalImages }, (_, index) => {
+    const separator = basePath === "" ? "" : "/";
+    return `${basePath}${separator}${prefix}${index + 1}.${ext}`;
+  });
 };
 
-// Premium Metallic Gold Gradient
 const premiumGoldGradient = "bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#AA771C_100%)]";
 
-/* ---------------- GALLERY DATA STRUCTURE ---------------- */
+/* ---------------- GALLERY DATA STRUCTURE (SORTED NEWEST TO OLDEST) ---------------- */
 const galleryEvents = [
-  { id: "1", category: "India", title: "Certificate Award Ceremony", cover: "/assets/certificate awards/1.jpg", images: generateImagePaths("/assets/certificate awards", 25) },
-  { id: "2", category: "India", title: "Lecture Sessions", cover: "/assets/lecture session/1.jpg", images: generateImagePaths("/assets/lecture session", 8) },
-  { id: "3", category: "India", title: "Practise Sessions", cover: "/assets/practice session/1.jpg", images: generateImagePaths("/assets/practice session", 22) },
-  { id: "4", category: "Dubai", title: "July 2021 Batch Awards", cover: "/assets/july-2021-award/1.jpg", images: generateImagePaths("/assets/july-2021-award", 65) },
+  //2026
+  { id: "11", category: "Dubai", title: "Dubai Masterclass Experience 2026", cover: "/assets/dubai/d9.jpg", images: generateImagePaths("/assets/dubai", 30, "jpg", "d") },
+  { id: "1", category: "Bangkok", title: "Bankok Masterclass Experience 2026", cover: "/assets/bankok/b18.jpeg", images: generateImagePaths("/assets/bankok", 76, "jpeg", "b") },  
+
+  // 2022
+  { id: "4", category: "Dubai", title: "July Batch Awards", cover: "/assets/july-2021-award/1.jpg", images: generateImagePaths("/assets/july-2021-award", 65) },
+  { id: "6", category: "India", title: "Certificate Award Ceremony", cover: "/assets/certificate awards/1.jpg", images: generateImagePaths("/assets/certificate awards", 25) },
+
+  { id: "8", category: "Korea", title: "February Batch Awards", cover: "/assets/feb-2022/1.jpeg", images: generateImagePaths("/assets/feb-2022", 4, "jpeg") },
+  { id: "7", category: "Korea", title: "January Batch Awards", cover: "/assets/jan-2022/1.jpeg", images: generateImagePaths("/assets/jan-2022", 9, "jpeg") },
+  
+  // 2021
+
   { id: "5", category: "Dubai", title: "July 2021 Batch Training", cover: "/assets/july-2021/1.jpg", images: generateImagePaths("/assets/july-2021", 7) },
-  { id: "6", category: "Bangkok", title: "November 2021 Batch Training", cover: "/assets/nov-2021/1.jpeg", images: generateImagePaths("/assets/nov-2021", 20, "jpeg") },
-  { id: "7", category: "Korea", title: "January 2022 Batch Awards", cover: "/assets/jan-2022/1.jpeg", images: generateImagePaths("/assets/jan-2022", 9, "jpeg") },
-  { id: "8", category: "Korea", title: "February 2022 Batch Awards", cover: "/assets/feb-2022/1.jpeg", images: generateImagePaths("/assets/feb-2022", 4, "jpeg") },
-  { id: "9", category: "Bangkok", title: "PMU1 Batch Awards", cover: "/assets/pmu1/1.jpeg", images: generateImagePaths("/assets/pmu1", 11, "jpeg") },
-  { id: "10", category: "India", title: "PMU2 Batch Awards", cover: "/assets/pmu2/1.jpeg", images: generateImagePaths("/assets/pmu2", 8, "jpeg") }
+
+  
+
+  // Undated / Ongoing India & PMU Batches
+  { id: "9", category: "India", title: "PMU1 Batch Awards", cover: "/assets/pmu1/1.jpeg", images: generateImagePaths("/assets/pmu1", 11, "jpeg") },
+  { id: "10", category: "India", title: "PMU2 Batch Awards", cover: "/assets/pmu2/1.jpeg", images: generateImagePaths("/assets/pmu2", 8, "jpeg") },
+  { id: "2", category: "India", title: "Lecture Sessions", cover: "/assets/lecture session/1.jpg", images: generateImagePaths("/assets/lecture session", 8) },
+  { id: "3", category: "India", title: "Practise Sessions", cover: "/assets/practice session/1.jpg", images: generateImagePaths("/assets/practice session", 22) }
 ];
 
 const categories = ["All", "India", "Dubai", "Korea", "Bangkok"];
@@ -47,71 +63,56 @@ const categories = ["All", "India", "Dubai", "Korea", "Bangkok"];
 export default function Gallery() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeCarouselIndex, setActiveCarouselIndex] = useState(0);
-  
   const [selectedEvent, setSelectedEvent] = useState<typeof galleryEvents[0] | null>(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const filteredEvents = activeCategory === "All" 
     ? galleryEvents 
     : galleryEvents.filter(event => event.category === activeCategory);
 
-  // Reset carousel to first item when category changes
+  // Convert raw image strings into the Masonry Object Format dynamically
+  const masonryItems = useMemo(() => {
+    if (!selectedEvent) return [];
+    
+    // Tighter height constraints ensure Next/Image `objectFit="cover"` looks perfect without severe cropping
+    const heights = [350, 450, 400, 500, 300, 450]; 
+    
+    return selectedEvent.images.map((src, i) => ({
+      id: `${selectedEvent.id}-${i}`,
+      img: src,
+      url: src, 
+      height: heights[i % heights.length]
+    }));
+  }, [selectedEvent]);
+
   useEffect(() => {
     setActiveCarouselIndex(0);
   }, [activeCategory]);
 
-  /* --- CAROUSEL NAVIGATION --- */
   const handleCarouselNext = () => {
-    if (activeCarouselIndex < filteredEvents.length - 1) {
-      setActiveCarouselIndex(prev => prev + 1);
-    }
+    if (activeCarouselIndex < filteredEvents.length - 1) setActiveCarouselIndex(prev => prev + 1);
   };
 
   const handleCarouselPrev = () => {
-    if (activeCarouselIndex > 0) {
-      setActiveCarouselIndex(prev => prev - 1);
-    }
+    if (activeCarouselIndex > 0) setActiveCarouselIndex(prev => prev - 1);
   };
 
-  /* --- LIGHTBOX NAVIGATION --- */
-  const handleNextImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (selectedEvent) {
-      setCurrentImageIndex((prev) => (prev + 1) % selectedEvent.images.length);
-    }
-  };
-
-  const handlePrevImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (selectedEvent) {
-      setCurrentImageIndex((prev) => (prev - 1 + selectedEvent.images.length) % selectedEvent.images.length);
-    }
-  };
-
-  const closeLightbox = () => {
-    setSelectedEvent(null);
-    setCurrentImageIndex(0);
-  };
-
-  const openLightbox = (event: typeof galleryEvents[0]) => {
-    setSelectedEvent(event);
-    setCurrentImageIndex(0);
-  };
+  const closeLightbox = () => setSelectedEvent(null);
+  const openLightbox = (event: typeof galleryEvents[0]) => setSelectedEvent(event);
 
   return (
     <main suppressHydrationWarning className="bg-[#040814] text-white min-h-screen pt-32 pb-32 relative overflow-hidden">
       
-      {/* ---------------- DYNAMIC AURORA BACKGROUND ---------------- */}
+      {/* ---------------- DYNAMIC AURORA BACKGROUND (Optimized) ---------------- */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{ opacity: [0.1, 0.2, 0.1] }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
           className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(212,175,55,0.15) 0%, rgba(0,0,0,0) 70%)" }}
+          style={{ background: "radial-gradient(circle, rgba(212,175,55,0.15) 0%, rgba(0,0,0,0) 70%), willChange: opacity" }}
         />
         <motion.div
           animate={{ opacity: [0.1, 0.25, 0.1] }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
           className="absolute bottom-[-10%] right-[-10%] w-[900px] h-[900px] rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(0,116,165,0.15) 0%, rgba(0,0,0,0) 70%)" }}
+          style={{ background: "radial-gradient(circle, rgba(0,116,165,0.15) 0%, rgba(0,0,0,0) 70%), willChange: opacity" }}
         />
       </div>
 
@@ -159,41 +160,31 @@ export default function Gallery() {
         {/* 3. 3D SPIRAL CAROUSEL */}
         <div className="relative w-full h-[500px] md:h-[650px] flex items-center justify-center perspective-[1500px]">
           
-          {/* Carousel Arrows */}
           <button 
-            onClick={handleCarouselPrev}
-            disabled={activeCarouselIndex === 0}
+            onClick={handleCarouselPrev} disabled={activeCarouselIndex === 0}
             className="absolute left-4 md:left-12 z-50 p-3 md:p-5 rounded-full bg-[#0A1128]/80 border border-[#BF953F]/40 text-[#FBF5B7] hover:bg-[#D4AF37] hover:text-[#040814] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-[0_0_30px_rgba(0,0,0,0.8)] backdrop-blur-md"
           >
             <ChevronLeft size={28} />
           </button>
 
           <button 
-            onClick={handleCarouselNext}
-            disabled={activeCarouselIndex === filteredEvents.length - 1}
+            onClick={handleCarouselNext} disabled={activeCarouselIndex === filteredEvents.length - 1}
             className="absolute right-4 md:right-12 z-50 p-3 md:p-5 rounded-full bg-[#0A1128]/80 border border-[#BF953F]/40 text-[#FBF5B7] hover:bg-[#D4AF37] hover:text-[#040814] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-[0_0_30px_rgba(0,0,0,0.8)] backdrop-blur-md"
           >
             <ChevronRight size={28} />
           </button>
 
-          {/* Render Spiral Cards */}
+          {/* Render Spiral Cards (OPTIMIZED) */}
           <div className="relative w-[280px] h-[380px] md:w-[400px] md:h-[500px] transform-style-3d">
             <AnimatePresence>
               {filteredEvents.map((event, index) => {
-                // Determine position relative to the active index
                 const offset = index - activeCarouselIndex;
                 const absOffset = Math.abs(offset);
                 const sign = Math.sign(offset);
                 
-                // Hide cards that are too far back to improve performance and visuals
+                // PERFORMANCE: Drop cards that are too far back from the DOM entirely
                 if (absOffset > 4) return null;
 
-                // 3D SPIRAL MATH
-                // x: Pushes left/right. 
-                // z: Pushes deep into the background (-200px per step).
-                // y: Drops them down slightly to form a spiral shape.
-                // rotateY: Angles them inward towards the user.
-                // rotateZ: Adds a subtle tilt like a fan/spiral.
                 const xOffset = offset * (typeof window !== "undefined" && window.innerWidth < 768 ? 100 : 180);
                 const zOffset = absOffset * -200;
                 const yOffset = absOffset * 25; 
@@ -207,26 +198,20 @@ export default function Gallery() {
                     key={event.id}
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ 
-                      x: xOffset, 
-                      y: yOffset,
-                      z: zOffset, 
-                      rotateY: rotateY,
-                      rotateZ: rotateZ,
+                      x: xOffset, y: yOffset, z: zOffset, rotateY: rotateY, rotateZ: rotateZ,
                       opacity: isActive ? 1 : 1 - (absOffset * 0.25),
                       scale: isActive ? 1 : 0.9,
                       zIndex: 100 - absOffset
                     }}
                     transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
                     className={`absolute inset-0 rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.8)] ${isActive ? "cursor-pointer" : "cursor-pointer"} border ${isActive ? "border-[#BF953F]" : "border-white/10"} overflow-hidden bg-[#0A1128]`}
+                    style={{ willChange: "transform, opacity" }} // Hardware Acceleration
                     onClick={() => {
-                      if (isActive) {
-                        openLightbox(event);
-                      } else {
-                        setActiveCarouselIndex(index);
-                      }
+                      if (isActive) { openLightbox(event); } 
+                      else { setActiveCarouselIndex(index); }
                     }}
                   >
-                    {/* The Image */}
+                    {/* The Image (OPTIMIZED WITH NEXT/IMAGE) */}
                     <div className="absolute inset-0 bg-black">
                       <Image
                         src={event.cover}
@@ -235,16 +220,17 @@ export default function Gallery() {
                         sizes="(max-width: 768px) 100vw, 500px"
                         className={`object-cover transition-transform duration-1000 ${isActive ? "hover:scale-110" : ""}`}
                         priority={absOffset <= 1}
+                        loading={absOffset > 1 ? "lazy" : undefined}
                       />
                     </div>
                     
                     {/* Dark gradient overlay for non-active cards */}
-                    <div className={`absolute inset-0 bg-black transition-opacity duration-700 ${isActive ? "opacity-0" : "opacity-50"}`} />
+                    <div className={`absolute inset-0 bg-black transition-opacity duration-700 pointer-events-none ${isActive ? "opacity-0" : "opacity-60"}`} />
                     
                     {/* Inner content overlay for ACTIVE card */}
                     <motion.div 
                       animate={{ opacity: isActive ? 1 : 0 }}
-                      className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-6 md:p-8"
+                      className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-6 md:p-8 pointer-events-none"
                     >
                       <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md border border-[#BF953F]/50 px-3 py-1.5 rounded-xl flex items-center gap-2">
                         <Images size={14} className="text-[#FBF5B7]" />
@@ -272,85 +258,54 @@ export default function Gallery() {
 
       </div>
 
-      {/* 4. OPTIMIZED LIGHTBOX MODAL (Unchanged) */}
+      {/* 4. THE MASONRY GALLERY MODAL (FIXED & OPTIMIZED) */}
       <AnimatePresence>
         {selectedEvent && (
           <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#040814]/95 backdrop-blur-md p-0 md:p-4"
-            onClick={closeLightbox}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] bg-[#040814] flex flex-col items-center justify-start p-4 md:p-10"
           >
-            {/* Top Bar Controls */}
-            <motion.div 
-              initial={{ y: -50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }}
-              className="absolute top-0 left-0 w-full p-4 md:p-6 flex justify-between items-center z-[60] bg-gradient-to-b from-black/80 to-transparent"
-            >
-               <div className="text-white pl-2 md:pl-6 max-w-[70vw]">
-                 <h3 className="font-serif text-lg md:text-3xl text-[#FBF5B7] drop-shadow-lg truncate">{selectedEvent.title}</h3>
-                 <p className="text-white/60 text-[10px] md:text-sm tracking-widest uppercase mt-1 md:mt-2">Photo {currentImageIndex + 1} of {selectedEvent.images.length}</p>
-               </div>
-               
-               <button 
+            {/* Modal Header */}
+            <div className="w-full max-w-7xl flex items-center justify-between mb-8 shrink-0 relative z-[99999] mt-12 md:mt-0">
+              <div>
+                <h3 className="text-[#FBF5B7] text-2xl md:text-4xl font-serif font-bold drop-shadow-md">
+                  {selectedEvent.title}
+                </h3>
+                <p className="text-white/50 text-sm uppercase tracking-widest mt-2 flex items-center gap-2">
+                  <MapPin size={16} className="text-[#BF953F]" /> {selectedEvent.category} • {selectedEvent.images.length} Photos
+                </p>
+              </div>
+              <button 
                 onClick={closeLightbox}
-                className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/5 border border-white/20 flex shrink-0 items-center justify-center text-white/90 hover:text-[#040814] hover:bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#AA771C_100%)] active:bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#AA771C_100%)] hover:border-transparent active:border-transparent transition-all shadow-lg"
-               >
-                 <X size={24} className="md:w-7 md:h-7" />
-               </button>
-            </motion.div>
-
-            {/* Slider Navigation Buttons */}
-           {selectedEvent.images.length > 1 && (
-              <>
-                <button 
-                  onClick={handlePrevImage}
-                  className="absolute left-2 md:left-10 top-1/2 -translate-y-1/2 w-10 h-10 md:w-16 md:h-16 rounded-full bg-[#0A1128]/80 border border-[#BF953F]/40 flex items-center justify-center text-[#FBF5B7] hover:bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#AA771C_100%)] active:bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#AA771C_100%)] hover:text-[#040814] active:text-[#040814] hover:border-transparent active:border-transparent transition-all z-[60] shadow-xl"
-                >
-                  <ChevronLeft size={24} className="md:w-8 md:h-8" />
-                </button>
-
-                <button 
-                  onClick={handleNextImage}
-                  className="absolute right-2 md:right-10 top-1/2 -translate-y-1/2 w-10 h-10 md:w-16 md:h-16 rounded-full bg-[#0A1128]/80 border border-[#BF953F]/40 flex items-center justify-center text-[#FBF5B7] hover:bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#AA771C_100%)] active:bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#AA771C_100%)] hover:text-[#040814] active:text-[#040814] hover:border-transparent active:border-transparent transition-all z-[60] shadow-xl"
-                >
-                  <ChevronRight size={24} className="md:w-8 md:h-8" />
-                </button>
-              </>
-            )}
-            {/* The Image Container */}
-            <div className="relative w-full h-[75vh] md:h-[85vh] flex items-center justify-center px-10 md:px-32 mt-8 md:mt-0" onClick={(e) => e.stopPropagation()}>
-               <Image
-                 key={selectedEvent.images[currentImageIndex]} 
-                 src={selectedEvent.images[currentImageIndex]}
-                 alt={`${selectedEvent.title} - Image ${currentImageIndex + 1}`}
-                 fill
-                 sizes="100vw"
-                 className="object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
-                 priority 
-               />
+                className="relative z-[99999] p-3 rounded-full bg-white/10 hover:bg-[#BF953F] hover:text-[#040814] transition-all text-white shadow-xl border border-white/20 cursor-pointer"
+              >
+                <X size={28} />
+              </button>
             </div>
 
-            {/* Thumbnail Navigation Strip */}
-            {selectedEvent.images.length > 1 && (
-              <motion.div 
-                initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}
-                className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex gap-2 md:gap-3 z-[60] bg-[#0A1128]/80 p-2 md:p-3 rounded-2xl border border-[#BF953F]/30 max-w-[95vw] md:max-w-[90vw] overflow-x-auto scrollbar-hide shadow-2xl backdrop-blur-md" 
-                onClick={(e) => e.stopPropagation()}
-              >
-                {selectedEvent.images.map((imgSrc, idx) => (
-                  <button 
-                    key={idx} 
-                    onClick={() => setCurrentImageIndex(idx)}
-                    className={`relative w-12 h-10 md:w-20 md:h-14 shrink-0 rounded-lg overflow-hidden transition-all border-2 ${currentImageIndex === idx ? "border-[#FBF5B7] opacity-100 scale-105" : "border-transparent opacity-40 hover:opacity-100 active:opacity-100"}`}
-                  >
-                    <Image src={imgSrc} alt={`Thumb ${idx}`} fill sizes="80px" className="object-cover" />
-                  </button>
-                ))}
-              </motion.div>
-            )}
-
+            {/* Masonry Container */}
+            <div className="w-full max-w-7xl flex-1 relative bg-black/40 rounded-3xl overflow-y-auto custom-scrollbar p-2 border border-white/5 shadow-inner">
+               {/* No fixed height needed - Masonry automatically calculates it! */}
+               <div className="w-full relative"> 
+                <Masonry
+                  items={masonryItems}
+                  scaleOnHover={true}
+                  hoverScale={0.98}
+                />
+               </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <style dangerouslySetInnerHTML={{__html: `
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(191, 149, 63, 0.5); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(191, 149, 63, 0.8); }
+      `}} />
 
     </main>
   );
