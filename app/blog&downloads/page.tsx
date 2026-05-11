@@ -35,7 +35,6 @@ const blogPosts = [
 const downloads = [
   { id: "d1", title: "Aesthetic Clinical Set Up In India", desc: "Guidelines for reference regarding setting up an aesthetic clinical practice in India.", file: "/assets/CLINICAL.pdf" },
   { id: "d2", title: "Global Aesthetic Guidelines for Injectables", desc: "Botulinum Toxin & Dermal Fillers for cosmetic indications globally accepted standards.", file: "/assets/comman.pdf" },
-  { id: "d3", title: "Guidelines of Facial Injectables Practise in India", desc: "Invasive Cosmetology reference based on NMC & DCI guidelines.", file: "/assets/GUIDELINES OF FACIAL INJECTABLES.pdf" }
 ];
 
 export default function BlogAndDownloads() {
