@@ -54,7 +54,7 @@ export default function Chatbot() {
       
       // Format the WhatsApp message with the captured lead details
       const clientWhatsAppNumber = "919884718883";
-      const leadMessage = `*New Website Lead!* 🚀\n\n*Contact Details:* ${userText}\n*Area of Interest / Question:* ${pendingQuestion}`;
+      const leadMessage = `*HI , I would like to Enquire[cbl]!* 🚀\n\n*Contact Details:* ${userText}\n*Area of Interest / Question:* ${pendingQuestion}`;
       const waUrl = `https://wa.me/${clientWhatsAppNumber}?text=${encodeURIComponent(leadMessage)}`;
 
       // Acknowledge the details and provide the WhatsApp link

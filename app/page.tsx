@@ -235,7 +235,7 @@ export default function Home() {
 
     // Format the WhatsApp message
     const clientWhatsAppNumber = "919884718883";
-    const message = `*New Website Popup Lead!* 🚀\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Profession:* ${profession}`;
+    const message = `*HI , I would like to Enquire[pl]!* 🚀\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Profession:* ${profession}`;
     const waUrl = `https://wa.me/${clientWhatsAppNumber}?text=${encodeURIComponent(message)}`;
 
     // Open WhatsApp in a new tab
