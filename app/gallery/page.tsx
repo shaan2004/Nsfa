@@ -34,7 +34,7 @@ const premiumGoldGradient = "bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#
 /* ---------------- GALLERY DATA STRUCTURE (SORTED NEWEST TO OLDEST) ---------------- */
 const galleryEvents = [
   //2026
-  { id: "11", category: "Dubai", title: "Dubai Masterclass Experience 2026", cover: "/assets/Dubai/d9.jpg", images: generateImagePaths("/assets/Dubai", 30, "jpeg", "d") },
+  { id: "11", category: "Dubai", title: "Dubai Masterclass Experience 2026", cover: "/assets/Dubai/d9.JPG", images: generateImagePaths("/assets/Dubai", 30, "jpeg", "d") },
   { id: "1", category: "Bangkok", title: "Bankok Masterclass Experience 2026", cover: "/assets/bankok/b18.jpeg", images: generateImagePaths("/assets/bankok", 76, "jpeg", "b") },  
 
   // 2022
