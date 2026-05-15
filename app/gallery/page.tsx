@@ -22,7 +22,7 @@ const GoldText = ({ text, className = "" }: { text: string; className?: string }
 
 // HELPER: Generates the "First Guess" image paths. 
 // If the guess is wrong (e.g. .jpeg instead of .jpg), our Masonry component will auto-fix it.
-const generateImagePaths = (basePath: string, totalImages: number, ext: string = "jpg", prefix: string = "") => {
+const generateImagePaths = (basePath: string, totalImages: number, ext: string = "JPG", prefix: string = "") => {
   return Array.from({ length: totalImages }, (_, index) => {
     const separator = basePath === "" ? "" : "/";
     return `${basePath}${separator}${prefix}${index + 1}.${ext}`;
