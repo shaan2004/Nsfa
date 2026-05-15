@@ -38,14 +38,22 @@ const useMeasure = () => {
   return [ref, size] as const;
 };
 
-/* --- OPTIMIZED SMART CARD USING NEXT/IMAGE --- */
+/* --- THE ULTIMATE SMART CARD: Handles .jpg, .jpeg, .JPG, and .JPEG --- */
 const MasonryCard = ({ item, scaleOnHover, hoverScale }: any) => {
   const [imgSrc, setImgSrc] = useState(item.img);
+  const [retryCount, setRetryCount] = useState(0);
 
-  // Instantly swap extension if Next/Image throws a 404
+  // If Vercel throws a 404, we test all 4 capitalization/extension combos automatically
   const handleError = () => {
-    if (imgSrc.endsWith('.jpeg')) setImgSrc(imgSrc.replace('.jpeg', '.jpg'));
-    else if (imgSrc.endsWith('.jpg')) setImgSrc(imgSrc.replace('.jpg', '.jpeg'));
+    const fallbacks = ['.jpg', '.jpeg', '.JPG', '.JPEG'];
+    
+    // As long as we haven't tried all 4 options, keep swapping the extension
+    if (retryCount < fallbacks.length) {
+      // Use regex to strip the old extension (ignoring case) and add the new one
+      const newSrc = item.img.replace(/\.(jpg|jpeg)$/i, fallbacks[retryCount]);
+      setImgSrc(newSrc);
+      setRetryCount((prev) => prev + 1);
+    }
   };
 
   return (
@@ -102,7 +110,7 @@ export default function Masonry({
     return items.map((child: any) => {
       const col = colHeights.indexOf(Math.min(...colHeights));
       const x = columnWidth * col;
-      const height = child.height / 2; // Scaling logic from original script
+      const height = child.height / 2;
       const y = colHeights[col];
       
       colHeights[col] += height;
@@ -111,7 +119,7 @@ export default function Masonry({
     });
   }, [columns, items, width]);
 
-  // NEW: Mathematically calculate the absolute maximum height of the grid
+  // Mathematically calculate the absolute maximum height of the grid
   const containerHeight = useMemo(() => {
     if (grid.length === 0) return 0;
     return Math.max(...grid.map((item: any) => item.y + item.h));
