@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { GraduationCap, BookOpenText, Globe, Award, Stethoscope, MessageCircle, ChevronDown, ChevronRight } from "lucide-react";
+import { GraduationCap, BookOpenText, Globe, Award, Stethoscope, MessageCircle, ChevronDown, ChevronRight, MapPin } from "lucide-react";
 
 /* ---------------- PREMIUM COMPONENTS ---------------- */
 const GoldText = ({ text, className = "" }: { text: string; className?: string }) => (
@@ -18,39 +18,99 @@ const GoldText = ({ text, className = "" }: { text: string; className?: string }
   </h2>
 );
 
-/* ---------------- HELPER FOR DYNAMIC DESCRIPTIONS ---------------- */
-const generateDescription = (title: string) => {
-  const cleanTitle = title.replace(/PG Diploma in |PG Diploma |Fellowship in |Fellowship In |Certification Training in |Mastership In |M\.SC in |M\.SC IN |PG Certificate In /i, '').trim();
-  return `Advanced clinical training focusing on ${cleanTitle.toLowerCase()}. This program provides world-class, hands-on experience, emphasizing international protocols and patient safety to elevate your medical practice.`;
-};
-
-/* ---------------- RESTRUCTURED DATA ---------------- */
+/* ---------------- RESTRUCTURED DATA (ACTUAL COURSES) ---------------- */
 const aestheticCourses = [
-  { category: "Diploma Programs", icon: BookOpenText, duration: "1 Year", programs: ["PG Diploma Clinical Cosmetology and Trichology", "PG Diploma in Medical Trichology, Trichopigmentation and Nutraceuticals", "PG Diploma in Non Surgical Facial Aesthetics", "PG Diploma in Bariatric Science and Nutrition"] },
-  { category: "Fellowship Programs", icon: Award, duration: "6 Months", programs: ["Fellowship in Non Surgical Facial Aesthetics", "Fellowship in Medical Cosmetology", "Fellowship in Aesthetic Medicine", "Fellowship in Cosmetic Medicine"] },
-  { category: "Mastership Programs", icon: GraduationCap, duration: "1 Year", programs: ["Non Surgical Facial Aesthetics with advanced Transformation", "Non Surgical Hair restoration", "Non Surgical Nutrigenomics"] },
-  { category: "PG Certification", icon: Globe, duration: "3-6 Months", programs: ["Certification Training in Advanced Lasers", "Certification Training in Chemical Peels and Medifacial", "Certification Training in Trichology", "Certification Training in Medical Cupping", "Certification Training in BBGlow", "Certification Training in Micropigmentation", "Certification Training in Clinical Nutrition", "Certification Training in Derma Planning", "Certification Training in Cosmeceutical Formation Science", "Certification Training in Botulinun toxin", "Certification Training in Dermal Fillers", "Certification Training in Fibroblast Pen", "Certification Training in Biostimulation in Aesthetics", "Certification Training in Acne & Hyperpigmentation"] },
-  { category: "M.SC Programs", icon: BookOpenText, duration: "2 Years", programs: ["M.SC IN FACIAL AESTHETICS & COSMETOLOGY", "M.SC in Cosmeceutical Science", "M.SC in Aesthetic Medicine", "M.SC in Trichology"] },
+  { 
+    category: "Level 4 Certification", 
+    icon: Award, 
+    duration: "Varies", 
+    programs: [
+      { title: "Skin Aesthetics", badge: "Level 4 - NVQF", location: "India", desc: "Advanced clinical training focusing on skin aesthetics. This Level 4 NVQF program provides world-class, hands-on experience, emphasizing international protocols and patient safety." }
+    ] 
+  },
+  { 
+    category: "Fellowship Programs", 
+    icon: Globe, 
+    duration: "Varies", 
+    programs: [
+      { title: "Facial Aesthetics", badge: "International Fellowship", location: "South Korea & Dubai", desc: "A prestigious International Fellowship in Facial Aesthetics offering advanced clinical exposure and mastery of international protocols in South Korea and Dubai." }
+    ] 
+  },
+  { 
+    category: "Masterclass & Diploma", 
+    icon: BookOpenText, 
+    duration: "Varies", 
+    programs: [
+      { title: "Permanent Makeup", badge: "ISPMU Masterclass & Professional Diploma", location: "Bangkok & India", desc: "Comprehensive ISPMU Masterclass and Professional Diploma focusing on cutting-edge permanent makeup techniques, delivered in Bangkok and India." },
+      { title: "K-Beauty Aesthetics", badge: "Masterclass", location: "Seoul, South Korea", desc: "Immersive training in the latest K-Beauty aesthetic trends and techniques, straight from the industry capital in Seoul, South Korea." }
+    ] 
+  },
+  { 
+    category: "Upcoming Programs", 
+    icon: GraduationCap, 
+    duration: "Coming Soon", 
+    programs: [
+      { title: "Cosmetology", badge: "BVOC / BSC", location: "Global", desc: "Our upcoming BVOC / BSC in Cosmetology will offer a comprehensive academic curriculum bridging foundational sciences with advanced aesthetic practices." }
+    ] 
+  },
 ];
 
 const dentalCourses = [
-  { category: "Fellowship Programs", icon: Award, duration: "Varies", programs: ["Fellowship In Laser Dentistry", "Fellowship In Cosmetic Dentistry", "Fellowship In Orthodontics"] },
-  { category: "Mastership Programs", icon: GraduationCap, duration: "Varies", programs: ["Mastership In Implantology", "Mastership In Aesthetic Dentistry (3 In 1) Course", "Mastership In Endodontics", "Mastership In Comprehensive Clinical Dentistry"] },
-  { category: "PG Certification", icon: Globe, duration: "Varies", programs: ["PG Certificate In Botulinum Toxin In Denstistry", "PG Certificate In Sports Dentistry", "PG Certificate In Gum Rejuvenation"] },
-  { category: "M.SC Programs", icon: Stethoscope, duration: "2 Years", programs: ["M.SC in Aesthetic Dentistry"] },
+  { 
+    category: "Fellowship Programs", 
+    icon: Award, 
+    duration: "Varies", 
+    programs: [
+      { title: "Cosmetic Dentistry", badge: "International Fellowship", location: "India & Dubai", desc: "Master the art of smile design and advanced cosmetic procedures through this International Fellowship in Cosmetic Dentistry." },
+      { title: "Implantology", badge: "International Fellowship", location: "India & Dubai", desc: "Comprehensive surgical and restorative training in dental implants, emphasizing precision and global standards." },
+      { title: "Clear Aligner Therapy", badge: "International Fellowship", location: "India & Dubai", desc: "Specialized training in modern orthodontic alignment using clear aligner technology, from case selection to advanced treatment." },
+      { title: "Endodontics", badge: "International Fellowship", location: "India & Dubai", desc: "Advanced clinical fellowship focusing on modern rotary endodontics, 3D obturation, and complex root canal treatments." }
+    ] 
+  },
+  { 
+    category: "Upcoming Programs", 
+    icon: GraduationCap, 
+    duration: "Coming Soon", 
+    programs: [
+      { title: "Aesthetic Dentistry", badge: "M.Sc", location: "India & Dubai", desc: "Our upcoming M.Sc in Aesthetic Dentistry will provide an extensive academic and clinical framework for mastering dental aesthetics." }
+    ] 
+  },
 ];
 
 const medicalCourses = [
-  { category: "Upcoming 2027", icon: Stethoscope, duration: "Coming Soon", programs: ["Fellowship in Internal Medicine", "Mastership in General Practice", "PG Diploma in Emergency Medicine"] }
+  { 
+    category: "Upcoming 2027", 
+    icon: Stethoscope, 
+    duration: "Coming Soon", 
+    programs: [
+      { title: "Internal Medicine", badge: "Fellowship", location: "GLOBAL", desc: "Intensive training focusing on adult diseases, diagnostics, and non-surgical treatments. Officially launching in 2027." },
+      { title: "General Practice", badge: "Mastership", location: "GLOBAL", desc: "Advanced comprehensive program covering modern general medical practices. Enrollment begins late 2026." },
+      { title: "Emergency Medicine", badge: "PG Diploma", location: "GLOBAL", desc: "Equip yourself with life-saving skills and rapid diagnostic protocols. Coming in 2027." }
+    ] 
+  }
 ];
 
 /* ---------------- ACCORDION COMPONENT ---------------- */
-const CourseAccordion = ({ title, duration, theme = "gold" }: { title: string; duration: string; theme?: "gold" | "blue" | "green" }) => {
+const CourseAccordion = ({ 
+  title, 
+  badge, 
+  location, 
+  desc, 
+  duration, 
+  theme = "gold" 
+}: { 
+  title: string; 
+  badge: string; 
+  location: string; 
+  desc: string; 
+  duration: string; 
+  theme?: "gold" | "blue" | "green" 
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   
   const handleWhatsAppEnquiry = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const message = `Hello NSFA Academy, I am interested in learning more about: *${title}*. Please share the syllabus and details.`;
+    const message = `Hello NSFA Academy, I am interested in learning more about: *${badge} in ${title}*. Please share the syllabus and details.`;
     window.open(`https://wa.me/919884718883?text=${encodeURIComponent(message)}`, '_blank');
   };
 
@@ -58,17 +118,20 @@ const CourseAccordion = ({ title, duration, theme = "gold" }: { title: string; d
     if (theme === "gold") return { 
         active: "bg-[#BF953F]/10 border-[#BF953F]/50 text-[#FBF5B7]", 
         btn: "bg-[linear-gradient(45deg,#BF953F,#FCF6BA,#B38728)] text-[#080E21]",
-        icon: "text-[#BF953F]"
+        icon: "text-[#BF953F]",
+        badge: "border-[#BF953F]/40 text-[#FBF5B7] bg-[#BF953F]/10"
     };
     if (theme === "blue") return { 
         active: "bg-[#0074A5]/10 border-[#88D4FF]/50 text-[#88D4FF]", 
         btn: "bg-[linear-gradient(45deg,#0074A5,#88D4FF,#005B82)] text-white",
-        icon: "text-[#88D4FF]"
+        icon: "text-[#88D4FF]",
+        badge: "border-[#88D4FF]/40 text-[#88D4FF] bg-[#88D4FF]/10"
     };
     return { 
         active: "bg-[#059669]/10 border-[#34D399]/50 text-[#34D399]", 
         btn: "bg-[linear-gradient(45deg,#059669,#34D399,#065F46)] text-white",
-        icon: "text-[#34D399]"
+        icon: "text-[#34D399]",
+        badge: "border-[#34D399]/40 text-[#34D399] bg-[#34D399]/10"
     };
   };
 
@@ -84,7 +147,17 @@ const CourseAccordion = ({ title, duration, theme = "gold" }: { title: string; d
       style={{ willChange: "transform, opacity" }}
     >
       <div className="p-4 md:p-5 flex items-center justify-between gap-4">
-        <h4 className={`font-medium text-sm md:text-base ${isOpen ? "" : "text-white"}`}>{title}</h4>
+        <div>
+          <h4 className={`font-serif font-bold text-lg md:text-xl ${isOpen ? "" : "text-white"}`}>{title}</h4>
+          <div className="flex flex-wrap items-center gap-2 md:gap-3 mt-2">
+            <span className={`text-[10px] md:text-xs px-2 py-0.5 rounded border font-bold uppercase tracking-wider ${styles.badge}`}>
+              {badge}
+            </span>
+            <span className="text-[10px] md:text-xs text-white/60 flex items-center gap-1 font-medium uppercase tracking-widest">
+              <MapPin size={12} /> {location}
+            </span>
+          </div>
+        </div>
         <div className="flex items-center gap-4 shrink-0">
           <span className="hidden md:block text-xs font-light text-white/40">{duration}</span>
           <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
@@ -97,7 +170,7 @@ const CourseAccordion = ({ title, duration, theme = "gold" }: { title: string; d
         {isOpen && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }}>
             <div className="px-4 pb-5 pt-2 border-t border-white/5 md:px-5 md:pb-6">
-              <p className="text-white/60 text-sm md:text-base leading-relaxed mb-6 font-light">{generateDescription(title)}</p>
+              <p className="text-white/60 text-sm md:text-base leading-relaxed mb-6 font-light">{desc}</p>
               <button onClick={handleWhatsAppEnquiry} className={`w-full md:w-auto px-6 py-2.5 rounded-xl font-bold tracking-wider uppercase text-xs flex items-center justify-center gap-2 transition-transform hover:scale-105 ${styles.btn}`}>
                 <MessageCircle size={16} /> Enquire Now
               </button>
@@ -158,7 +231,15 @@ export default function Courses() {
               <AnimatePresence mode="wait">
                 <motion.div key={activeAestheticIdx} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.3 }} className="bg-white/[0.02] border border-white/10 rounded-3xl p-4 md:p-8 backdrop-blur-sm">
                   {aestheticCourses[activeAestheticIdx].programs.map((prog, i) => (
-                    <CourseAccordion key={i} title={prog} duration={aestheticCourses[activeAestheticIdx].duration} theme="gold" />
+                    <CourseAccordion 
+                      key={i} 
+                      title={prog.title} 
+                      badge={prog.badge}
+                      location={prog.location}
+                      desc={prog.desc}
+                      duration={aestheticCourses[activeAestheticIdx].duration} 
+                      theme="gold" 
+                    />
                   ))}
                 </motion.div>
               </AnimatePresence>
@@ -189,7 +270,15 @@ export default function Courses() {
               <AnimatePresence mode="wait">
                 <motion.div key={activeDentalIdx} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.3 }} className="bg-white/[0.02] border border-white/10 rounded-3xl p-4 md:p-8 backdrop-blur-sm">
                   {dentalCourses[activeDentalIdx].programs.map((prog, i) => (
-                    <CourseAccordion key={i} title={prog} duration={dentalCourses[activeDentalIdx].duration} theme="blue" />
+                    <CourseAccordion 
+                      key={i} 
+                      title={prog.title} 
+                      badge={prog.badge}
+                      location={prog.location}
+                      desc={prog.desc}
+                      duration={dentalCourses[activeDentalIdx].duration} 
+                      theme="blue" 
+                    />
                   ))}
                 </motion.div>
               </AnimatePresence>
@@ -222,7 +311,15 @@ export default function Courses() {
               <AnimatePresence mode="wait">
                 <motion.div key={activeMedicalIdx} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.3 }} className="bg-white/[0.02] border border-white/10 rounded-3xl p-4 md:p-8 backdrop-blur-sm">
                   {medicalCourses[activeMedicalIdx].programs.map((prog, i) => (
-                    <CourseAccordion key={i} title={prog} duration={medicalCourses[activeMedicalIdx].duration} theme="green" />
+                    <CourseAccordion 
+                      key={i} 
+                      title={prog.title} 
+                      badge={prog.badge}
+                      location={prog.location}
+                      desc={prog.desc}
+                      duration={medicalCourses[activeMedicalIdx].duration} 
+                      theme="green" 
+                    />
                   ))}
                 </motion.div>
               </AnimatePresence>

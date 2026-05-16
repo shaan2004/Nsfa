@@ -143,7 +143,7 @@ const VideoReelCard = ({ num }: { num: number }) => {
   );
 };
 
-/* ---------------- DATA ARRAYS ---------------- */
+/* ---------------- DATA ARRAYS (UPDATED WITH ACTUAL CLIENT COURSES) ---------------- */
 const advancedFeatures = [
   { id: 1, title: "8-in-1 Course", desc: "Only institute providing 8 CPD trainings in 1 comprehensive course.", x: 15, y: 15 },
   { id: 2, title: "Multilevel Certification", desc: "Multi-level certifications across Dubai & South Korea.", x: 85, y: 18 },
@@ -158,25 +158,19 @@ const advancedFeatures = [
 ];
 
 const aestheticCourses = [
-  { title: "PG Diploma", loc: "Clinical Cosmetology", desc: "Clinical Cosmetology, Trichology & Nutraceuticals.", badge: "Diploma", icon: BookOpen },
-  { title: "PG Diploma", loc: "Facial Aesthetics", desc: "Non Surgical Facial Aesthetics, Bariatric Science & Nutrition.", badge: "Diploma", icon: Award },
-  { title: "Fellowship", loc: "Medical Cosmetology", desc: "Non Surgical Facial Aesthetics & Aesthetic/Cosmetic Medicine.", badge: "Fellowship", icon: Globe },
-  { title: "Mastership", loc: "Advanced Transformation", desc: "Non Surgical Hair restoration & Nutrigenomics.", badge: "Mastership", icon: GraduationCap },
-  { title: "M.SC", loc: "Facial Aesthetics", desc: "M.SC in Facial Aesthetics, Cosmetology & Aesthetic Medicine.", badge: "Degree", icon: Briefcase },
-  { title: "PG Certification", loc: "Advanced Lasers", desc: "Chemical Peels, Medifacial & Trichology.", badge: "Certificate", icon: Sparkles },
-  { title: "PG Certification", loc: "Botulinum Toxin", desc: "Dermal Fillers, Fibroblast Pen & Biostimulation.", badge: "Certificate", icon: Stethoscope },
-  { title: "PG Certification", loc: "Clinical Nutrition", desc: "Derma Planning & Cosmeceutical Formation Science.", badge: "Certificate", icon: Users },
+  { title: "Skin Aesthetics", loc: "India", desc: "Level 4 NVQF Certification in Skin Aesthetics.", badge: "Level 4", icon: Sparkles },
+  { title: "Facial Aesthetics", loc: "South Korea & Dubai", desc: "International Fellowship in Facial Aesthetics.", badge: "Fellowship", icon: Globe },
+  { title: "Permanent Makeup", loc: "Bangkok & India", desc: "ISPMU Masterclass & Professional Diploma in Permanent Makeup.", badge: "Masterclass", icon: Award },
+  { title: "K-Beauty Aesthetics", loc: "Seoul, South Korea", desc: "Exclusive K-Beauty Aesthetics training in the heart of South Korea.", badge: "Masterclass", icon: Users },
+  { title: "Cosmetology", loc: "Global", desc: "Upcoming BVOC / BSC in Cosmetology.", badge: "Upcoming", icon: GraduationCap }
 ];
 
 const dentalCourses = [
-  { title: "Fellowship", loc: "Laser Dentistry", desc: "Fellowship In Laser Dentistry.", badge: "Dental", icon: Stethoscope },
-  { title: "Fellowship", loc: "Cosmetic Dentistry", desc: "Fellowship In Cosmetic Dentistry & Orthodontics.", badge: "Dental", icon: Award },
-  { title: "Mastership", loc: "Implantology", desc: "Mastership In Implantology.", badge: "Dental", icon: Globe },
-  { title: "Mastership", loc: "Aesthetic Dentistry", desc: "Mastership In Aesthetic Dentistry (3 In 1) Course.", badge: "Dental", icon: GraduationCap },
-  { title: "Mastership", loc: "Endodontics", desc: "Mastership In Endodontics & Comprehensive Clinical Dentistry.", badge: "Dental", icon: BookOpen },
-  { title: "PG Certificate", loc: "Botulinum Toxin", desc: "Botulinum Toxin In Denstistry.", badge: "Certificate", icon: Sparkles },
-  { title: "PG Certificate", loc: "Sports Dentistry", desc: "Sports Dentistry & Gum Rejuvenation.", badge: "Certificate", icon: Briefcase },
-  { title: "M.SC", loc: "Aesthetic Dentistry", desc: "M.SC in Aesthetic Dentistry.", badge: "Degree", icon: Award },
+  { title: "Cosmetic Dentistry", loc: "India & Dubai", desc: "International Fellowship in Cosmetic Dentistry.", badge: "Fellowship", icon: Sparkles },
+  { title: "Implantology", loc: "India & Dubai", desc: "International Fellowship in Implantology.", badge: "Fellowship", icon: Stethoscope },
+  { title: "Clear Aligner Therapy", loc: "India & Dubai", desc: "International Fellowship in Clear Aligner Therapy.", badge: "Fellowship", icon: Users },
+  { title: "Endodontics", loc: "India & Dubai", desc: "International Fellowship in Endodontics.", badge: "Fellowship", icon: BookOpen },
+  { title: "Aesthetic Dentistry", loc: "India & Dubai", desc: "Upcoming MSc in Aesthetic Dentistry.", badge: "Upcoming", icon: GraduationCap }
 ];
 
 const generalMedicalCourses = [
@@ -186,10 +180,10 @@ const generalMedicalCourses = [
 ];
 
 /* --- ENDLESS LOOP ARRAY GENERATORS --- */
-// By repeating the arrays to a massive length, we ensure the 24-item CSS scroll perfectly aligns with identical elements!
-const extendedAesthetic = Array(6).fill(aestheticCourses).flat(); // 48 items
-const extendedDental = Array(6).fill(dentalCourses).flat(); // 48 items
-const extendedMedical = Array(16).fill(generalMedicalCourses).flat(); // 48 items
+// By repeating the arrays to a massive length, we ensure the CSS scroll perfectly aligns with identical elements!
+const extendedAesthetic = Array(8).fill(aestheticCourses).flat(); 
+const extendedDental = Array(8).fill(dentalCourses).flat(); 
+const extendedMedical = Array(16).fill(generalMedicalCourses).flat(); 
 
 const wipeReveal: Variants = {
   hidden: { clipPath: "inset(0 100% 0 0)", opacity: 0 },
