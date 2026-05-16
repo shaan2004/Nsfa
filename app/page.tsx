@@ -143,7 +143,7 @@ const VideoReelCard = ({ num }: { num: number }) => {
   );
 };
 
-/* ---------------- DATA ARRAYS (UPDATED WITH ACTUAL CLIENT COURSES) ---------------- */
+/* ---------------- DATA ARRAYS ---------------- */
 const advancedFeatures = [
   { id: 1, title: "8-in-1 Course", desc: "Only institute providing 8 CPD trainings in 1 comprehensive course.", x: 15, y: 15 },
   { id: 2, title: "Multilevel Certification", desc: "Multi-level certifications across Dubai & South Korea.", x: 85, y: 18 },
@@ -180,7 +180,6 @@ const generalMedicalCourses = [
 ];
 
 /* --- ENDLESS LOOP ARRAY GENERATORS --- */
-// By repeating the arrays to a massive length, we ensure the CSS scroll perfectly aligns with identical elements!
 const extendedAesthetic = Array(8).fill(aestheticCourses).flat(); 
 const extendedDental = Array(8).fill(dentalCourses).flat(); 
 const extendedMedical = Array(16).fill(generalMedicalCourses).flat(); 
@@ -221,21 +220,17 @@ export default function Home() {
   const handleLeadSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    // Grab the values from the form
     const form = e.currentTarget;
     const name = (form.elements.namedItem('name') as HTMLInputElement).value;
     const phone = (form.elements.namedItem('phone') as HTMLInputElement).value;
     const profession = (form.elements.namedItem('profession') as HTMLSelectElement).value;
 
-    // Format the WhatsApp message
     const clientWhatsAppNumber = "919884718883";
     const message = `*HI , I would like to Enquire[pl]!* 🚀\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Profession:* ${profession}`;
     const waUrl = `https://wa.me/${clientWhatsAppNumber}?text=${encodeURIComponent(message)}`;
 
-    // Open WhatsApp in a new tab
     window.open(waUrl, '_blank', 'noopener,noreferrer');
 
-    // Show the success screen in the popup
     setPopupSubmitted(true);
     setTimeout(() => {
       setShowLeadPopup(false);
@@ -479,7 +474,7 @@ export default function Home() {
                 <motion.div initial={{ opacity: 0, scale: 0.9, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 1, delay: 0.5 }} className="relative w-full aspect-video rounded-[2rem] p-1.5 shadow-[0_20px_50px_rgba(191,149,63,0.3)] bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] mt-2" style={{ willChange: "transform" }}>
                   <div className="w-full h-full rounded-[1.5rem] overflow-hidden bg-black relative flex items-center justify-center group">
                     <video controls playsInline className="w-full h-full object-contain outline-none rounded-[1.5rem]" poster="/assets/hero1.png" preload="metadata">
-                      <source src="/assets/r5.mp4" type="video/mp4" />
+                      <source src="/assets/KOREA.mp4" type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
                   </div>
@@ -490,7 +485,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------------- 2. WHY CHOOSE US ---------------- */}
+        {/* ---------------- 2. WHY CHOOSE US (INLINE EXPANDING VIEW) ---------------- */}
         <section className="min-h-[100vh] py-24 relative overflow-hidden bg-[linear-gradient(180deg,#0B132A_0%,#050914_100%)] flex flex-col items-center justify-center">
           <div className="absolute top-[20%] left-[10%] w-[40%] h-[40%] rounded-full bg-[#BF953F]/10 blur-[120px] pointer-events-none" />
           <div className="absolute bottom-[20%] right-[10%] w-[40%] h-[40%] rounded-full bg-[#0074A5]/10 blur-[120px] pointer-events-none" />
@@ -536,58 +531,68 @@ export default function Home() {
               <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2 }} className="h-[2px] bg-[#FFD700] mt-8" />
             </div>
 
-            <div className="w-full lg:w-7/12 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 relative z-20">
-              {advancedFeatures.map((f, i) => (
-                <motion.div 
-                  key={f.id} 
-                  onClick={() => setActiveFeature(f.id)}
-                  initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
-                  whileHover={{ scale: 1.03, x: -5 }} whileTap={{ scale: 0.97 }}
-                  className="w-full px-5 py-4 md:px-6 md:py-5 rounded-2xl bg-[#0A1128]/80 border border-white/10 shadow-[0_10px_20px_rgba(0,0,0,0.4)] cursor-pointer group transition-all relative flex items-center justify-start text-left overflow-hidden"
-                  style={{ willChange: "transform" }}
-                >
-                  <div className="absolute inset-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
-                  <div className="relative flex items-center justify-center w-4 h-4 mr-4 shrink-0 z-10">
-                    <div className="w-1.5 h-1.5 bg-[#FBF5B7] group-hover:bg-[#080E21] transition-colors duration-500 rounded-full z-10" />
-                    <motion.div 
-                      animate={{ scale: [1, 3.5, 1], opacity: [0.8, 0, 0.8] }} transition={{ repeat: Infinity, duration: 2.5, delay: i * 0.15 }}
-                      className="absolute inset-0 bg-[#BF953F] group-hover:bg-[#080E21]/30 transition-colors duration-500 rounded-full" style={{ willChange: "transform, opacity" }}
-                    />
-                  </div>
-                  <h4 className="text-[#FBF5B7] group-hover:text-[#080E21] font-serif font-bold text-base md:text-lg transition-colors duration-500 relative z-10 truncate">{f.title}</h4>
-                </motion.div>
-              ))}
+            <div className="w-full lg:w-7/12 relative z-20 min-h-[400px] flex items-center justify-center">
+              <AnimatePresence mode="wait">
+                {activeFeature === null ? (
+                  <motion.div 
+                    key="feature-grid"
+                    initial={{ opacity: 0, filter: "blur(10px)" }}
+                    animate={{ opacity: 1, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, filter: "blur(10px)", transition: { duration: 0.2 } }}
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 w-full"
+                  >
+                    {advancedFeatures.map((f, i) => (
+                      <motion.div 
+                        key={f.id} 
+                        onClick={() => setActiveFeature(f.id)}
+                        initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
+                        whileHover={{ scale: 1.03, x: -5 }} whileTap={{ scale: 0.97 }}
+                        className="w-full px-5 py-4 md:px-6 md:py-5 rounded-2xl bg-[#0A1128]/80 border border-white/10 shadow-[0_10px_20px_rgba(0,0,0,0.4)] cursor-pointer group transition-all relative flex items-center justify-start text-left overflow-hidden"
+                        style={{ willChange: "transform" }}
+                      >
+                        <div className="absolute inset-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
+                        <div className="relative flex items-center justify-center w-4 h-4 mr-4 shrink-0 z-10">
+                          <div className="w-1.5 h-1.5 bg-[#FBF5B7] group-hover:bg-[#080E21] transition-colors duration-500 rounded-full z-10" />
+                          <motion.div 
+                            animate={{ scale: [1, 3.5, 1], opacity: [0.8, 0, 0.8] }} transition={{ repeat: Infinity, duration: 2.5, delay: i * 0.15 }}
+                            className="absolute inset-0 bg-[#BF953F] group-hover:bg-[#080E21]/30 transition-colors duration-500 rounded-full" style={{ willChange: "transform, opacity" }}
+                          />
+                        </div>
+                        <h4 className="text-[#FBF5B7] group-hover:text-[#080E21] font-serif font-bold text-base md:text-lg transition-colors duration-500 relative z-10 truncate">{f.title}</h4>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="feature-detail"
+                    initial={{ scale: 0.9, y: 20, opacity: 0 }}
+                    animate={{ scale: 1, y: 0, opacity: 1 }}
+                    exit={{ scale: 0.9, y: 20, opacity: 0 }}
+                    transition={{ type: "spring", bounce: 0.4 }}
+                    className="w-full h-full flex items-center justify-center"
+                  >
+                    {advancedFeatures.filter(f => f.id === activeFeature).map(f => (
+                      <div 
+                        key={f.id} 
+                        className="bg-[#0A1128] border border-[#BF953F]/40 p-6 md:p-10 rounded-3xl w-full shadow-[0_20px_60px_rgba(191,149,63,0.3)] text-center relative overflow-hidden"
+                      >
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(191,149,63,0.15)_0%,rgba(0,0,0,0)_100%)] pointer-events-none" />
+                        <div className="relative z-10 flex flex-col items-center">
+                          <div className="w-12 md:w-16 h-1.5 md:h-2 bg-[#BF953F]/40 rounded-full mb-6 md:mb-8" />
+                          <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#FBF5B7] mb-4 md:mb-6">{f.title}</h3>
+                          <p className="text-white/80 text-base md:text-lg font-light leading-relaxed">{f.desc}</p>
+                          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mt-8 md:mt-10 w-full justify-center">
+                            <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I would like to know more about: ${f.title}.`)}`, '_blank')} className="px-6 py-3 md:px-8 rounded-xl bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] text-[#080E21] font-bold tracking-widest text-xs md:text-sm uppercase hover:scale-[1.02] active:scale-95 transition-all shadow-lg w-full sm:w-auto">Enquire Now</button>
+                            <button onClick={() => setActiveFeature(null)} className="px-6 py-3 md:px-8 rounded-xl border border-white/20 text-white/70 font-bold tracking-widest text-xs md:text-sm uppercase hover:bg-white/10 hover:text-white transition-all w-full sm:w-auto">Back to Features</button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
-
-          <AnimatePresence>
-            {activeFeature && (
-              <motion.div 
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} 
-                onClick={() => setActiveFeature(null)} 
-                className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 cursor-pointer"
-              >
-                {advancedFeatures.filter(f => f.id === activeFeature).map(f => (
-                  <motion.div 
-                    key={f.id} initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }} transition={{ type: "spring", bounce: 0.4 }}
-                    className="bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] p-6 md:p-10 rounded-3xl max-w-[90vw] md:max-w-lg w-full shadow-[0_20px_60px_rgba(191,149,63,0.6)] cursor-default text-center relative overflow-hidden" 
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-overlay pointer-events-none" />
-                    <div className="relative z-10 flex flex-col items-center">
-                      <div className="w-12 md:w-16 h-1.5 md:h-2 bg-[#080E21]/20 rounded-full mb-6 md:mb-8" />
-                      <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#080E21] mb-4 md:mb-6">{f.title}</h3>
-                      <p className="text-[#080E21]/90 text-base md:text-lg font-medium leading-relaxed">{f.desc}</p>
-                      <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mt-8 md:mt-10 w-full justify-center">
-                        <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I would like to know more about: ${f.title}.`)}`, '_blank')} className="px-6 py-3 md:px-8 rounded-full bg-[#080E21] text-[#FBF5B7] font-bold tracking-widest text-xs md:text-sm uppercase hover:scale-[1.02] active:scale-95 transition-all shadow-lg w-full sm:w-auto">Enquire Now</button>
-                        <button onClick={() => setActiveFeature(null)} className="px-6 py-3 md:px-8 rounded-full border-2 border-[#080E21]/40 text-[#080E21] font-bold tracking-widest text-xs md:text-sm uppercase hover:bg-[#080E21] active:bg-[#080E21] hover:text-[#FBF5B7] active:text-[#FBF5B7] transition-all w-full sm:w-auto">Close</button>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
         </section>
 
       {/* ---------------- 3. STATS SECTION ---------------- */}

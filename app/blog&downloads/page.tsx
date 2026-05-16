@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Calendar, ChevronRight, User, FileText, Download, BookOpen, ArrowLeft, Globe } from "lucide-react";
+import { Search, Calendar, ChevronRight, User, FileText, Download, BookOpen, ArrowLeft, Globe, Lock, Unlock, Library } from "lucide-react";
 import Image from "next/image";
 
 /* ---------------- PREMIUM COMPONENTS ---------------- */
@@ -53,16 +53,29 @@ const downloads = [
   { id: "d10", title: "New Brunswick Medical Aesthetics Guideline", desc: "Practice Guideline for Medical Aesthetics by the Nurses Association of New Brunswick (NANB).", file: "/assets/NANB-Practice-Guideline-MedicalAesthetics-Dec-24-_Jan-25-E.pdf" },
   { id: "d11", title: "UK Cosmetic Procedures Regulation", desc: "House of Commons research briefing on the regulation of non-surgical cosmetic procedures in England.", file: "/assets/CBP-10331.pdf" },
   { id: "d12", title: "Abu Dhabi Non-Surgical Cosmetics Standard", desc: "Department of Health standard for healthcare professionals performing non-surgical cosmetic procedures in Abu Dhabi.", file: "/assets/standard-for-healthcare-professionals-performing-non-surgical-cosmetic-procedures (1).pdf" }
-  
+];
+
+// Premium Restricted Documents
+const libraryDocuments = [
+  { id: "lib1", title: "Level 4 NVQF Clinical Cosmetology Syllabus", desc: "Complete module breakdown, learning outcomes, and assessment criteria for the India batch.", file: "#" },
+  { id: "lib2", title: "International Fellowship Facial Aesthetics Guide", desc: "South Korea & Dubai clinical exposure itinerary and advanced protocol handbooks.", file: "#" },
+  { id: "lib3", title: "Cosmetic Dentistry Mastership Blueprint", desc: "Smile design, veneers, and full-mouth rehabilitation step-by-step documentation.", file: "#" },
+  { id: "lib4", title: "ISPMU Permanent Makeup Technical Manual", desc: "Advanced pigment theory, mapping, and machine handling instructions for enrolled students.", file: "#" },
 ];
 
 export default function BlogAndDownloads() {
-  const [activeTab, setActiveTab] = useState<"blog" | "downloads">("blog");
+  const [activeTab, setActiveTab] = useState<"blog" | "downloads" | "library">("blog");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   
-  // State to manage the open article
+  // State for Blog Reader
   const [selectedPost, setSelectedPost] = useState<typeof blogPosts[0] | null>(null);
+
+  // State for Restricted Library
+  const [isLibraryUnlocked, setIsLibraryUnlocked] = useState(false);
+  const [enrollmentId, setEnrollmentId] = useState("");
+  const [dob, setDob] = useState("");
+  const [authError, setAuthError] = useState("");
 
   // Scroll to top when opening an article
   useEffect(() => {
@@ -85,8 +98,6 @@ export default function BlogAndDownloads() {
   // --- WEBINAR WHATSAPP INTEGRATION ---
   const handleWebinarSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    // Grab the values from the form
     const form = e.currentTarget;
     const firstName = (form.elements.namedItem('firstName') as HTMLInputElement).value;
     const lastName = (form.elements.namedItem('lastName') as HTMLInputElement).value;
@@ -95,17 +106,26 @@ export default function BlogAndDownloads() {
     const city = (form.elements.namedItem('city') as HTMLInputElement).value;
     const country = (form.elements.namedItem('country') as HTMLSelectElement).value;
 
-    // Format the WhatsApp message
     const clientWhatsAppNumber = "919884718883";
     const message = `*New Webinar Registration!* 🎓\n\n*Name:* ${firstName} ${lastName}\n*Email:* ${email}\n*Phone:* ${phone}\n*Location:* ${city}, ${country}\n*Event:* The Future of Anti-Aging Medicine`;
     const waUrl = `https://wa.me/${clientWhatsAppNumber}?text=${encodeURIComponent(message)}`;
 
-    // Open WhatsApp in a new tab
     window.open(waUrl, '_blank', 'noopener,noreferrer');
-
-    // Optional: Clear the form and show a quick native alert
     form.reset();
-    alert("Redirecting to WhatsApp to complete your registration!");
+  };
+
+  // --- STUDENT PORTAL LOGIN HANDLER ---
+  const handleLibraryLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError("");
+    
+    // DEMO AUTHENTICATION CHECK
+    // In production, this would be an API call to check your database.
+    if (enrollmentId === "NSFA2026" && dob === "2004-11-09") {
+      setIsLibraryUnlocked(true);
+    } else {
+      setAuthError("Invalid Enrollment ID or Date of Birth. Please check your credentials and try again.");
+    }
   };
 
   return (
@@ -143,26 +163,32 @@ export default function BlogAndDownloads() {
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.5 }}
               className="text-white/70 text-lg md:text-xl font-light font-serif italic leading-relaxed max-w-3xl mx-auto"
             >
-              Explore global clinical discussions, technique breakdowns, and download essential regulatory guidelines.
+              Explore global clinical discussions, download essential regulatory guidelines, and access your student resources.
             </motion.p>
           </div>
         )}
 
         {/* ---------------- 3. MAIN NAVIGATION TABS ---------------- */}
         {!selectedPost && (
-          <div className="flex justify-center mb-16">
-            <div className="bg-[#0A1128] border border-white/10 p-2 rounded-full inline-flex relative shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+          <div className="flex justify-center mb-16 overflow-x-auto no-scrollbar py-2">
+            <div className="bg-[#0A1128] border border-white/10 p-2 rounded-full inline-flex relative shadow-[0_10px_30px_rgba(0,0,0,0.5)] min-w-max">
               <motion.div 
-                className="absolute top-2 bottom-2 w-[calc(50%-8px)] rounded-full bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] shadow-[0_5px_15px_rgba(191,149,63,0.4)]"
-                animate={{ x: activeTab === "blog" ? 0 : "100%" }}
+                className="absolute top-2 bottom-2 rounded-full bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] shadow-[0_5px_15px_rgba(191,149,63,0.4)]"
+                animate={{ 
+                  left: activeTab === "blog" ? "8px" : activeTab === "downloads" ? "33.33%" : "66.66%",
+                  width: "calc(33.33% - 8px)" 
+                }}
                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                style={{ willChange: "transform" }}
+                style={{ willChange: "left, width" }}
               />
-              <button onClick={() => setActiveTab("blog")} className={`relative z-10 px-8 py-3 md:px-12 md:py-4 flex items-center gap-2 rounded-full font-bold text-xs md:text-sm tracking-widest uppercase transition-colors duration-300 ${activeTab === "blog" ? "text-[#080E21]" : "text-white/60 hover:text-white"}`}>
-                <BookOpen size={18} /> Read Articles
+              <button onClick={() => setActiveTab("blog")} className={`relative z-10 px-6 py-3 md:px-10 md:py-4 flex items-center gap-2 rounded-full font-bold text-[10px] md:text-xs tracking-widest uppercase transition-colors duration-300 ${activeTab === "blog" ? "text-[#080E21]" : "text-white/60 hover:text-white"}`}>
+                <BookOpen size={16} /> Read Articles
               </button>
-              <button onClick={() => setActiveTab("downloads")} className={`relative z-10 px-8 py-3 md:px-12 md:py-4 flex items-center gap-2 rounded-full font-bold text-xs md:text-sm tracking-widest uppercase transition-colors duration-300 ${activeTab === "downloads" ? "text-[#080E21]" : "text-white/60 hover:text-white"}`}>
-                <Download size={18} /> Official Guidelines
+              <button onClick={() => setActiveTab("downloads")} className={`relative z-10 px-6 py-3 md:px-10 md:py-4 flex items-center gap-2 rounded-full font-bold text-[10px] md:text-xs tracking-widest uppercase transition-colors duration-300 ${activeTab === "downloads" ? "text-[#080E21]" : "text-white/60 hover:text-white"}`}>
+                <Download size={16} /> Public Guidelines
+              </button>
+              <button onClick={() => setActiveTab("library")} className={`relative z-10 px-6 py-3 md:px-10 md:py-4 flex items-center gap-2 rounded-full font-bold text-[10px] md:text-xs tracking-widest uppercase transition-colors duration-300 ${activeTab === "library" ? "text-[#080E21]" : "text-white/60 hover:text-[#BF953F]"}`}>
+                {isLibraryUnlocked ? <Unlock size={16} /> : <Lock size={16} />} Student Library
               </button>
             </div>
           </div>
@@ -171,7 +197,7 @@ export default function BlogAndDownloads() {
         {/* ---------------- 4. TAB CONTENT AREA ---------------- */}
         <AnimatePresence mode="wait">
           
-          {/* BLOG GRID VIEW */}
+          {/* TAB 1: BLOG GRID VIEW */}
           {activeTab === "blog" && !selectedPost && (
             <motion.div key="blog-grid" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }}>
               <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12 bg-white/[0.03] backdrop-blur-xl border border-white/10 p-4 rounded-3xl shadow-lg">
@@ -238,7 +264,7 @@ export default function BlogAndDownloads() {
             </motion.div>
           )}
 
-          {/* FULL ARTICLE READING VIEW */}
+          {/* TAB 1: FULL ARTICLE READING VIEW */}
           {activeTab === "blog" && selectedPost && (
             <motion.article 
               key="article-view" 
@@ -278,25 +304,16 @@ export default function BlogAndDownloads() {
                   Understanding this variation is essential because ignorance of local aesthetic practitioner laws can expose practitioners to legal repercussions, including fines, loss of license, or worse, jeopardize patient safety. Whether you are a physician, nurse, or clinic manager, staying informed about who can do Botox legally in your jurisdiction and ensuring your team holds a valid aesthetic medicine license is a foundational step towards legal compliance and professional excellence.
                 </p>
 
-                {/* Country-by-Country Guide */}
                 <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#FBF5B7] mt-12 mb-6">Country-by-Country Legal Guide to Performing Aesthetic Procedures in 2026</h2>
                 
                 <h3 className="text-xl font-bold text-white mt-8 mb-4 flex items-center gap-2"><Globe className="text-[#BF953F]" size={20}/> United States: A State-Regulated Patchwork</h3>
                 <p>
                   In the United States, aesthetic practitioner laws are predominantly governed at the state level, resulting in a patchwork of varying regulations. While physicians universally require an aesthetic medicine license or equivalent credentials, the permissions granted to nurse practitioners, physician assistants, and registered nurses differ substantially.
                 </p>
-                <p>
-                  States such as California and New York enforce rigorous licensing and training prerequisites for non-physician injectors, whereas other states offer more lenient pathways, sometimes allowing non-medical personnel to perform procedures under physician delegation.
-                </p>
 
                 <h3 className="text-xl font-bold text-white mt-8 mb-4 flex items-center gap-2"><Globe className="text-[#BF953F]" size={20}/> United Kingdom: Tightening Oversight</h3>
                 <p>
                   The United Kingdom maintains strict aesthetic practitioner laws that generally restrict the administration of Botox and other injectables to medically qualified professionals holding an aesthetic medicine license or recognized equivalent qualification. Recent years have witnessed increased regulatory scrutiny targeting non-medical providers.
-                </p>
-
-                <h3 className="text-xl font-bold text-white mt-8 mb-4 flex items-center gap-2"><Globe className="text-[#BF953F]" size={20}/> Canada: Provincial Autonomy</h3>
-                <p>
-                  Canada’s provinces establish their own aesthetic practitioner laws, which in turn shape who may perform aesthetic procedures. For example, Ontario requires that Botox injections be performed by physicians or registered nurses with additional certification, all under the umbrella of a valid aesthetic medicine license or provincial equivalent.
                 </p>
 
                 {/* EMBEDDED LEAD GEN FORM (Webinar) */}
@@ -332,45 +349,16 @@ export default function BlogAndDownloads() {
                   </form>
                 </div>
 
-                <h3 className="text-xl font-bold text-white mt-8 mb-4 flex items-center gap-2"><Globe className="text-[#BF953F]" size={20}/> Australia: National Standards</h3>
-                <p>
-                  Australia operates under a national regulatory system that requires aesthetic injectors to hold an aesthetic medicine license, generally in the form of a medical or nursing license accompanied by formal aesthetic training. Nurse practitioners are increasingly recognized as eligible to perform injectables provided they meet national competency standards.
-                </p>
-
-                <h3 className="text-xl font-bold text-white mt-8 mb-4 flex items-center gap-2"><Globe className="text-[#BF953F]" size={20}/> European Union: Harmonized Frameworks</h3>
-                <p>
-                  Within the European Union, aesthetic procedures are regulated under a combination of harmonized medical device regulations and individual member state laws. Countries such as Germany, France, and Spain each implement additional national aesthetic practitioner laws, specifying who can perform procedures like Botox injections.
-                </p>
-
-                <h3 className="text-xl font-bold text-white mt-8 mb-4 flex items-center gap-2"><Globe className="text-[#BF953F]" size={20}/> Middle East & Asia-Pacific: Fast-Evolving Laws</h3>
-                <p>
-                  In regions such as the Middle East and Asia-Pacific, aesthetic medicine markets are expanding rapidly. Countries like the United Arab Emirates have established formal licensing systems requiring injectors to hold an aesthetic medicine license issued by local health authorities.
-                </p>
-
                 {/* FAQ SECTION */}
                 <div className="my-12 p-8 border border-white/10 rounded-2xl bg-white/[0.02]">
                   <h2 className="text-2xl font-serif font-bold text-[#FBF5B7] mb-8">Frequently Asked Questions (FAQ)</h2>
-                  
                   <div className="space-y-6">
                     <div>
                       <h4 className="text-white font-bold text-lg">Who can do Botox legally in my country?</h4>
                       <p className="text-white/60 text-sm mt-2">This depends on local aesthetic practitioner laws and whether the individual holds a valid aesthetic medicine license recognized by health authorities.</p>
                     </div>
-                    <div>
-                      <h4 className="text-white font-bold text-lg">What qualifications are needed for non-physician injectors?</h4>
-                      <p className="text-white/60 text-sm mt-2">Many countries allow nurses or allied health professionals to perform certain procedures provided they hold appropriate licenses and complete accredited aesthetic training.</p>
-                    </div>
-                    <div>
-                      <h4 className="text-white font-bold text-lg">What are the legal consequences of non-compliance?</h4>
-                      <p className="text-white/60 text-sm mt-2">Consequences may include fines, suspension or revocation of licenses, civil lawsuits, and reputational harm.</p>
-                    </div>
                   </div>
                 </div>
-
-                <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#FBF5B7] mt-12 mb-4">Conclusion: Mastering Compliance Amidst Diverse Regulation</h2>
-                <p>
-                  In 2026, the question of who can do Botox legally and hold a valid aesthetic medicine license remains central to the safe and lawful practice of aesthetic medicine worldwide. For practitioners and clinics committed to excellence, understanding and complying with beauty regulation by country is not optional—it is a professional imperative.
-                </p>
 
                 <div className="p-6 md:p-8 rounded-2xl bg-[#BF953F]/10 border border-[#BF953F]/30 mt-8 mb-16">
                   <h3 className="text-xl font-serif font-bold text-white mb-2">Take the Next Step with NSFA Academy</h3>
@@ -382,33 +370,11 @@ export default function BlogAndDownloads() {
                   </button>
                 </div>
               </div>
-
-              {/* COMMENTS SECTION */}
-              <div className="mt-16 pt-12 border-t border-white/10">
-                <h3 className="text-2xl font-serif font-bold text-white mb-2">Leave a Reply</h3>
-                <p className="text-white/50 text-sm mb-8">Your email address will not be published. Required fields are marked *</p>
-                
-                <form className="space-y-4">
-                  <textarea placeholder="Comment *" required rows={5} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] outline-none transition-all resize-none"></textarea>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" placeholder="Name *" required className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] outline-none transition-all" />
-                    <input type="email" placeholder="Email *" required className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] outline-none transition-all" />
-                  </div>
-                  <label className="flex items-center gap-3 text-xs text-white/60 cursor-pointer pt-2">
-                    <input type="checkbox" className="accent-[#BF953F]" />
-                    Save my name, email, and website in this browser for the next time I comment.
-                  </label>
-                  <button type="submit" className="mt-6 px-8 py-3 rounded-full bg-white/10 text-white font-bold text-xs tracking-widest uppercase hover:bg-white/20 transition-colors border border-white/20">
-                    Post Comment
-                  </button>
-                </form>
-              </div>
-
             </motion.article>
           )}
 
-          {/* DOWNLOADS TAB CONTENT */}
-          {activeTab === "downloads" && !selectedPost && (
+          {/* TAB 2: DOWNLOADS TAB CONTENT */}
+          {activeTab === "downloads" && (
             <motion.div key="downloads-view" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }} className="pt-4">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
                 {downloads.map((doc, i) => (
@@ -429,6 +395,109 @@ export default function BlogAndDownloads() {
                   </motion.a>
                 ))}
               </div>
+            </motion.div>
+          )}
+
+          {/* TAB 3: STUDENT LIBRARY (RESTRICTED ACCESS) */}
+          {activeTab === "library" && (
+            <motion.div key="library-view" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }} className="pt-4">
+              
+              {!isLibraryUnlocked ? (
+                // --- RESTRICTED LOGIN CARD ---
+                <div className="max-w-md mx-auto mt-10">
+                  <motion.div 
+                    initial={{ scale: 0.9 }} animate={{ scale: 1 }} transition={{ type: "spring", bounce: 0.4 }}
+                    className="bg-[#0A1128]/80 backdrop-blur-xl border border-[#BF953F]/40 p-8 md:p-10 rounded-[2rem] shadow-[0_20px_60px_rgba(191,149,63,0.15)] relative overflow-hidden"
+                  >
+                    <div className="absolute top-0 right-0 w-48 h-48 bg-[#BF953F]/10 rounded-full blur-[60px] pointer-events-none" />
+                    
+                    <div className="flex justify-center mb-6 relative z-10">
+                      <div className="w-20 h-20 rounded-full bg-white/5 border border-[#BF953F]/30 flex items-center justify-center shadow-inner">
+                        <Lock className="w-10 h-10 text-[#FBF5B7]" />
+                      </div>
+                    </div>
+                    
+                    <div className="text-center mb-8 relative z-10">
+                      <h3 className="text-2xl font-serif font-bold text-white mb-2">Student Library</h3>
+                      <p className="text-white/60 text-sm font-light">Enter your Enrollment ID and Date of Birth to access exclusive course syllabuses and materials.</p>
+                    </div>
+
+                    <form onSubmit={handleLibraryLogin} className="space-y-4 relative z-10">
+                      <div>
+                        <label className="block text-white/50 text-xs font-bold tracking-widest uppercase mb-2 ml-1">Enrollment ID</label>
+                        <input 
+                          type="text" 
+                          required 
+                          value={enrollmentId}
+                          onChange={(e) => setEnrollmentId(e.target.value)}
+                          placeholder="e.g. NSFA2026" 
+                          className="w-full bg-white/5 border border-white/10 text-white text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition-all" 
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-white/50 text-xs font-bold tracking-widest uppercase mb-2 ml-1">Date of Birth</label>
+                        <input 
+                          type="date" 
+                          required 
+                          value={dob}
+                          onChange={(e) => setDob(e.target.value)}
+                          className="w-full bg-white/5 border border-white/10 text-white text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition-all [color-scheme:dark]" 
+                        />
+                      </div>
+
+                      {authError && (
+                        <p className="text-red-400 text-xs text-center font-medium bg-red-400/10 py-2 rounded-lg border border-red-400/20">{authError}</p>
+                      )}
+
+                      <button type="submit" className="w-full mt-4 flex items-center justify-center gap-2 py-4 rounded-xl bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] text-[#040814] font-bold text-sm tracking-widest uppercase hover:scale-[1.02] active:scale-95 transition-transform shadow-lg">
+                        <Unlock size={18} /> Access Library
+                      </button>
+                    </form>
+                  </motion.div>
+                </div>
+              ) : (
+                // --- UNLOCKED VAULT CONTENT ---
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}>
+                  <div className="flex items-center justify-between mb-8 pb-6 border-b border-white/10">
+                    <div>
+                      <h3 className="text-2xl font-serif font-bold text-[#FBF5B7] flex items-center gap-3">
+                        <Library className="text-[#BF953F]" /> Welcome, Student
+                      </h3>
+                      <p className="text-white/60 text-sm mt-1">Here are your exclusive course materials and syllabuses.</p>
+                    </div>
+                    <button onClick={() => setIsLibraryUnlocked(false)} className="text-white/40 hover:text-white text-xs font-bold uppercase tracking-widest underline transition-colors">
+                      Log Out
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {libraryDocuments.map((doc, i) => (
+                      <motion.a
+                        key={doc.id} href={doc.file}
+                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.1 }}
+                        whileHover={{ scale: 1.02 }}
+                        className="bg-[#0A1128] border border-[#BF953F]/40 p-6 rounded-3xl flex flex-col md:flex-row items-start md:items-center gap-6 group hover:shadow-[0_15px_30px_rgba(191,149,63,0.15)] transition-all duration-300 relative overflow-hidden"
+                      >
+                        <div className="absolute top-0 right-0 bg-[#BF953F] text-[#040814] text-[8px] font-bold uppercase tracking-widest px-3 py-1 rounded-bl-xl z-10">Premium</div>
+                        
+                        <div className="w-16 h-16 shrink-0 rounded-2xl bg-[#040814] border border-[#BF953F]/30 flex items-center justify-center shadow-inner group-hover:bg-[#BF953F]/10 transition-colors">
+                          <BookOpen className="w-8 h-8 text-[#FBF5B7]" />
+                        </div>
+                        
+                        <div className="flex-grow pr-4">
+                          <h4 className="text-lg font-serif font-bold text-white mb-2 leading-snug group-hover:text-[#FBF5B7] transition-colors">{doc.title}</h4>
+                          <p className="text-white/50 text-sm font-light leading-relaxed">{doc.desc}</p>
+                        </div>
+
+                        <div className="md:ml-auto shrink-0 w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#BF953F] group-hover:border-transparent transition-all">
+                          <Download size={18} className="text-[#D4AF37] group-hover:text-[#040814]" />
+                        </div>
+                      </motion.a>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
             </motion.div>
           )}
 
