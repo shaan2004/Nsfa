@@ -19,7 +19,7 @@ export default function Navbar() {
     { name: "About Us", path: "/about-us" },
     { name: "Gallery", path: "/gallery" },
     { name: "Courses", path: "/courses" },
-    { name: "Blog & Downloads", path: "/blog&downloads" }, 
+    { name: "Blog & Library", path: "/blog&downloads" }, 
     { name: "Contact", path: "/contact" },
   ];
 

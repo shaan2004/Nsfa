@@ -455,7 +455,7 @@ export default function Home() {
 
                 <div className="grid grid-cols-4 gap-3 md:gap-4 w-full">
                   {[
-                    { src: "/assets/hero5.jpeg", country: "India", gradient: "linear-gradient(to bottom, rgba(255, 153, 51, 0.65), rgba(255, 255, 255, 0.2), rgba(19, 136, 8, 0.75))" },
+                    { src: "/assets/india.jpeg", country: "India", gradient: "linear-gradient(to bottom, rgba(255, 153, 51, 0.65), rgba(255, 255, 255, 0.2), rgba(19, 136, 8, 0.75))" },
                     { src: "/assets/Dubai/d26.jpg", country: "Dubai", gradient: "linear-gradient(to bottom, rgba(255, 0, 0, 0.5), rgba(0, 115, 47, 0.6), rgba(0, 0, 0, 0.8))" },
                     { src: "/assets/bankok/b18.jpeg", country: "Bangkok", gradient: "linear-gradient(to bottom, rgba(237, 28, 36, 0.6), rgba(36, 29, 79, 0.8), rgba(237, 28, 36, 0.6))" },
                     { src: "/assets/hero4.jpeg", country: "Korea", gradient: "linear-gradient(to bottom right, rgba(205, 46, 58, 0.7), rgba(255, 255, 255, 0.2), rgba(0, 71, 160, 0.8))" }
@@ -779,7 +779,7 @@ export default function Home() {
             <div className="absolute right-0 top-0 bottom-0 w-16 md:w-48 bg-gradient-to-l from-[#050914] to-transparent z-20 pointer-events-none" />
 
             <div className="animate-programs w-max flex items-center gap-16 md:gap-32 px-8">
-              {[ "/assets/mets.png", "/assets/mount.png", "/assets/meds.png", "/assets/iso.png", "/assets/iao.png", "/assets/iaf.png", "/assets/mets.png", "/assets/mount.png", "/assets/meds.png", "/assets/iso.png", "/assets/iao.png", "/assets/iaf.png" ].map((src, i) => (
+              {[ "/assets/logos/l1.png", "/assets/logos/l2.png", "/assets/logos/l3.png", "/assets/logos/l4.png", "/assets/logos/l5.png", "/assets/logos/l6.png", "/assets/logos/l7.WEBP", "/assets/logos/l8.png", "/assets/logos/l9.png", "/assets/logos/l10.png", "/assets/logos/l11.AVIF", "/assets/logos/l12.png", "/assets/logos/l13.png", "/assets/logos/l14.png"].map((src, i) => (
                 <motion.div key={i} whileHover={{ scale: 1.15 }} className="shrink-0 relative w-24 h-16 md:w-40 md:h-28 flex items-center justify-center cursor-pointer transition-transform duration-500 group" style={{ willChange: "transform" }}>
                   <Image src={src} alt={`Accreditation Logo ${i}`} fill sizes="(max-width: 768px) 100px, 160px" className="object-contain filter brightness-75 group-hover:brightness-110 drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] transition-all duration-500" />
                 </motion.div>
