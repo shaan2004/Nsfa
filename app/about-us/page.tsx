@@ -223,7 +223,7 @@ export default function AboutUs() {
           {/* Background Map - Next/Image optimized */}
           <div className="absolute inset-0 z-0 flex items-center justify-center opacity-10 pointer-events-none mix-blend-screen overflow-hidden">
             <div className="relative w-[200%] h-full">
-               <Image src="/assets/map.png" alt="Global Reach" fill className="object-contain opacity-50" sizes="100vw" />
+               <Image src="/assets/global.png" alt="Global Reach" fill className="object-contain opacity-50" sizes="100vw" />
             </div>
           </div>
 
