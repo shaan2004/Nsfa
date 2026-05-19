@@ -484,7 +484,7 @@ export default function Home() {
 
                 <div className="grid grid-cols-4 gap-3 md:gap-4 w-full">
                   {[
-                    { src: "/assets/hero5.jpeg", country: "India", gradient: "linear-gradient(to bottom, rgba(255, 153, 51, 0.65), rgba(255, 255, 255, 0.2), rgba(19, 136, 8, 0.75))" },
+                    { src: "/assets/india.jpeg", country: "India", gradient: "linear-gradient(to bottom, rgba(255, 153, 51, 0.65), rgba(255, 255, 255, 0.2), rgba(19, 136, 8, 0.75))" },
                     { src: "/assets/Dubai/d26.jpg", country: "Dubai", gradient: "linear-gradient(to bottom, rgba(255, 0, 0, 0.5), rgba(0, 115, 47, 0.6), rgba(0, 0, 0, 0.8))" },
                     { src: "/assets/bankok/b18.jpeg", country: "Bangkok", gradient: "linear-gradient(to bottom, rgba(237, 28, 36, 0.6), rgba(36, 29, 79, 0.8), rgba(237, 28, 36, 0.6))" },
                     { src: "/assets/hero4.jpeg", country: "Korea", gradient: "linear-gradient(to bottom right, rgba(205, 46, 58, 0.7), rgba(255, 255, 255, 0.2), rgba(0, 71, 160, 0.8))" }
