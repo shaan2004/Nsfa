@@ -184,6 +184,17 @@ const extendedAesthetic = Array(8).fill(aestheticCourses).flat();
 const extendedDental = Array(8).fill(dentalCourses).flat(); 
 const extendedMedical = Array(16).fill(generalMedicalCourses).flat(); 
 
+/* --- LOGOS INFINITE SCROLL GENERATOR --- */
+const baseLogos = [ 
+  "/assets/logos/l1.png", "/assets/logos/l2.png", "/assets/logos/l3.png", 
+  "/assets/logos/l4.png", "/assets/logos/l5.png", "/assets/logos/l6.png", 
+  "/assets/logos/l7.WEBP", "/assets/logos/l8.png", "/assets/logos/l9.png", 
+  "/assets/logos/l10.png", "/assets/logos/l11.AVIF", "/assets/logos/l12.png", 
+  "/assets/logos/l13.png", "/assets/logos/l14.png"
+];
+// Doubling the array ensures the perfect -50% CSS transform loop
+const extendedLogos = [...baseLogos, ...baseLogos];
+
 const wipeReveal: Variants = {
   hidden: { clipPath: "inset(0 100% 0 0)", opacity: 0 },
   visible: { clipPath: "inset(0 0% 0 0)", opacity: 1, transition: { duration: 1.2, ease: [0.77, 0, 0.175, 1] } }
@@ -307,16 +318,14 @@ export default function Home() {
 
       <main suppressHydrationWarning className="bg-[#080E21] text-white overflow-hidden min-h-screen relative perspective-[1000px]">
         
-        {/* GLOBAL CSS OPTIMIZATIONS FOR FLAWLESS INFINITE MARQUEE */}
+        {/* GLOBAL CSS OPTIMIZATIONS FOR FLAWLESS INFINITE MARQUEES */}
         <style dangerouslySetInnerHTML={{__html: `
+          /* --- COURSES CARDS SCROLL --- */
           /* Desktop: Scrolls exactly 24 items (320px width + 32px gap = 352px per item) */
           @media (min-width: 768px) {
             @keyframes infinite-scroll {
               0% { transform: translateX(0); }
               100% { transform: translateX(calc(-352px * 24)); }
-            }
-            .animate-programs.reverse {
-              animation-direction: reverse;
             }
           }
           /* Mobile: Scrolls exactly 24 items (260px width + 16px gap = 276px per item) */
@@ -324,9 +333,6 @@ export default function Home() {
             @keyframes infinite-scroll {
               0% { transform: translateX(0); }
               100% { transform: translateX(calc(-276px * 24)); }
-            }
-            .animate-programs.reverse {
-              animation-direction: reverse;
             }
           }
           
@@ -336,13 +342,36 @@ export default function Home() {
             animation: infinite-scroll 120s linear infinite;
             will-change: transform; 
           }
+          .animate-programs.reverse {
+            animation-direction: reverse;
+          }
+
+          /* --- LOGOS INFINITE SCROLL (PERFECT LOOP) --- */
+          @keyframes scroll-logos {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .animate-logos {
+            display: flex;
+            width: max-content;
+            animation: scroll-logos 40s linear infinite;
+            will-change: transform;
+          }
+          
+          /* PAUSE BOTH ON HOVER */
           .pause-on-hover:hover .animate-programs,
           .pause-on-hover:active .animate-programs,
-          .pause-on-hover:focus-within .animate-programs {
+          .pause-on-hover:focus-within .animate-programs,
+          .pause-on-hover:hover .animate-logos,
+          .pause-on-hover:active .animate-logos,
+          .pause-on-hover:focus-within .animate-logos {
             animation-play-state: paused;
           }
+
           .no-scrollbar::-webkit-scrollbar { display: none; }
           .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+          
+          /* METEOR ANIMATIONS */
           @keyframes meteor-fall {
             0% { transform: translate(0, 0) rotate(45deg); opacity: 0; }
             10% { opacity: 1; }
@@ -455,7 +484,7 @@ export default function Home() {
 
                 <div className="grid grid-cols-4 gap-3 md:gap-4 w-full">
                   {[
-                    { src: "/assets/india.jpeg", country: "India", gradient: "linear-gradient(to bottom, rgba(255, 153, 51, 0.65), rgba(255, 255, 255, 0.2), rgba(19, 136, 8, 0.75))" },
+                    { src: "/assets/hero5.jpeg", country: "India", gradient: "linear-gradient(to bottom, rgba(255, 153, 51, 0.65), rgba(255, 255, 255, 0.2), rgba(19, 136, 8, 0.75))" },
                     { src: "/assets/Dubai/d26.jpg", country: "Dubai", gradient: "linear-gradient(to bottom, rgba(255, 0, 0, 0.5), rgba(0, 115, 47, 0.6), rgba(0, 0, 0, 0.8))" },
                     { src: "/assets/bankok/b18.jpeg", country: "Bangkok", gradient: "linear-gradient(to bottom, rgba(237, 28, 36, 0.6), rgba(36, 29, 79, 0.8), rgba(237, 28, 36, 0.6))" },
                     { src: "/assets/hero4.jpeg", country: "Korea", gradient: "linear-gradient(to bottom right, rgba(205, 46, 58, 0.7), rgba(255, 255, 255, 0.2), rgba(0, 71, 160, 0.8))" }
@@ -474,7 +503,7 @@ export default function Home() {
                 <motion.div initial={{ opacity: 0, scale: 0.9, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 1, delay: 0.5 }} className="relative w-full aspect-video rounded-[2rem] p-1.5 shadow-[0_20px_50px_rgba(191,149,63,0.3)] bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] mt-2" style={{ willChange: "transform" }}>
                   <div className="w-full h-full rounded-[1.5rem] overflow-hidden bg-black relative flex items-center justify-center group">
                     <video controls playsInline className="w-full h-full object-contain outline-none rounded-[1.5rem]" poster="/assets/hero1.png" preload="metadata">
-                      <source src="/assets/KOREA.mp4" type="video/mp4" />
+                      <source src="/assets/r5.mp4" type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
                   </div>
@@ -741,7 +770,7 @@ export default function Home() {
                           <p className="text-xs md:text-sm text-[#34D399] font-bold uppercase tracking-widest mb-2 transition-colors duration-500 truncate w-full">📍 {c.loc}</p>
                           <p className="text-xs md:text-sm text-white/60 group-hover:text-white/90 group-active:text-white/90 font-light mb-auto transition-colors duration-500 line-clamp-3">{c.desc}</p>
                           <div className="w-full flex flex-col gap-2 opacity-100 md:opacity-0 md:translate-y-4 md:group-hover:opacity-100 md:group-active:opacity-100 md:group-hover:translate-y-0 transition-all duration-500 pb-6 mt-4">
-                            <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, please notify me when the ${c.title} launches in 2027.`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-white text-white md:text-[#059669] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black hover:text-white active:bg-black active:text-white transition-colors border border-white/10 md:border-none shadow-lg">Notify Me</button>
+                            <button onClick={() => window.location.href = '/courses'} className="w-full py-2 md:py-2.5 rounded-xl bg-black/50 md:bg-white text-white md:text-[#059669] font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black hover:text-white active:bg-black active:text-white transition-colors border border-white/10 md:border-none shadow-lg">Notify Me</button>
                             <button onClick={() => window.open(`https://wa.me/919884718883?text=${encodeURIComponent(`Hello NSFA, I would like to join the waitlist for ${c.title}.`)}`, '_blank')} className="w-full py-2 md:py-2.5 rounded-xl border border-white/30 text-white font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-black active:bg-black hover:border-black active:border-black transition-colors">Join Waitlist</button>
                           </div>
                         </div>
@@ -759,7 +788,7 @@ export default function Home() {
         <section className="py-24 relative overflow-hidden bg-[#050914] flex flex-col items-center justify-center">
           <div className="absolute inset-0 z-0 flex items-center justify-center opacity-30 mix-blend-screen pointer-events-none">
             <div className="relative w-full max-w-[1600px] h-full">
-              <Image src="/assets/map.png" alt="World Map" fill className="object-contain drop-shadow-[0_0_30px_rgba(191,149,63,0.3)]" sizes="100vw" />
+              <Image src="/assets/global.png" alt="World Map" fill className="object-contain drop-shadow-[0_0_30px_rgba(191,149,63,0.3)]" sizes="100vw" />
             </div>
           </div>
 
@@ -778,10 +807,10 @@ export default function Home() {
             <div className="absolute left-0 top-0 bottom-0 w-16 md:w-48 bg-gradient-to-r from-[#050914] to-transparent z-20 pointer-events-none" />
             <div className="absolute right-0 top-0 bottom-0 w-16 md:w-48 bg-gradient-to-l from-[#050914] to-transparent z-20 pointer-events-none" />
 
-            <div className="animate-programs w-max flex items-center gap-16 md:gap-32 px-8">
-              {[ "/assets/logos/l1.png", "/assets/logos/l2.png", "/assets/logos/l3.png", "/assets/logos/l4.png", "/assets/logos/l5.png", "/assets/logos/l6.png", "/assets/logos/l7.WEBP", "/assets/logos/l8.png", "/assets/logos/l9.png", "/assets/logos/l10.png", "/assets/logos/l11.AVIF", "/assets/logos/l12.png", "/assets/logos/l13.png", "/assets/logos/l14.png"].map((src, i) => (
+            <div className="animate-logos w-max flex items-center gap-16 md:gap-32 px-8">
+              {extendedLogos.map((src, i) => (
                 <motion.div key={i} whileHover={{ scale: 1.15 }} className="shrink-0 relative w-24 h-16 md:w-40 md:h-28 flex items-center justify-center cursor-pointer transition-transform duration-500 group" style={{ willChange: "transform" }}>
-                  <Image src={src} alt={`Accreditation Logo ${i}`} fill sizes="(max-width: 768px) 100px, 160px" className="object-contain filter brightness-75 group-hover:brightness-110 drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] transition-all duration-500" />
+                  <Image src={src} alt={`Accreditation Logo ${i}`} fill sizes="(max-width: 768px) 100px, 160px" loading="lazy" className="object-contain filter brightness-75 group-hover:brightness-110 drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] transition-all duration-500" />
                 </motion.div>
               ))}
             </div>
