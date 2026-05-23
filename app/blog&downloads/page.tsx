@@ -55,13 +55,9 @@ const downloads = [
   { id: "d12", title: "Abu Dhabi Non-Surgical Cosmetics Standard", desc: "Department of Health standard for healthcare professionals performing non-surgical cosmetic procedures in Abu Dhabi.", file: "/assets/standard-for-healthcare-professionals-performing-non-surgical-cosmetic-procedures (1).pdf" }
 ];
 
-// Premium Restricted Documents
-const libraryDocuments = [
-  { id: "lib1", title: "Level 4 NVQF Clinical Cosmetology Syllabus", desc: "Complete module breakdown, learning outcomes, and assessment criteria for the India batch.", file: "#" },
-  { id: "lib2", title: "International Fellowship Facial Aesthetics Guide", desc: "South Korea & Dubai clinical exposure itinerary and advanced protocol handbooks.", file: "#" },
-  { id: "lib3", title: "Cosmetic Dentistry Mastership Blueprint", desc: "Smile design, veneers, and full-mouth rehabilitation step-by-step documentation.", file: "#" },
-  { id: "lib4", title: "ISPMU Permanent Makeup Technical Manual", desc: "Advanced pigment theory, mapping, and machine handling instructions for enrolled students.", file: "#" },
-];
+// --- AUTHORIZED STUDENTS DATABASE ---
+
+
 
 export default function BlogAndDownloads() {
   const [activeTab, setActiveTab] = useState<"blog" | "downloads" | "library">("blog");
@@ -73,9 +69,12 @@ export default function BlogAndDownloads() {
 
   // State for Restricted Library
   const [isLibraryUnlocked, setIsLibraryUnlocked] = useState(false);
+  const [loggedInStudentName, setLoggedInStudentName] = useState("");
+  const [secureDocuments, setSecureDocuments] = useState<any[]>([]); // To hold the files fetched from server
   const [enrollmentId, setEnrollmentId] = useState("");
   const [dob, setDob] = useState("");
   const [authError, setAuthError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   // Scroll to top when opening an article
   useEffect(() => {
@@ -115,16 +114,34 @@ export default function BlogAndDownloads() {
   };
 
   // --- STUDENT PORTAL LOGIN HANDLER ---
-  const handleLibraryLogin = (e: React.FormEvent) => {
+  // --- STUDENT PORTAL LOGIN HANDLER ---
+  const handleLibraryLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError("");
+    setIsLoading(true);
     
-    // DEMO AUTHENTICATION CHECK
-    // In production, this would be an API call to check your database.
-    if (enrollmentId === "NSFA2026" && dob === "2004-11-09") {
-      setIsLibraryUnlocked(true);
-    } else {
-      setAuthError("Invalid Enrollment ID or Date of Birth. Please check your credentials and try again.");
+    try {
+      // Ask the secure server if this user is allowed
+      const response = await fetch('/api/library-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ enrollmentId, dob })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Unlock the vault and save the secure data the server sent us
+        setIsLibraryUnlocked(true);
+        setLoggedInStudentName(data.name);
+        setSecureDocuments(data.documents);
+      } else {
+        setAuthError(data.message || "Invalid Enrollment ID or Date of Birth.");
+      }
+    } catch (err) {
+      setAuthError("Something went wrong connecting to the server. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -349,6 +366,21 @@ export default function BlogAndDownloads() {
                   </form>
                 </div>
 
+                <h3 className="text-xl font-bold text-white mt-8 mb-4 flex items-center gap-2"><Globe className="text-[#BF953F]" size={20}/> Australia: National Standards</h3>
+                <p>
+                  Australia operates under a national regulatory system that requires aesthetic injectors to hold an aesthetic medicine license, generally in the form of a medical or nursing license accompanied by formal aesthetic training. Nurse practitioners are increasingly recognized as eligible to perform injectables provided they meet national competency standards.
+                </p>
+
+                <h3 className="text-xl font-bold text-white mt-8 mb-4 flex items-center gap-2"><Globe className="text-[#BF953F]" size={20}/> European Union: Harmonized Frameworks</h3>
+                <p>
+                  Within the European Union, aesthetic procedures are regulated under a combination of harmonized medical device regulations and individual member state laws. Countries such as Germany, France, and Spain each implement additional national aesthetic practitioner laws, specifying who can perform procedures like Botox injections.
+                </p>
+
+                <h3 className="text-xl font-bold text-white mt-8 mb-4 flex items-center gap-2"><Globe className="text-[#BF953F]" size={20}/> Middle East & Asia-Pacific: Fast-Evolving Laws</h3>
+                <p>
+                  In regions such as the Middle East and Asia-Pacific, aesthetic medicine markets are expanding rapidly. Countries like the United Arab Emirates have established formal licensing systems requiring injectors to hold an aesthetic medicine license issued by local health authorities.
+                </p>
+
                 {/* FAQ SECTION */}
                 <div className="my-12 p-8 border border-white/10 rounded-2xl bg-white/[0.02]">
                   <h2 className="text-2xl font-serif font-bold text-[#FBF5B7] mb-8">Frequently Asked Questions (FAQ)</h2>
@@ -374,23 +406,23 @@ export default function BlogAndDownloads() {
           )}
 
           {/* TAB 2: DOWNLOADS TAB CONTENT */}
-          {activeTab === "downloads" && (
+          {activeTab === "downloads" && !selectedPost && (
             <motion.div key="downloads-view" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }} className="pt-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-10">
                 {downloads.map((doc, i) => (
                   <motion.a
                     key={doc.id} href={doc.file} target="_blank" rel="noopener noreferrer"
                     initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.4, delay: i * 0.1 }}
                     whileHover={{ y: -5 }} style={{ willChange: "transform" }}
-                    className="bg-[#0A1128]/80 backdrop-blur-md border border-[#BF953F]/30 p-6 md:p-8 rounded-[2rem] flex flex-col h-full group transition-all duration-300 hover:shadow-[0_15px_40px_rgba(191,149,63,0.2)] hover:border-[#BF953F]"
+                    className="bg-[#0A1128]/80 backdrop-blur-md border border-[#BF953F]/30 p-4 md:p-8 rounded-[1.5rem] md:rounded-[2rem] flex flex-col h-full group transition-all duration-300 hover:shadow-[0_15px_40px_rgba(191,149,63,0.2)] hover:border-[#BF953F]"
                   >
-                    <div className="w-14 h-14 rounded-2xl bg-[#040814] border border-[#BF953F]/50 flex items-center justify-center mb-6 shadow-inner group-hover:bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] transition-all duration-500">
-                      <FileText className="w-7 h-7 text-[#FBF5B7] group-hover:text-[#040814] transition-colors duration-500" />
+                    <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-[#040814] border border-[#BF953F]/50 flex items-center justify-center mb-4 md:mb-6 shadow-inner group-hover:bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] transition-all duration-500">
+                      <FileText className="w-5 h-5 md:w-7 md:h-7 text-[#FBF5B7] group-hover:text-[#040814] transition-colors duration-500" />
                     </div>
-                    <h4 className="text-lg md:text-xl font-serif font-bold text-white mb-3 leading-snug group-hover:text-[#FBF5B7] transition-colors">{doc.title}</h4>
-                    <p className="text-white/60 text-sm font-light leading-relaxed mb-8 flex-grow">{doc.desc}</p>
-                    <div className="mt-auto flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-[#D4AF37] group-hover:text-white transition-colors">
-                      <Download size={16} className="animate-bounce" /> Download PDF
+                    <h4 className="text-sm md:text-xl font-serif font-bold text-white mb-2 md:mb-3 leading-snug group-hover:text-[#FBF5B7] transition-colors">{doc.title}</h4>
+                    <p className="text-white/60 text-xs md:text-sm font-light leading-relaxed mb-4 md:mb-8 flex-grow line-clamp-3 md:line-clamp-none">{doc.desc}</p>
+                    <div className="mt-auto flex items-center gap-1.5 md:gap-3 text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#D4AF37] group-hover:text-white transition-colors">
+                      <Download size={14} className="animate-bounce shrink-0" /> Download PDF
                     </div>
                   </motion.a>
                 ))}
@@ -399,7 +431,7 @@ export default function BlogAndDownloads() {
           )}
 
           {/* TAB 3: STUDENT LIBRARY (RESTRICTED ACCESS) */}
-          {activeTab === "library" && (
+          {activeTab === "library" && !selectedPost && (
             <motion.div key="library-view" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }} className="pt-4">
               
               {!isLibraryUnlocked ? (
@@ -430,7 +462,7 @@ export default function BlogAndDownloads() {
                           required 
                           value={enrollmentId}
                           onChange={(e) => setEnrollmentId(e.target.value)}
-                          placeholder="e.g. NSFA2026" 
+                          placeholder="e.g. C&L-D-1" 
                           className="w-full bg-white/5 border border-white/10 text-white text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition-all" 
                         />
                       </div>
@@ -461,7 +493,7 @@ export default function BlogAndDownloads() {
                   <div className="flex items-center justify-between mb-8 pb-6 border-b border-white/10">
                     <div>
                       <h3 className="text-2xl font-serif font-bold text-[#FBF5B7] flex items-center gap-3">
-                        <Library className="text-[#BF953F]" /> Welcome, Student
+                        <Library className="text-[#BF953F]" /> Welcome, {loggedInStudentName}
                       </h3>
                       <p className="text-white/60 text-sm mt-1">Here are your exclusive course materials and syllabuses.</p>
                     </div>
@@ -470,27 +502,27 @@ export default function BlogAndDownloads() {
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {libraryDocuments.map((doc, i) => (
+                  <div className="grid grid-cols-2 gap-4 md:gap-6">
+                    {secureDocuments.map((doc, i) => (
                       <motion.a
-                        key={doc.id} href={doc.file}
+                        key={doc.id} href={doc.file} target="_blank" rel="noopener noreferrer"
                         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.1 }}
                         whileHover={{ scale: 1.02 }}
-                        className="bg-[#0A1128] border border-[#BF953F]/40 p-6 rounded-3xl flex flex-col md:flex-row items-start md:items-center gap-6 group hover:shadow-[0_15px_30px_rgba(191,149,63,0.15)] transition-all duration-300 relative overflow-hidden"
+                        className="bg-[#0A1128] border border-[#BF953F]/40 p-4 md:p-6 rounded-2xl md:rounded-3xl flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 group hover:shadow-[0_15px_30px_rgba(191,149,63,0.15)] transition-all duration-300 relative overflow-hidden"
                       >
                         <div className="absolute top-0 right-0 bg-[#BF953F] text-[#040814] text-[8px] font-bold uppercase tracking-widest px-3 py-1 rounded-bl-xl z-10">Premium</div>
                         
-                        <div className="w-16 h-16 shrink-0 rounded-2xl bg-[#040814] border border-[#BF953F]/30 flex items-center justify-center shadow-inner group-hover:bg-[#BF953F]/10 transition-colors">
-                          <BookOpen className="w-8 h-8 text-[#FBF5B7]" />
+                        <div className="w-10 h-10 md:w-16 md:h-16 shrink-0 rounded-xl md:rounded-2xl bg-[#040814] border border-[#BF953F]/30 flex items-center justify-center shadow-inner group-hover:bg-[#BF953F]/10 transition-colors">
+                          <BookOpen className="w-5 h-5 md:w-8 md:h-8 text-[#FBF5B7]" />
                         </div>
                         
-                        <div className="flex-grow pr-4">
-                          <h4 className="text-lg font-serif font-bold text-white mb-2 leading-snug group-hover:text-[#FBF5B7] transition-colors">{doc.title}</h4>
-                          <p className="text-white/50 text-sm font-light leading-relaxed">{doc.desc}</p>
+                        <div className="flex-grow pr-0 md:pr-4">
+                          <h4 className="text-sm md:text-lg font-serif font-bold text-white mb-1.5 md:mb-2 leading-snug group-hover:text-[#FBF5B7] transition-colors">{doc.title}</h4>
+                          <p className="text-white/50 text-xs md:text-sm font-light leading-relaxed line-clamp-3 md:line-clamp-none">{doc.desc}</p>
                         </div>
 
-                        <div className="md:ml-auto shrink-0 w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#BF953F] group-hover:border-transparent transition-all">
-                          <Download size={18} className="text-[#D4AF37] group-hover:text-[#040814]" />
+                        <div className="mt-auto md:mt-0 md:ml-auto shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#BF953F] group-hover:border-transparent transition-all">
+                          <Download size={14} className="text-[#D4AF37] group-hover:text-[#040814]" />
                         </div>
                       </motion.a>
                     ))}
