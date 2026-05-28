@@ -3,7 +3,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { motion, Variants, AnimatePresence, useInView, useMotionValue, useTransform, animate } from "framer-motion";
 import { useRouter } from "next/navigation";
-import Image from "next/image"; 
+import Image from "next/image";
 import Aurora from '../components/ui/Aurora/Aurora';
 import { Award, BookOpen, Globe, Stethoscope, Briefcase, GraduationCap, Play, PlayCircle, Volume2, VolumeX, Users, MessageCircle, Sparkles, X, CheckCircle2 } from "lucide-react";
 
@@ -85,7 +85,7 @@ const VideoReelCard = ({ num }: { num: number }) => {
       whileTap={{ scale: 0.98 }}
       className="relative w-[260px] md:w-[300px] h-[460px] md:h-[533px] shrink-0 rounded-3xl overflow-hidden shadow-2xl cursor-pointer group transition-all duration-500 bg-black border-2 border-transparent hover:border-[#BF953F]/60 active:border-[#BF953F]/60 hover:shadow-[0_20px_50px_rgba(191,149,63,0.3)] active:shadow-[0_20px_50px_rgba(191,149,63,0.3)]"
       onClick={togglePlay}
-      style={{ willChange: "transform" }} 
+      style={{ willChange: "transform" }}
     >
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#AA771C_100%)] pointer-events-none transition-opacity duration-500 -z-10 scale-[1.02]" />
 
@@ -136,7 +136,7 @@ const VideoReelCard = ({ num }: { num: number }) => {
       <div className="absolute bottom-0 left-0 w-full p-4 md:p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-20">
         <h4 className="text-lg md:text-xl font-bold text-white mb-1 group-hover:text-[#FBF5B7] group-active:text-[#FBF5B7] transition-colors">Success Story {num}</h4>
         <p className="text-white/80 text-xs md:text-sm font-light flex items-center gap-2">
-           <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" /> Verified Alumni
+          <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" /> Verified Alumni
         </p>
       </div>
     </motion.div>
@@ -180,17 +180,18 @@ const generalMedicalCourses = [
 ];
 
 /* --- ENDLESS LOOP ARRAY GENERATORS --- */
-const extendedAesthetic = Array(8).fill(aestheticCourses).flat(); 
-const extendedDental = Array(8).fill(dentalCourses).flat(); 
-const extendedMedical = Array(16).fill(generalMedicalCourses).flat(); 
+const extendedAesthetic = Array(8).fill(aestheticCourses).flat();
+const extendedDental = Array(8).fill(dentalCourses).flat();
+const extendedMedical = Array(16).fill(generalMedicalCourses).flat();
 
 /* --- LOGOS INFINITE SCROLL GENERATOR --- */
-const baseLogos = [ 
-  "/assets/logos/l1.png", "/assets/logos/l2.png", "/assets/logos/l3.png", 
-  "/assets/logos/l4.png", "/assets/logos/l5.png", "/assets/logos/l6.png", 
-  "/assets/logos/l7.WEBP", "/assets/logos/l8.png", "/assets/logos/l9.png", 
-  "/assets/logos/l10.png", "/assets/logos/l11.AVIF", "/assets/logos/l12.png", 
-  "/assets/logos/l13.png", "/assets/logos/l14.png"
+const baseLogos = [
+  "/assets/logos/l1.png", "/assets/logos/l2.png", "/assets/logos/l3.png",
+  "/assets/logos/l4.png", "/assets/logos/l5.png", "/assets/logos/l6.png",
+  "/assets/logos/l7.WEBP", "/assets/logos/l8.png", "/assets/logos/l9.png",
+  "/assets/logos/l10.png", "/assets/logos/l11.AVIF", "/assets/logos/l12.png",
+  "/assets/logos/l13.png", "/assets/logos/l14.png", "/assets/logos/l15.png",
+  "/assets/logos/l16.png", "/assets/logos/l17.png"
 ];
 // Doubling the array ensures the perfect -50% CSS transform loop
 const extendedLogos = [...baseLogos, ...baseLogos];
@@ -204,14 +205,14 @@ export default function Home() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [activeFeature, setActiveFeature] = useState<number | null>(null);
-  
+
   // LEAD GEN POPUP STATE
   const [showLeadPopup, setShowLeadPopup] = useState(false);
   const [hasDismissedPopup, setHasDismissedPopup] = useState(false);
   const [popupSubmitted, setPopupSubmitted] = useState(false);
 
   const reviewsRef = useRef<HTMLDivElement>(null);
-  const programsRef = useRef<HTMLDivElement>(null); 
+  const programsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -224,13 +225,13 @@ export default function Home() {
         setShowLeadPopup(true);
       }
     };
-    window.addEventListener("scroll", handleScroll, { passive: true }); 
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasDismissedPopup, showLeadPopup, popupSubmitted]);
 
   const handleLeadSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     const form = e.currentTarget;
     const name = (form.elements.namedItem('name') as HTMLInputElement).value;
     const phone = (form.elements.namedItem('phone') as HTMLInputElement).value;
@@ -256,17 +257,17 @@ export default function Home() {
       {/* ---------------- LEAD GEN POPUP MODAL ---------------- */}
       <AnimatePresence>
         {showLeadPopup && (
-          <motion.div 
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} 
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
           >
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }} transition={{ type: "spring", bounce: 0.4 }}
               className="w-full max-w-md bg-[#0A1128] border border-[#BF953F]/40 rounded-3xl shadow-[0_20px_60px_rgba(191,149,63,0.3)] relative overflow-hidden"
             >
               <div className="absolute top-0 left-0 w-full h-32 bg-[linear-gradient(135deg,rgba(191,149,63,0.2)_0%,rgba(0,0,0,0)_100%)] pointer-events-none" />
-              
-              <button 
+
+              <button
                 onClick={() => { setShowLeadPopup(false); setHasDismissedPopup(true); }}
                 className="absolute top-4 right-4 p-2 rounded-full bg-white/5 text-white/50 hover:text-white hover:bg-white/10 active:bg-white/10 transition-all z-20"
               >
@@ -278,7 +279,7 @@ export default function Home() {
                   <>
                     <h3 className="text-2xl font-serif font-bold text-white mb-2">Book Free Counseling</h3>
                     <p className="text-[#FBF5B7]/70 text-sm mb-6 font-light">Get exclusive syllabus details, EMI options, and admission guidance.</p>
-                    
+
                     <form onSubmit={handleLeadSubmit} className="space-y-4">
                       <div>
                         <input name="name" type="text" required placeholder="Full Name" className="w-full bg-white/5 border border-white/10 text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-[#BF953F] focus:ring-1 focus:ring-[#BF953F] transition-all" />
@@ -317,9 +318,10 @@ export default function Home() {
       </AnimatePresence>
 
       <main suppressHydrationWarning className="bg-[#080E21] text-white overflow-hidden min-h-screen relative perspective-[1000px]">
-        
+
         {/* GLOBAL CSS OPTIMIZATIONS FOR FLAWLESS INFINITE MARQUEES */}
-        <style dangerouslySetInnerHTML={{__html: `
+        <style dangerouslySetInnerHTML={{
+          __html: `
           /* --- COURSES CARDS SCROLL --- */
           /* Desktop: Scrolls exactly 24 items (320px width + 32px gap = 352px per item) */
           @media (min-width: 768px) {
@@ -409,7 +411,7 @@ export default function Home() {
 
         {/* ---------------- 1. HERO SECTION ---------------- */}
         <section className="min-h-screen flex flex-col justify-center px-4 md:px-8 xl:px-12 relative overflow-hidden pt-24 pb-16">
-          
+
           <div className="absolute inset-0 -z-40 bg-[#050914]" />
           <div className="absolute inset-0 -z-30 opacity-80" style={{ willChange: "opacity" }}>
             <Aurora colorStops={["#BF953F", "#FCF6BA", "#B38728"]} blend={0.6} amplitude={1.2} speed={0.5} />
@@ -418,12 +420,12 @@ export default function Home() {
 
           <div className="max-w-[1920px] w-full mx-auto flex flex-col z-10 perspective-[1500px]">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-start w-full pt-4 lg:pt-8">
-              
-              <motion.div 
+
+              <motion.div
                 initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, ease: "easeOut" }}
                 className="lg:col-span-5 flex flex-col items-center lg:items-start text-center lg:text-left z-10"
               >
-                <motion.h3 
+                <motion.h3
                   initial={{ opacity: 0, letterSpacing: "0.1em" }} animate={{ opacity: 1, letterSpacing: "0.4em" }} transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }}
                   className="text-[#FBF5B7] uppercase mb-4 md:mb-6 font-bold text-xs md:text-sm drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] tracking-widest mt-1"
                 >
@@ -439,7 +441,7 @@ export default function Home() {
                   </h1>
                 </div>
 
-                <motion.p 
+                <motion.p
                   initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }}
                   className="text-white text-lg md:text-2xl xl:text-3xl font-light italic font-serif tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] max-w-lg"
                 >
@@ -486,8 +488,8 @@ export default function Home() {
                   {[
                     { src: "/assets/india.jpeg", country: "India", gradient: "linear-gradient(to bottom, rgba(255, 153, 51, 0.65), rgba(255, 255, 255, 0.2), rgba(19, 136, 8, 0.75))" },
                     { src: "/assets/Dubai/d26.jpg", country: "Dubai", gradient: "linear-gradient(to bottom, rgba(255, 0, 0, 0.5), rgba(0, 115, 47, 0.6), rgba(0, 0, 0, 0.8))" },
-                    { src: "/assets/bankok/b18.jpeg", country: "Bangkok", gradient: "linear-gradient(to bottom, rgba(237, 28, 36, 0.6), rgba(36, 29, 79, 0.8), rgba(237, 28, 36, 0.6))" },
-                    { src: "/assets/hero4.jpeg", country: "Korea", gradient: "linear-gradient(to bottom right, rgba(205, 46, 58, 0.7), rgba(255, 255, 255, 0.2), rgba(0, 71, 160, 0.8))" }
+                    { src: "/assets/bangkok.JPEG", country: "Bangkok", gradient: "linear-gradient(to bottom, rgba(237, 28, 36, 0.6), rgba(36, 29, 79, 0.8), rgba(237, 28, 36, 0.6))" },
+                    { src: "/assets/south korea graduation/korea.jpeg", country: "Korea", gradient: "linear-gradient(to bottom right, rgba(205, 46, 58, 0.7), rgba(255, 255, 255, 0.2), rgba(0, 71, 160, 0.8))" }
                   ].map((card, i) => (
                     <motion.div key={i} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1 + (i * 0.15) }} className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden border border-[#BF953F]/30 shadow-lg transition-all duration-500 hover:border-white/50 hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(0,0,0,0.5)] group cursor-pointer" style={{ willChange: "transform, opacity" }}>
                       <Image src={card.src} alt={`NSFA Academy ${card.country}`} fill sizes="(max-width: 768px) 50vw, 25vw" priority={true} className="object-cover transition-transform duration-700 group-hover:scale-110" />
@@ -499,7 +501,7 @@ export default function Home() {
                     </motion.div>
                   ))}
                 </div>
-                
+
                 <motion.div initial={{ opacity: 0, scale: 0.9, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 1, delay: 0.5 }} className="relative w-full aspect-video rounded-[2rem] p-1.5 shadow-[0_20px_50px_rgba(191,149,63,0.3)] bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] mt-2" style={{ willChange: "transform" }}>
                   <div className="w-full h-full rounded-[1.5rem] overflow-hidden bg-black relative flex items-center justify-center group">
                     <video controls playsInline className="w-full h-full object-contain outline-none rounded-[1.5rem]" poster="/assets/hero1.png" preload="metadata">
@@ -533,14 +535,14 @@ export default function Home() {
               { x: 58, y: 58 }, { x: 78, y: 58 },
               { x: 58, y: 76 }, { x: 78, y: 76 }
             ].map((pos, i) => (
-              <motion.path 
+              <motion.path
                 key={`line-${i}`}
                 d={`M 35% 50% C 42% 50%, 45% ${pos.y}%, ${pos.x}% ${pos.y}%`}
                 fill="none"
                 stroke="url(#tree-grad)"
                 strokeWidth="1.5"
                 strokeDasharray="5 5"
-                animate={{ opacity: [0.05, 0.7, 0.05] }} 
+                animate={{ opacity: [0.05, 0.7, 0.05] }}
                 transition={{ repeat: Infinity, duration: 3 + (i % 2), delay: i * 0.2, ease: "easeInOut" }}
                 style={{ willChange: "opacity" }}
               />
@@ -548,7 +550,7 @@ export default function Home() {
           </svg>
 
           <div className="max-w-7xl w-full mx-auto px-4 flex flex-col lg:flex-row items-center justify-between relative z-20 gap-16 lg:gap-8">
-            
+
             <div className="w-full lg:w-5/12 flex flex-col items-center lg:items-start text-center lg:text-left shrink-0">
               <motion.div initial={{ width: 0 }} whileInView={{ width: "100px" }} viewport={{ once: true }} transition={{ duration: 0.8 }} className="h-[2px] bg-[#FFD700] mb-8" />
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
@@ -563,7 +565,7 @@ export default function Home() {
             <div className="w-full lg:w-7/12 relative z-20 min-h-[400px] flex items-center justify-center">
               <AnimatePresence mode="wait">
                 {activeFeature === null ? (
-                  <motion.div 
+                  <motion.div
                     key="feature-grid"
                     initial={{ opacity: 0, filter: "blur(10px)" }}
                     animate={{ opacity: 1, filter: "blur(0px)" }}
@@ -571,8 +573,8 @@ export default function Home() {
                     className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5 w-full"
                   >
                     {advancedFeatures.map((f, i) => (
-                      <motion.div 
-                        key={f.id} 
+                      <motion.div
+                        key={f.id}
                         onClick={() => setActiveFeature(f.id)}
                         initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
                         whileHover={{ scale: 1.03, x: -5 }} whileTap={{ scale: 0.97 }}
@@ -582,7 +584,7 @@ export default function Home() {
                         <div className="absolute inset-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
                         <div className="relative flex items-center justify-center w-4 h-4 mr-4 shrink-0 z-10">
                           <div className="w-1.5 h-1.5 bg-[#FBF5B7] group-hover:bg-[#080E21] transition-colors duration-500 rounded-full z-10" />
-                          <motion.div 
+                          <motion.div
                             animate={{ scale: [1, 3.5, 1], opacity: [0.8, 0, 0.8] }} transition={{ repeat: Infinity, duration: 2.5, delay: i * 0.15 }}
                             className="absolute inset-0 bg-[#BF953F] group-hover:bg-[#080E21]/30 transition-colors duration-500 rounded-full" style={{ willChange: "transform, opacity" }}
                           />
@@ -601,8 +603,8 @@ export default function Home() {
                     className="w-full h-full flex items-center justify-center"
                   >
                     {advancedFeatures.filter(f => f.id === activeFeature).map(f => (
-                      <div 
-                        key={f.id} 
+                      <div
+                        key={f.id}
                         className="bg-[#0A1128] border border-[#BF953F]/40 p-6 md:p-10 rounded-3xl w-full shadow-[0_20px_60px_rgba(191,149,63,0.3)] text-center relative overflow-hidden"
                       >
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(191,149,63,0.15)_0%,rgba(0,0,0,0)_100%)] pointer-events-none" />
@@ -624,12 +626,12 @@ export default function Home() {
           </div>
         </section>
 
-      {/* ---------------- 3. STATS SECTION ---------------- */}
+        {/* ---------------- 3. STATS SECTION ---------------- */}
         <section className="py-24 md:py-32 relative bg-[#FAFAFA] border-y-4 border-[#BF953F] overflow-hidden z-10">
           <div className="absolute top-[-10%] right-[-5%] w-[400px] h-[400px] bg-[#BF953F]/10 rounded-full blur-[100px] -z-10" />
           <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-[#0074A5]/10 rounded-full blur-[100px] -z-10" />
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-[0.03] pointer-events-none -z-10" />
-          
+
           <div className="max-w-7xl mx-auto px-4 relative z-10">
             <div className="text-center mb-16 md:mb-24">
               <h3 className="text-[#8B6914] tracking-[0.2em] uppercase text-xs md:text-sm font-bold mb-4 drop-shadow-sm">A GLOBAL COMMUNITY</h3>
@@ -643,7 +645,7 @@ export default function Home() {
                 { number: 30, suffix: "+", label: "Advanced Courses", icon: BookOpen },
                 { number: 10, suffix: "+", label: "Countries Reached", icon: Globe },
               ].map((stat, i) => (
-                <motion.div 
+                <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.8 }}
                   className="bg-white/60 backdrop-blur-xl border border-white shadow-[0_15px_30px_rgba(0,0,0,0.05)] rounded-3xl p-6 md:p-10 flex flex-col items-center justify-center text-center group hover:bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] hover:border-transparent hover:shadow-[0_20px_50px_rgba(191,149,63,0.5)] transition-all duration-500 hover:-translate-y-3"
@@ -662,7 +664,7 @@ export default function Home() {
           </div>
         </section>
 
-      {/* ---------------- 4. PROGRAMS SECTION (CONTINUOUS SCROLL FIX) ---------------- */}
+        {/* ---------------- 4. PROGRAMS SECTION (CONTINUOUS SCROLL FIX) ---------------- */}
         <section className="py-24 md:py-32 relative bg-[linear-gradient(180deg,#080E21_0%,#0B132A_100%)] overflow-hidden">
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="meteor" /><div className="meteor" /><div className="meteor" /><div className="meteor" /><div className="meteor" />
@@ -676,7 +678,7 @@ export default function Home() {
           </div>
 
           <div className="w-full flex flex-col gap-12 md:gap-20 overflow-hidden pb-16 pt-4 md:pt-8 relative z-10" ref={programsRef}>
-            
+
             {/* ROW 1: Aesthetic Courses */}
             <div className="w-full flex flex-col gap-6">
               <div className="max-w-7xl mx-auto px-4 w-full flex items-center gap-4">
@@ -784,7 +786,7 @@ export default function Home() {
           </div>
         </section>
 
-      {/* ---------------- 5. GLOBALLY RECOGNISED ---------------- */}
+        {/* ---------------- 5. GLOBALLY RECOGNISED ---------------- */}
         <section className="py-24 relative overflow-hidden bg-[#050914] flex flex-col items-center justify-center">
           <div className="absolute inset-0 z-0 flex items-center justify-center opacity-30 mix-blend-screen pointer-events-none">
             <div className="relative w-full max-w-[1600px] h-full">
@@ -797,7 +799,7 @@ export default function Home() {
               <motion.div variants={wipeReveal}>
                 <GoldText text="Globally Recognised" className="text-4xl md:text-7xl lg:text-8xl leading-tight" />
               </motion.div>
-              <motion.p variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.5 }}}} className="text-white/70 text-sm md:text-2xl leading-relaxed max-w-4xl mx-auto font-light px-4">
+              <motion.p variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.5 } } }} className="text-white/70 text-sm md:text-2xl leading-relaxed max-w-4xl mx-auto font-light px-4">
                 Comprehensive training and upgradation of skills on a global scale.
               </motion.p>
             </motion.div>
@@ -829,7 +831,7 @@ export default function Home() {
               <motion.div variants={wipeReveal}>
                 <DarkGoldText text="Student Experience" className="text-4xl md:text-7xl leading-tight" />
               </motion.div>
-              <motion.p variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.5 }}}} className="text-gray-600 text-sm md:text-xl max-w-3xl mx-auto font-light pt-2 md:pt-4 px-4">
+              <motion.p variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { delay: 0.5 } } }} className="text-gray-600 text-sm md:text-xl max-w-3xl mx-auto font-light pt-2 md:pt-4 px-4">
                 Swipe and click to watch real testimonials and clinical training experiences.
               </motion.p>
             </motion.div>

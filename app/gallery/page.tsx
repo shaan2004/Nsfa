@@ -33,28 +33,71 @@ const premiumGoldGradient = "bg-[linear-gradient(145deg,#D4AF37_0%,#FFF2CD_45%,#
 
 /* ---------------- GALLERY DATA STRUCTURE (SORTED NEWEST TO OLDEST) ---------------- */
 const galleryEvents = [
-  //2026
-  { id: "11", category: "Dubai", title: "Dubai Masterclass Experience 2026", cover: "/assets/Dubai/d9.JPG", images: generateImagePaths("/assets/Dubai", 30, "jpeg", "d") },
-  { id: "1", category: "Bangkok", title: "Bankok Masterclass Experience 2026", cover: "/assets/bankok/b18.jpeg", images: generateImagePaths("/assets/bankok", 76, "jpeg", "b") },  
-
-  // 2022
-  { id: "4", category: "Dubai", title: "July Batch Awards", cover: "/assets/july-2021-award/1.jpg", images: generateImagePaths("/assets/july-2021-award", 65) },
-  { id: "6", category: "India", title: "Certificate Award Ceremony", cover: "/assets/certificate awards/1.jpg", images: generateImagePaths("/assets/certificate awards", 25) },
-
-  { id: "8", category: "Korea", title: "February Batch Awards", cover: "/assets/feb-2022/1.jpeg", images: generateImagePaths("/assets/feb-2022", 4, "jpeg") },
-  { id: "7", category: "Korea", title: "January Batch Awards", cover: "/assets/jan-2022/1.jpeg", images: generateImagePaths("/assets/jan-2022", 9, "jpeg") },
-  
-  // 2021
-
-  { id: "5", category: "Dubai", title: "July 2021 Batch Training", cover: "/assets/july-2021/1.jpg", images: generateImagePaths("/assets/july-2021", 7) },
-
-  
-
-  // Undated / Ongoing India & PMU Batches
-  { id: "9", category: "India", title: "PMU1 Batch Awards", cover: "/assets/pmu1/1.jpeg", images: generateImagePaths("/assets/pmu1", 11, "jpeg") },
-  { id: "10", category: "India", title: "PMU2 Batch Awards", cover: "/assets/pmu2/1.jpeg", images: generateImagePaths("/assets/pmu2", 8, "jpeg") },
-  { id: "2", category: "India", title: "Lecture Sessions", cover: "/assets/lecture session/1.jpg", images: generateImagePaths("/assets/lecture session", 8) },
-  { id: "3", category: "India", title: "Practise Sessions", cover: "/assets/practice session/1.jpg", images: generateImagePaths("/assets/practice session", 22) }
+  {
+    id: "1",
+    category: "Dubai",
+    title: "Dubai Masterclass Experience 2026",
+    cover: "/assets/Dubai/d9.JPG",
+    images: [
+      ...generateImagePaths("/assets/Dubai", 30, "jpeg", "d"),
+      "/assets/dubai dental graduation 26/Dr. Amira.png",
+      "/assets/dubai dental graduation 26/Dr. Anurada.png",
+      "/assets/dubai dental graduation 26/Dr. Nandini.png",
+      "/assets/dubai dental graduation 26/Dr. Rajavarakumar.png",
+      "/assets/dubai dental graduation 26/Dr. Sahithi.png",
+      "/assets/dubai dental graduation 26/Dr. Sameera.png",
+      "/assets/dubai dental graduation 26/Dr. Shama.png",
+      "/assets/dubai dental graduation 26/Dr. Tameem.png",
+      "/assets/dubai dental graduation 26/Dr. Vrinda.png"
+    ]
+  },
+  {
+    id: "2",
+    category: "Bangkok",
+    title: "Bankok Masterclass Experience 2026",
+    cover: "/assets/bankok/b18.jpeg",
+    images: generateImagePaths("/assets/bankok", 76, "jpeg", "b")
+  },
+  {
+    id: "3",
+    category: "Korea",
+    title: "South Korea Graduation",
+    cover: "/assets/south korea graduation/ANUSHA KUMARESAN.png",
+    images: [
+      "/assets/south korea graduation/ANUSHA KUMARESAN.png",
+      "/assets/south korea graduation/ARPANA.BR.png",
+      "/assets/south korea graduation/CHAITHRA .M.png",
+      "/assets/south korea graduation/DR vishnu roshini.png",
+      "/assets/south korea graduation/Dr.Pramila rakesh lad.png",
+      "/assets/south korea graduation/MANJULA MANIMARAN.png",
+      "/assets/south korea graduation/Mashita niyaz.png",
+      "/assets/south korea graduation/SWATHI RANI KANUKUNTLA.png",
+      "/assets/south korea graduation/VISHNU PRIYA VASU DEVAN.png",
+      "/assets/south korea graduation/sahana nithursan.png",
+      "/assets/south korea graduation/sangamithrai devi.png",
+      "/assets/south korea graduation/sangita aiyyar reddy.png",
+      "/assets/south korea graduation/sreedha manimaran.png",
+      "/assets/south korea graduation/vishnupriya.s.png",
+      "/assets/south korea graduation/yuvasree ramesh.png"
+    ]
+  },
+  {
+    id: "4",
+    category: "India",
+    title: "India Masterclass & Awards",
+    cover: "/assets/nov-2021/20.jpeg",
+    images: [
+      ...generateImagePaths("/assets/certificate awards", 25),
+      ...generateImagePaths("/assets/lecture session", 8),
+      ...generateImagePaths("/assets/practice session", 22),
+      ...generateImagePaths("/assets/pmu1", 11, "jpeg"),
+      ...generateImagePaths("/assets/pmu2", 8, "jpeg"),
+      ...generateImagePaths("/assets/july-2021-award", 65),
+      ...generateImagePaths("/assets/july-2021", 7),
+      ...generateImagePaths("/assets/jan-2022", 9, "jpeg"),
+      ...generateImagePaths("/assets/feb-2022", 4, "jpeg")
+    ]
+  }
 ];
 
 const categories = ["All", "India", "Dubai", "Korea", "Bangkok"];
@@ -65,21 +108,21 @@ export default function Gallery() {
   const [activeCarouselIndex, setActiveCarouselIndex] = useState(0);
   const [selectedEvent, setSelectedEvent] = useState<typeof galleryEvents[0] | null>(null);
 
-  const filteredEvents = activeCategory === "All" 
-    ? galleryEvents 
+  const filteredEvents = activeCategory === "All"
+    ? galleryEvents
     : galleryEvents.filter(event => event.category === activeCategory);
 
   // Convert raw image strings into the Masonry Object Format dynamically
   const masonryItems = useMemo(() => {
     if (!selectedEvent) return [];
-    
+
     // Tighter height constraints ensure Next/Image `objectFit="cover"` looks perfect without severe cropping
-    const heights = [350, 450, 400, 500, 300, 450]; 
-    
+    const heights = [350, 450, 400, 500, 300, 450];
+
     return selectedEvent.images.map((src, i) => ({
       id: `${selectedEvent.id}-${i}`,
       img: src,
-      url: src, 
+      url: src,
       height: heights[i % heights.length]
     }));
   }, [selectedEvent]);
@@ -101,7 +144,7 @@ export default function Gallery() {
 
   return (
     <main suppressHydrationWarning className="bg-[#040814] text-white min-h-screen pt-32 pb-32 relative overflow-hidden">
-      
+
       {/* ---------------- DYNAMIC AURORA BACKGROUND (Optimized) ---------------- */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <motion.div
@@ -117,19 +160,19 @@ export default function Gallery() {
       </div>
 
       <div className="max-w-[1920px] mx-auto relative z-10">
-        
+
         {/* 1. HEADER */}
         <div className="text-center mb-10 max-w-3xl mx-auto px-4">
-          <motion.h3 
+          <motion.h3
             initial={{ opacity: 0, letterSpacing: "0.1em" }} animate={{ opacity: 1, letterSpacing: "0.4em" }} transition={{ duration: 1.5, ease: "easeOut" }}
             className="text-[#D4AF37] uppercase mb-4 text-sm font-bold"
           >
             A Glimpse of Excellence
           </motion.h3>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}>
-             <GoldText text="The NSFA Gallery" className="text-4xl md:text-6xl mb-6" />
+            <GoldText text="The NSFA Gallery" className="text-4xl md:text-6xl mb-6" />
           </motion.div>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.5 }}
             className="text-white/70 text-base md:text-xl font-light font-serif italic"
           >
@@ -138,7 +181,7 @@ export default function Gallery() {
         </div>
 
         {/* 2. CATEGORY FILTERS */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }}
           className="flex flex-wrap justify-center gap-3 md:gap-4 mb-8 md:mb-12 px-4"
         >
@@ -146,11 +189,10 @@ export default function Gallery() {
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
-              className={`px-5 py-2 md:px-8 md:py-3 rounded-full md:rounded-2xl text-[10px] md:text-xs font-bold tracking-widest uppercase transition-all duration-300 ${
-                activeCategory === category
-                  ? `${premiumGoldGradient} text-[#040814] shadow-[0_5px_20px_rgba(212,175,55,0.4)] scale-105 border-transparent`
-                  : "bg-white/5 border border-white/10 text-white/60 hover:text-white active:bg-white/10 hover:bg-white/10 hover:border-[#D4AF37]/50 active:border-[#D4AF37]/50"
-              }`}
+              className={`px-5 py-2 md:px-8 md:py-3 rounded-full md:rounded-2xl text-[10px] md:text-xs font-bold tracking-widest uppercase transition-all duration-300 ${activeCategory === category
+                ? `${premiumGoldGradient} text-[#040814] shadow-[0_5px_20px_rgba(212,175,55,0.4)] scale-105 border-transparent`
+                : "bg-white/5 border border-white/10 text-white/60 hover:text-white active:bg-white/10 hover:bg-white/10 hover:border-[#D4AF37]/50 active:border-[#D4AF37]/50"
+                }`}
             >
               {category}
             </button>
@@ -159,15 +201,15 @@ export default function Gallery() {
 
         {/* 3. 3D SPIRAL CAROUSEL */}
         <div className="relative w-full h-[500px] md:h-[650px] flex items-center justify-center perspective-[1500px]">
-          
-          <button 
+
+          <button
             onClick={handleCarouselPrev} disabled={activeCarouselIndex === 0}
             className="absolute left-4 md:left-12 z-50 p-3 md:p-5 rounded-full bg-[#0A1128]/80 border border-[#BF953F]/40 text-[#FBF5B7] hover:bg-[#D4AF37] hover:text-[#040814] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-[0_0_30px_rgba(0,0,0,0.8)] backdrop-blur-md"
           >
             <ChevronLeft size={28} />
           </button>
 
-          <button 
+          <button
             onClick={handleCarouselNext} disabled={activeCarouselIndex === filteredEvents.length - 1}
             className="absolute right-4 md:right-12 z-50 p-3 md:p-5 rounded-full bg-[#0A1128]/80 border border-[#BF953F]/40 text-[#FBF5B7] hover:bg-[#D4AF37] hover:text-[#040814] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-[0_0_30px_rgba(0,0,0,0.8)] backdrop-blur-md"
           >
@@ -181,23 +223,23 @@ export default function Gallery() {
                 const offset = index - activeCarouselIndex;
                 const absOffset = Math.abs(offset);
                 const sign = Math.sign(offset);
-                
+
                 // PERFORMANCE: Drop cards that are too far back from the DOM entirely
                 if (absOffset > 4) return null;
 
                 const xOffset = offset * (typeof window !== "undefined" && window.innerWidth < 768 ? 100 : 180);
                 const zOffset = absOffset * -200;
-                const yOffset = absOffset * 25; 
-                const rotateY = sign * -25; 
+                const yOffset = absOffset * 25;
+                const rotateY = sign * -25;
                 const rotateZ = offset * 2;
-                
+
                 const isActive = offset === 0;
 
                 return (
                   <motion.div
                     key={event.id}
                     initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ 
+                    animate={{
                       x: xOffset, y: yOffset, z: zOffset, rotateY: rotateY, rotateZ: rotateZ,
                       opacity: isActive ? 1 : 1 - (absOffset * 0.25),
                       scale: isActive ? 1 : 0.9,
@@ -207,7 +249,7 @@ export default function Gallery() {
                     className={`absolute inset-0 rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.8)] ${isActive ? "cursor-pointer" : "cursor-pointer"} border ${isActive ? "border-[#BF953F]" : "border-white/10"} overflow-hidden bg-[#0A1128]`}
                     style={{ willChange: "transform, opacity" }} // Hardware Acceleration
                     onClick={() => {
-                      if (isActive) { openLightbox(event); } 
+                      if (isActive) { openLightbox(event); }
                       else { setActiveCarouselIndex(index); }
                     }}
                   >
@@ -223,12 +265,12 @@ export default function Gallery() {
                         loading={absOffset > 1 ? "lazy" : undefined}
                       />
                     </div>
-                    
+
                     {/* Dark gradient overlay for non-active cards */}
                     <div className={`absolute inset-0 bg-black transition-opacity duration-700 pointer-events-none ${isActive ? "opacity-0" : "opacity-60"}`} />
-                    
+
                     {/* Inner content overlay for ACTIVE card */}
-                    <motion.div 
+                    <motion.div
                       animate={{ opacity: isActive ? 1 : 0 }}
                       className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-6 md:p-8 pointer-events-none"
                     >
@@ -243,7 +285,7 @@ export default function Gallery() {
                       <h4 className="text-white font-serif text-xl md:text-3xl font-bold mb-4 leading-tight drop-shadow-lg">
                         {event.title}
                       </h4>
-                      
+
                       <div className="flex items-center gap-3 text-[#FBF5B7] text-sm font-bold uppercase tracking-widest group">
                         <MousePointerClick size={18} className="animate-pulse" />
                         Click to view album
@@ -277,7 +319,7 @@ export default function Gallery() {
                   <MapPin size={16} className="text-[#BF953F]" /> {selectedEvent.category} • {selectedEvent.images.length} Photos
                 </p>
               </div>
-              <button 
+              <button
                 onClick={closeLightbox}
                 className="relative z-[99999] p-3 rounded-full bg-white/10 hover:bg-[#BF953F] hover:text-[#040814] transition-all text-white shadow-xl border border-white/20 cursor-pointer"
               >
@@ -287,20 +329,21 @@ export default function Gallery() {
 
             {/* Masonry Container */}
             <div className="w-full max-w-7xl flex-1 relative bg-black/40 rounded-3xl overflow-y-auto custom-scrollbar p-2 border border-white/5 shadow-inner">
-               {/* No fixed height needed - Masonry automatically calculates it! */}
-               <div className="w-full relative"> 
+              {/* No fixed height needed - Masonry automatically calculates it! */}
+              <div className="w-full relative">
                 <Masonry
                   items={masonryItems}
                   scaleOnHover={true}
                   hoverScale={0.98}
                 />
-               </div>
+              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(191, 149, 63, 0.5); border-radius: 10px; }
