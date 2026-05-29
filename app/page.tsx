@@ -488,7 +488,7 @@ export default function Home() {
                   {[
                     { src: "/assets/india.jpeg", country: "India", gradient: "linear-gradient(to bottom, rgba(255, 153, 51, 0.65), rgba(255, 255, 255, 0.2), rgba(19, 136, 8, 0.75))" },
                     { src: "/assets/Dubai/d26.jpg", country: "Dubai", gradient: "linear-gradient(to bottom, rgba(255, 0, 0, 0.5), rgba(0, 115, 47, 0.6), rgba(0, 0, 0, 0.8))" },
-                    { src: "/assets/bangkok.JPEG", country: "Bangkok", gradient: "linear-gradient(to bottom, rgba(237, 28, 36, 0.6), rgba(36, 29, 79, 0.8), rgba(237, 28, 36, 0.6))" },
+                    { src: "/assets/bangkok.jpeg", country: "Bangkok", gradient: "linear-gradient(to bottom, rgba(237, 28, 36, 0.6), rgba(36, 29, 79, 0.8), rgba(237, 28, 36, 0.6))" },
                     { src: "/assets/south korea graduation/korea.jpeg", country: "Korea", gradient: "linear-gradient(to bottom right, rgba(205, 46, 58, 0.7), rgba(255, 255, 255, 0.2), rgba(0, 71, 160, 0.8))" }
                   ].map((card, i) => (
                     <motion.div key={i} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1 + (i * 0.15) }} className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden border border-[#BF953F]/30 shadow-lg transition-all duration-500 hover:border-white/50 hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(0,0,0,0.5)] group cursor-pointer" style={{ willChange: "transform, opacity" }}>

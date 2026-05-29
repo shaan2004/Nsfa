@@ -38,10 +38,10 @@ const useMeasure = () => {
   return [ref, size] as const;
 };
 
-/* --- THE ULTIMATE SMART CARD: Handles .jpg, .jpeg, .JPG, and .JPEG --- */
 const MasonryCard = ({ item, scaleOnHover, hoverScale }: any) => {
   const [imgSrc, setImgSrc] = useState(item.img);
   const [retryCount, setRetryCount] = useState(0);
+  const [loaded, setLoaded] = useState(false);
 
   // If Vercel throws a 404, we test all 4 capitalization/extension combos automatically
   const handleError = () => {
@@ -66,7 +66,16 @@ const MasonryCard = ({ item, scaleOnHover, hoverScale }: any) => {
         willChange: 'transform',
       }}
     >
-      <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-[0px_10px_30px_-10px_rgba(0,0,0,0.5)] border border-white/10 cursor-pointer">
+      <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-[0px_10px_30px_-10px_rgba(0,0,0,0.5)] border border-white/10 cursor-pointer bg-[#040814]">
+        
+        {/* Loading overlay & skeleton */}
+        {!loaded && (
+          <div className="absolute inset-0 bg-[#0A1128]/40 flex items-center justify-center z-10 pointer-events-none">
+            <div className="absolute inset-0 animate-premium-shimmer" />
+            <div className="w-8 h-8 rounded-full border-2 border-t-[#BF953F] border-[#BF953F]/10 animate-spin" />
+          </div>
+        )}
+
         <div 
           className="w-full h-full transition-transform duration-300 ease-out"
           style={scaleOnHover ? { transformOrigin: 'center' } : {}}
@@ -78,8 +87,9 @@ const MasonryCard = ({ item, scaleOnHover, hoverScale }: any) => {
             alt="Gallery Event" 
             fill 
             sizes="(max-width: 600px) 50vw, (max-width: 1000px) 33vw, 25vw" 
-            className="object-cover" 
+            className={`object-cover transition-all duration-700 ease-out ${loaded ? 'blur-0 scale-100' : 'blur-xl scale-105'}`} 
             onError={handleError} 
+            onLoadingComplete={() => setLoaded(true)}
             loading="lazy"
           />
         </div>
@@ -136,6 +146,18 @@ export default function Masonry({
           hoverScale={hoverScale}
         />
       ))}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+        @keyframes premium-shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        .animate-premium-shimmer {
+          background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0) 100%);
+          background-size: 200% 100%;
+          animation: premium-shimmer 1.5s infinite linear;
+        }
+      `}} />
     </div>
   );
 }

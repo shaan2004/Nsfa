@@ -20,6 +20,32 @@ const GoldText = ({ text, className = "" }: { text: string; className?: string }
   </h2>
 );
 
+const GalleryCoverImage = ({ src, alt, isActive, priority, loading }: any) => {
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <div className="absolute inset-0 bg-[#040814]">
+      {/* Loading overlay & skeleton */}
+      {!loaded && (
+        <div className="absolute inset-0 bg-[#0A1128]/40 flex items-center justify-center z-10 pointer-events-none">
+          <div className="absolute inset-0 animate-premium-shimmer" />
+          <div className="w-8 h-8 rounded-full border-2 border-t-[#BF953F] border-[#BF953F]/10 animate-spin" />
+        </div>
+      )}
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(max-width: 768px) 100vw, 500px"
+        className={`object-cover transition-all duration-1000 ${isActive ? "hover:scale-110" : ""} ${loaded ? 'blur-0 scale-100' : 'blur-xl scale-105'}`}
+        priority={priority}
+        loading={loading}
+        onLoadingComplete={() => setLoaded(true)}
+      />
+    </div>
+  );
+};
+
 // HELPER: Generates the "First Guess" image paths. 
 // If the guess is wrong (e.g. .jpeg instead of .jpg), our Masonry component will auto-fix it.
 const generateImagePaths = (basePath: string, totalImages: number, ext: string = "JPG", prefix: string = "") => {
@@ -254,17 +280,13 @@ export default function Gallery() {
                     }}
                   >
                     {/* The Image (OPTIMIZED WITH NEXT/IMAGE) */}
-                    <div className="absolute inset-0 bg-black">
-                      <Image
-                        src={event.cover}
-                        alt={event.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 500px"
-                        className={`object-cover transition-transform duration-1000 ${isActive ? "hover:scale-110" : ""}`}
-                        priority={absOffset <= 1}
-                        loading={absOffset > 1 ? "lazy" : undefined}
-                      />
-                    </div>
+                    <GalleryCoverImage
+                      src={event.cover}
+                      alt={event.title}
+                      isActive={isActive}
+                      priority={absOffset <= 1}
+                      loading={absOffset > 1 ? "lazy" : undefined}
+                    />
 
                     {/* Dark gradient overlay for non-active cards */}
                     <div className={`absolute inset-0 bg-black transition-opacity duration-700 pointer-events-none ${isActive ? "opacity-0" : "opacity-60"}`} />
@@ -348,6 +370,16 @@ export default function Gallery() {
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(191, 149, 63, 0.5); border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(191, 149, 63, 0.8); }
+
+        @keyframes premium-shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        .animate-premium-shimmer {
+          background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0) 100%);
+          background-size: 200% 100%;
+          animation: premium-shimmer 1.5s infinite linear;
+        }
       `}} />
 
     </main>
