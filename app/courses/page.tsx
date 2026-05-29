@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GraduationCap, BookOpenText, Globe, Award, Stethoscope, MessageCircle, ChevronDown, ChevronRight, MapPin } from "lucide-react";
+import ScrollIndicatorWrapper from "../../components/ui/ScrollIndicatorWrapper";
 
 /* ---------------- PREMIUM COMPONENTS ---------------- */
 const GoldText = ({ text, className = "" }: { text: string; className?: string }) => (
@@ -216,17 +217,19 @@ export default function Courses() {
           </div>
 
           <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
-            <div className="w-full lg:w-[30%] flex lg:flex-col gap-3 overflow-x-auto lg:overflow-visible pb-4 no-scrollbar">
-              {aestheticCourses.map((cat, idx) => (
-                <button key={idx} onClick={() => setActiveAestheticIdx(idx)} className={`flex items-center justify-between w-full min-w-[240px] lg:min-w-0 p-4 rounded-2xl transition-all border text-left ${activeAestheticIdx === idx ? "bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] border-transparent text-[#040814]" : "bg-white/5 border-white/10 text-white/60 hover:border-[#BF953F]/30"}`}>
-                  <div className="flex items-center gap-4">
-                    <cat.icon className={`w-5 h-5 ${activeAestheticIdx === idx ? "text-[#040814]" : "text-[#BF953F]"}`} />
-                    <span className="font-bold text-sm md:text-base">{cat.category}</span>
-                  </div>
-                  {activeAestheticIdx === idx && <ChevronRight className="hidden lg:block w-4 h-4" />}
-                </button>
-              ))}
-            </div>
+            <ScrollIndicatorWrapper theme="gold" className="w-full lg:w-[30%]">
+              <div className="flex lg:flex-col gap-3 pb-4 lg:overflow-visible no-scrollbar">
+                {aestheticCourses.map((cat, idx) => (
+                  <button key={idx} onClick={() => setActiveAestheticIdx(idx)} className={`flex items-center justify-between w-full min-w-[240px] lg:min-w-0 p-4 rounded-2xl transition-all border text-left ${activeAestheticIdx === idx ? "bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] border-transparent text-[#040814]" : "bg-white/5 border-white/10 text-white/60 hover:border-[#BF953F]/30"}`}>
+                    <div className="flex items-center gap-4">
+                      <cat.icon className={`w-5 h-5 ${activeAestheticIdx === idx ? "text-[#040814]" : "text-[#BF953F]"}`} />
+                      <span className="font-bold text-sm md:text-base">{cat.category}</span>
+                    </div>
+                    {activeAestheticIdx === idx && <ChevronRight className="hidden lg:block w-4 h-4" />}
+                  </button>
+                ))}
+              </div>
+            </ScrollIndicatorWrapper>
             <div className="w-full lg:w-[70%]">
               <AnimatePresence mode="wait">
                 <motion.div key={activeAestheticIdx} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.3 }} className="bg-white/[0.02] border border-white/10 rounded-3xl p-4 md:p-8 backdrop-blur-sm">
@@ -255,17 +258,19 @@ export default function Courses() {
           </div>
 
           <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
-            <div className="w-full lg:w-[30%] flex lg:flex-col gap-3 overflow-x-auto lg:overflow-visible pb-4 no-scrollbar">
-              {dentalCourses.map((cat, idx) => (
-                <button key={idx} onClick={() => setActiveDentalIdx(idx)} className={`flex items-center justify-between w-full min-w-[240px] lg:min-w-0 p-4 rounded-2xl transition-all border text-left ${activeDentalIdx === idx ? "bg-[linear-gradient(135deg,#0074A5,#88D4FF,#005B82)] border-transparent text-white" : "bg-white/5 border-white/10 text-white/60 hover:border-[#88D4FF]/30"}`}>
-                  <div className="flex items-center gap-4">
-                    <cat.icon className={`w-5 h-5 ${activeDentalIdx === idx ? "text-white" : "text-[#88D4FF]"}`} />
-                    <span className="font-bold text-sm md:text-base">{cat.category}</span>
-                  </div>
-                  {activeDentalIdx === idx && <ChevronRight className="hidden lg:block w-4 h-4" />}
-                </button>
-              ))}
-            </div>
+            <ScrollIndicatorWrapper theme="blue" className="w-full lg:w-[30%]">
+              <div className="flex lg:flex-col gap-3 pb-4 lg:overflow-visible no-scrollbar">
+                {dentalCourses.map((cat, idx) => (
+                  <button key={idx} onClick={() => setActiveDentalIdx(idx)} className={`flex items-center justify-between w-full min-w-[240px] lg:min-w-0 p-4 rounded-2xl transition-all border text-left ${activeDentalIdx === idx ? "bg-[linear-gradient(135deg,#0074A5,#88D4FF,#005B82)] border-transparent text-white" : "bg-white/5 border-white/10 text-white/60 hover:border-[#88D4FF]/30"}`}>
+                    <div className="flex items-center gap-4">
+                      <cat.icon className={`w-5 h-5 ${activeDentalIdx === idx ? "text-white" : "text-[#88D4FF]"}`} />
+                      <span className="font-bold text-sm md:text-base">{cat.category}</span>
+                    </div>
+                    {activeDentalIdx === idx && <ChevronRight className="hidden lg:block w-4 h-4" />}
+                  </button>
+                ))}
+              </div>
+            </ScrollIndicatorWrapper>
             <div className="w-full lg:w-[70%]">
               <AnimatePresence mode="wait">
                 <motion.div key={activeDentalIdx} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.3 }} className="bg-white/[0.02] border border-white/10 rounded-3xl p-4 md:p-8 backdrop-blur-sm">
@@ -296,17 +301,19 @@ export default function Courses() {
           </div>
 
           <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
-            <div className="w-full lg:w-[30%] flex lg:flex-col gap-3 overflow-x-auto lg:overflow-visible pb-4 no-scrollbar">
-              {medicalCourses.map((cat, idx) => (
-                <button key={idx} onClick={() => setActiveMedicalIdx(idx)} className={`flex items-center justify-between w-full min-w-[240px] lg:min-w-0 p-4 rounded-2xl transition-all border text-left ${activeMedicalIdx === idx ? "bg-[linear-gradient(135deg,#059669,#34D399,#065F46)] border-transparent text-white" : "bg-white/5 border-white/10 text-white/60 hover:border-[#34D399]/30"}`}>
-                  <div className="flex items-center gap-4">
-                    <cat.icon className={`w-5 h-5 ${activeMedicalIdx === idx ? "text-white" : "text-[#34D399]"}`} />
-                    <span className="font-bold text-sm md:text-base">{cat.category}</span>
-                  </div>
-                  {activeMedicalIdx === idx && <ChevronRight className="hidden lg:block w-4 h-4" />}
-                </button>
-              ))}
-            </div>
+            <ScrollIndicatorWrapper theme="green" className="w-full lg:w-[30%]">
+              <div className="flex lg:flex-col gap-3 pb-4 lg:overflow-visible no-scrollbar">
+                {medicalCourses.map((cat, idx) => (
+                  <button key={idx} onClick={() => setActiveMedicalIdx(idx)} className={`flex items-center justify-between w-full min-w-[240px] lg:min-w-0 p-4 rounded-2xl transition-all border text-left ${activeMedicalIdx === idx ? "bg-[linear-gradient(135deg,#059669,#34D399,#065F46)] border-transparent text-white" : "bg-white/5 border-white/10 text-white/60 hover:border-[#34D399]/30"}`}>
+                    <div className="flex items-center gap-4">
+                      <cat.icon className={`w-5 h-5 ${activeMedicalIdx === idx ? "text-white" : "text-[#34D399]"}`} />
+                      <span className="font-bold text-sm md:text-base">{cat.category}</span>
+                    </div>
+                    {activeMedicalIdx === idx && <ChevronRight className="hidden lg:block w-4 h-4" />}
+                  </button>
+                ))}
+              </div>
+            </ScrollIndicatorWrapper>
             <div className="w-full lg:w-[70%]">
               <AnimatePresence mode="wait">
                 <motion.div key={activeMedicalIdx} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.3 }} className="bg-white/[0.02] border border-white/10 rounded-3xl p-4 md:p-8 backdrop-blur-sm">

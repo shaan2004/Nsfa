@@ -5,6 +5,7 @@ import { motion, Variants } from "framer-motion";
 import Image from "next/image"; // Added Next.js Image component
 import { Globe2, Award, ShieldCheck, MapPin, Briefcase, Sparkles, ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import ScrollIndicatorWrapper from "../../components/ui/ScrollIndicatorWrapper";
 
 /* ---------------- PREMIUM COMPONENTS ---------------- */
 const GoldText = ({ text, className = "" }: { text: string; className?: string }) => (
@@ -132,24 +133,26 @@ export default function AboutUs() {
               </div>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 1, type: "spring" }} 
-              className="flex overflow-x-auto gap-4 snap-x snap-mandatory w-full h-[350px] no-scrollbar pb-4 md:grid md:grid-cols-2 md:grid-rows-2 md:h-[700px] md:gap-6 perspective-[1000px]"
-            >
-              <div className="min-w-[85vw] snap-center md:min-w-0 bg-[linear-gradient(135deg,#1A2D4A,#080E21)] p-6 md:p-10 rounded-3xl flex flex-col justify-center text-white shadow-2xl hover:-translate-y-4 md:hover:rotate-2 transition-all duration-500 cursor-pointer border border-white/10">
-                <h4 className="text-2xl md:text-3xl font-serif font-bold mb-3 md:mb-4">Having any queries?</h4>
-                <p className="text-white/70 text-sm md:text-base leading-relaxed">Ready to move into a fast-growing industry with multiple career path opportunities available?</p>
-              </div>
-              <div className="min-w-[85vw] snap-center md:min-w-0 rounded-3xl overflow-hidden shadow-2xl relative">
-                <Image src="/assets/j1.png" alt="Graduation" fill className="object-cover hover:scale-110 transition-transform duration-700" sizes="(max-width: 768px) 100vw, 400px" />
-              </div>
-              <div className="min-w-[85vw] snap-center md:min-w-0 rounded-3xl overflow-hidden shadow-2xl relative">
-                <Image src="/assets/j2.png" alt="Students Learning" fill className="object-cover hover:scale-110 transition-transform duration-700" sizes="(max-width: 768px) 100vw, 400px" />
-              </div>
-              <div className="min-w-[85vw] snap-center md:min-w-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] p-6 md:p-10 rounded-3xl flex flex-col justify-center text-[#080E21] shadow-[0_20px_40px_rgba(191,149,63,0.4)] hover:-translate-y-4 md:hover:-rotate-2 transition-all duration-500 cursor-pointer">
-                <h4 className="text-2xl md:text-3xl font-serif font-bold mb-3 md:mb-4 text-[#040814]">Connect with us!</h4>
-                <p className="text-[#040814]/80 text-sm md:text-base leading-relaxed font-bold">We are here to help you. It's time to earn your Aesthetician certification with NSFA Academy!</p>
-              </div>
-            </motion.div>
+            <ScrollIndicatorWrapper theme="gold" className="w-full">
+              <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 1, type: "spring" }} 
+                className="flex gap-4 snap-x snap-mandatory w-full h-[350px] no-scrollbar pb-4 md:grid md:grid-cols-2 md:grid-rows-2 md:h-[700px] md:gap-6 perspective-[1000px]"
+              >
+                <div className="min-w-[85vw] snap-center md:min-w-0 bg-[linear-gradient(135deg,#1A2D4A,#080E21)] p-6 md:p-10 rounded-3xl flex flex-col justify-center text-white shadow-2xl hover:-translate-y-4 md:hover:rotate-2 transition-all duration-500 cursor-pointer border border-white/10">
+                  <h4 className="text-2xl md:text-3xl font-serif font-bold mb-3 md:mb-4">Having any queries?</h4>
+                  <p className="text-white/70 text-sm md:text-base leading-relaxed">Ready to move into a fast-growing industry with multiple career path opportunities available?</p>
+                </div>
+                <div className="min-w-[85vw] snap-center md:min-w-0 rounded-3xl overflow-hidden shadow-2xl relative">
+                  <Image src="/assets/j1.png" alt="Graduation" fill className="object-cover hover:scale-110 transition-transform duration-700" sizes="(max-width: 768px) 100vw, 400px" />
+                </div>
+                <div className="min-w-[85vw] snap-center md:min-w-0 rounded-3xl overflow-hidden shadow-2xl relative">
+                  <Image src="/assets/j2.png" alt="Students Learning" fill className="object-cover hover:scale-110 transition-transform duration-700" sizes="(max-width: 768px) 100vw, 400px" />
+                </div>
+                <div className="min-w-[85vw] snap-center md:min-w-0 bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] p-6 md:p-10 rounded-3xl flex flex-col justify-center text-[#080E21] shadow-[0_20px_40px_rgba(191,149,63,0.4)] hover:-translate-y-4 md:hover:-rotate-2 transition-all duration-500 cursor-pointer">
+                  <h4 className="text-2xl md:text-3xl font-serif font-bold mb-3 md:mb-4 text-[#040814]">Connect with us!</h4>
+                  <p className="text-[#040814]/80 text-sm md:text-base leading-relaxed font-bold">We are here to help you. It's time to earn your Aesthetician certification with NSFA Academy!</p>
+                </div>
+              </motion.div>
+            </ScrollIndicatorWrapper>
           </div>
         </section>
 

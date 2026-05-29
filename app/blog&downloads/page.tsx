@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Calendar, ChevronRight, User, FileText, Download, BookOpen, ArrowLeft, Globe, Lock, Unlock, Library } from "lucide-react";
 import Image from "next/image";
+import ScrollIndicatorWrapper from "../../components/ui/ScrollIndicatorWrapper";
 
 /* ---------------- PREMIUM COMPONENTS ---------------- */
 const GoldText = ({ text, className = "" }: { text: string; className?: string }) => (
@@ -187,7 +188,7 @@ export default function BlogAndDownloads() {
 
         {/* ---------------- 3. MAIN NAVIGATION TABS ---------------- */}
         {!selectedPost && (
-          <div className="flex justify-center mb-16 overflow-x-auto no-scrollbar py-2">
+          <ScrollIndicatorWrapper theme="gold" className="flex justify-center mb-16 py-2">
             <div className="bg-[#0A1128] border border-white/10 p-2 rounded-full inline-flex relative shadow-[0_10px_30px_rgba(0,0,0,0.5)] min-w-max">
               <motion.div 
                 className="absolute top-2 bottom-2 rounded-full bg-[linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)] shadow-[0_5px_15px_rgba(191,149,63,0.4)]"
@@ -208,7 +209,7 @@ export default function BlogAndDownloads() {
                 {isLibraryUnlocked ? <Unlock size={16} /> : <Lock size={16} />} Student Library
               </button>
             </div>
-          </div>
+          </ScrollIndicatorWrapper>
         )}
 
         {/* ---------------- 4. TAB CONTENT AREA ---------------- */}
@@ -218,16 +219,18 @@ export default function BlogAndDownloads() {
           {activeTab === "blog" && !selectedPost && (
             <motion.div key="blog-grid" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }}>
               <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12 bg-white/[0.03] backdrop-blur-xl border border-white/10 p-4 rounded-3xl shadow-lg">
-                <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar">
-                  {categories.map((category) => (
-                    <button
-                      key={category} onClick={() => setActiveCategory(category)}
-                      className={`px-6 py-2.5 rounded-full text-xs font-bold tracking-widest uppercase transition-all duration-300 shrink-0 ${activeCategory === category ? `${premiumGoldGradient} text-[#040814] shadow-[0_5px_20px_rgba(212,175,55,0.4)]` : "bg-white/5 border border-white/10 text-white/60 hover:text-white hover:border-[#D4AF37]/50"}`}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
+                <ScrollIndicatorWrapper theme="gold" className="w-full md:w-auto">
+                  <div className="flex gap-2 pb-2 md:pb-0 no-scrollbar">
+                    {categories.map((category) => (
+                      <button
+                        key={category} onClick={() => setActiveCategory(category)}
+                        className={`px-6 py-2.5 rounded-full text-xs font-bold tracking-widest uppercase transition-all duration-300 shrink-0 ${activeCategory === category ? `${premiumGoldGradient} text-[#040814] shadow-[0_5px_20px_rgba(212,175,55,0.4)]` : "bg-white/5 border border-white/10 text-white/60 hover:text-white hover:border-[#D4AF37]/50"}`}
+                      >
+                        {category}
+                      </button>
+                    ))}
+                  </div>
+                </ScrollIndicatorWrapper>
                 <div className="relative w-full md:w-80 group">
                   <input type="text" placeholder="Search articles..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full bg-[#0A1128]/80 border border-white/20 text-white rounded-full py-3 pl-12 pr-4 focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/50 transition-all" />
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40 group-focus-within:text-[#D4AF37] transition-colors w-5 h-5" />
